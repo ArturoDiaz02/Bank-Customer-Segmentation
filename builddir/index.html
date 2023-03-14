@@ -1,0 +1,1253 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>&lt;no title&gt; &#8212; customer-segmentation  documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/sphinx_highlight.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h2 style="color:MediumVioletRed; font-family:Cursive"><p>Goal of creating this Notebook🎯</p>
+</h2><ol class="arabic simple">
+<li><p>Perform Clustering / Segmentation on the dataset and identify popular
+customer groups along with their definitions/rules</p></li>
+<li><p>Perform Location-wise analysis to identify regional trends in India</p></li>
+<li><p>Perform transaction-related analysis to identify interesting trends
+that can be used by a bank to improve / optimi their user experiences</p></li>
+<li><p>Customer Recency, Frequency, Monetary analysis</p></li>
+<li><p>Network analysis or Graph analysis of customer data.</p></li>
+</ol>
+<p><strong>Table of contents of this notebook: 📭</strong></p>
+<ol class="arabic simple">
+<li><p><a class="reference external" href="#1">Importing Necessary Libraries</a></p></li>
+<li><p><a class="reference external" href="#2">Data Collection</a></p></li>
+<li><p><a class="reference external" href="#3">Data Cleaning</a></p></li>
+<li><p><a class="reference external" href="#4">Exploratory Data Analysis</a></p></li>
+</ol>
+<h2  style="color:darkmagenta;text-align: center; background-color: AliceBlue;padding: 20px;"><ol class="arabic">
+<li><p>Importing Libraries</p>
+</h2></li>
+</ol>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="o">%</span><span class="k">matplotlib</span> inline
+<span class="n">plt</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="s2">&quot;fivethirtyeight&quot;</span><span class="p">)</span>
+<span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
+</pre></div>
+</div>
+<h2  style="color:darkmagenta;text-align: center; background-color: AliceBlue;padding: 20px;"><ol class="arabic" start="2">
+<li><p>Data Collection</p>
+</h2></li>
+</ol>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Suma dos números.</span>
+<span class="sd">:param a: Primer número.</span>
+<span class="sd">:type a: int</span>
+<span class="sd">:param b: Segundo número.</span>
+<span class="sd">:type b: int</span>
+<span class="sd">:return: Resultado de la suma.</span>
+<span class="sd">:rtype: int</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;../../data/bank_transactions.csv&quot;</span><span class="p">)</span>
+<span class="n">initialRows</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+<span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>TransactionID</th>
+      <th>CustomerID</th>
+      <th>CustomerDOB</th>
+      <th>CustGender</th>
+      <th>CustLocation</th>
+      <th>CustAccountBalance</th>
+      <th>TransactionDate</th>
+      <th>TransactionTime</th>
+      <th>TransactionAmount (INR)</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>T1</td>
+      <td>C5841053</td>
+      <td>10/1/94</td>
+      <td>F</td>
+      <td>JAMSHEDPUR</td>
+      <td>17819.05</td>
+      <td>2/8/16</td>
+      <td>143207</td>
+      <td>25.0</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>T2</td>
+      <td>C2142763</td>
+      <td>4/4/57</td>
+      <td>M</td>
+      <td>JHAJJAR</td>
+      <td>2270.69</td>
+      <td>2/8/16</td>
+      <td>141858</td>
+      <td>27999.0</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>T3</td>
+      <td>C4417068</td>
+      <td>26/11/96</td>
+      <td>F</td>
+      <td>MUMBAI</td>
+      <td>17874.44</td>
+      <td>2/8/16</td>
+      <td>142712</td>
+      <td>459.0</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>T4</td>
+      <td>C5342380</td>
+      <td>14/9/73</td>
+      <td>F</td>
+      <td>MUMBAI</td>
+      <td>866503.21</td>
+      <td>2/8/16</td>
+      <td>142714</td>
+      <td>2060.0</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>T5</td>
+      <td>C9031234</td>
+      <td>24/3/88</td>
+      <td>F</td>
+      <td>NAVI MUMBAI</td>
+      <td>6714.43</td>
+      <td>2/8/16</td>
+      <td>181156</td>
+      <td>1762.5</td>
+    </tr>
+  </tbody>
+</table>
+</div><div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;TransactionAmount (INR)&#39;</span><span class="p">:</span><span class="s1">&#39;TransactionAmount&#39;</span><span class="p">})</span>
+</pre></div>
+</div>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">shape</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">(</span><span class="mi">1048567</span><span class="p">,</span> <span class="mi">9</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">info</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>&lt;class &#39;pandas.core.frame.DataFrame&#39;&gt;
+RangeIndex: 1048567 entries, 0 to 1048566
+Data columns (total 9 columns):
+ #   Column              Non-Null Count    Dtype
+---  ------              --------------    -----
+ 0   TransactionID       1048567 non-null  object
+ 1   CustomerID          1048567 non-null  object
+ 2   CustomerDOB         1045170 non-null  object
+ 3   CustGender          1047467 non-null  object
+ 4   CustLocation        1048416 non-null  object
+ 5   CustAccountBalance  1046198 non-null  float64
+ 6   TransactionDate     1048567 non-null  object
+ 7   TransactionTime     1048567 non-null  int64
+ 8   TransactionAmount   1048567 non-null  float64
+dtypes: float64(2), int64(1), object(6)
+memory usage: 72.0+ MB
+</pre></div>
+</div>
+<h2  style="color:darkmagenta;text-align: center; background-color: AliceBlue;padding: 20px;"><ol class="arabic" start="3">
+<li><p>Data Cleaning</p>
+</h2></li>
+</ol>
+<h4><p>The amount of null data and duplicated is calculated</p>
+</h4><div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">check</span><span class="p">(</span><span class="n">df</span><span class="p">):</span>
+    <span class="n">l</span><span class="o">=</span><span class="p">[]</span>
+    <span class="n">columns</span><span class="o">=</span><span class="n">df</span><span class="o">.</span><span class="n">columns</span>
+    <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">columns</span><span class="p">:</span>
+        <span class="n">dtypes</span><span class="o">=</span><span class="n">df</span><span class="p">[</span><span class="n">col</span><span class="p">]</span><span class="o">.</span><span class="n">dtypes</span>
+        <span class="n">nunique</span><span class="o">=</span><span class="n">df</span><span class="p">[</span><span class="n">col</span><span class="p">]</span><span class="o">.</span><span class="n">nunique</span><span class="p">()</span>
+        <span class="n">sum_null</span><span class="o">=</span><span class="n">df</span><span class="p">[</span><span class="n">col</span><span class="p">]</span><span class="o">.</span><span class="n">isnull</span><span class="p">()</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+        <span class="n">l</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">col</span><span class="p">,</span><span class="n">dtypes</span><span class="p">,</span><span class="n">nunique</span><span class="p">,</span><span class="n">sum_null</span><span class="p">])</span>
+    <span class="n">df_check</span><span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">l</span><span class="p">)</span>
+    <span class="n">df_check</span><span class="o">.</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;column&#39;</span><span class="p">,</span><span class="s1">&#39;dtypes&#39;</span><span class="p">,</span><span class="s1">&#39;nunique&#39;</span><span class="p">,</span><span class="s1">&#39;sum_null&#39;</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">df_check</span>
+<span class="n">check</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+</pre></div>
+</div>
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>column</th>
+      <th>dtypes</th>
+      <th>nunique</th>
+      <th>sum_null</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>TransactionID</td>
+      <td>object</td>
+      <td>1048567</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>CustomerID</td>
+      <td>object</td>
+      <td>884265</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>CustomerDOB</td>
+      <td>object</td>
+      <td>17254</td>
+      <td>3397</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>CustGender</td>
+      <td>object</td>
+      <td>3</td>
+      <td>1100</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>CustLocation</td>
+      <td>object</td>
+      <td>9355</td>
+      <td>151</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>CustAccountBalance</td>
+      <td>float64</td>
+      <td>161328</td>
+      <td>2369</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>TransactionDate</td>
+      <td>object</td>
+      <td>55</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>TransactionTime</td>
+      <td>int64</td>
+      <td>81918</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>TransactionAmount</td>
+      <td>float64</td>
+      <td>93024</td>
+      <td>0</td>
+    </tr>
+  </tbody>
+</table>
+</div><div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">dropna</span><span class="p">(</span><span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">duplicated</span><span class="p">()</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="mi">0</span>
+</pre></div>
+</div>
+<h5><p>The CustomerDOB column is analyzed because it may contain atypical data.</p>
+</h5><div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Getting distinct values from CustomerDOB variable</span>
+<span class="n">df</span><span class="p">[</span><span class="s1">&#39;CustomerDOB&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="mi">1</span><span class="o">/</span><span class="mi">1</span><span class="o">/</span><span class="mi">1800</span>    <span class="mi">56292</span>
+<span class="mi">1</span><span class="o">/</span><span class="mi">1</span><span class="o">/</span><span class="mi">89</span>        <span class="mi">809</span>
+<span class="mi">1</span><span class="o">/</span><span class="mi">1</span><span class="o">/</span><span class="mi">90</span>        <span class="mi">784</span>
+<span class="mi">6</span><span class="o">/</span><span class="mi">8</span><span class="o">/</span><span class="mi">91</span>        <span class="mi">698</span>
+<span class="mi">1</span><span class="o">/</span><span class="mi">1</span><span class="o">/</span><span class="mi">91</span>        <span class="mi">665</span>
+            <span class="o">...</span>
+<span class="mi">2</span><span class="o">/</span><span class="mi">12</span><span class="o">/</span><span class="mi">51</span>         <span class="mi">1</span>
+<span class="mi">20</span><span class="o">/</span><span class="mi">3</span><span class="o">/</span><span class="mi">52</span>         <span class="mi">1</span>
+<span class="mi">26</span><span class="o">/</span><span class="mi">9</span><span class="o">/</span><span class="mi">47</span>         <span class="mi">1</span>
+<span class="mi">4</span><span class="o">/</span><span class="mi">10</span><span class="o">/</span><span class="mi">41</span>         <span class="mi">1</span>
+<span class="mi">24</span><span class="o">/</span><span class="mi">10</span><span class="o">/</span><span class="mi">44</span>        <span class="mi">1</span>
+<span class="n">Name</span><span class="p">:</span> <span class="n">CustomerDOB</span><span class="p">,</span> <span class="n">Length</span><span class="p">:</span> <span class="mi">17233</span><span class="p">,</span> <span class="n">dtype</span><span class="p">:</span> <span class="n">int64</span>
+</pre></div>
+</div>
+<h5><p>Dates 1/1/1800 are deleted because it is not possible to define whether
+they are children, adults or persons without date of birth.</p>
+</h5><div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Removing CustomerDOB == &#39;1/1/1800&#39;</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="o">~</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;CustomerDOB&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;1/1/1800&#39;</span><span class="p">)]</span>
+<span class="c1"># Cheking distinct values from dataframe</span>
+<span class="n">df</span><span class="p">[</span><span class="s1">&#39;CustomerDOB&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="mi">1</span><span class="o">/</span><span class="mi">1</span><span class="o">/</span><span class="mi">89</span>      <span class="mi">809</span>
+<span class="mi">1</span><span class="o">/</span><span class="mi">1</span><span class="o">/</span><span class="mi">90</span>      <span class="mi">784</span>
+<span class="mi">6</span><span class="o">/</span><span class="mi">8</span><span class="o">/</span><span class="mi">91</span>      <span class="mi">698</span>
+<span class="mi">1</span><span class="o">/</span><span class="mi">1</span><span class="o">/</span><span class="mi">91</span>      <span class="mi">665</span>
+<span class="mi">1</span><span class="o">/</span><span class="mi">1</span><span class="o">/</span><span class="mi">92</span>      <span class="mi">631</span>
+           <span class="o">...</span>
+<span class="mi">23</span><span class="o">/</span><span class="mi">2</span><span class="o">/</span><span class="mi">05</span>       <span class="mi">1</span>
+<span class="mi">28</span><span class="o">/</span><span class="mi">11</span><span class="o">/</span><span class="mi">42</span>      <span class="mi">1</span>
+<span class="mi">23</span><span class="o">/</span><span class="mi">9</span><span class="o">/</span><span class="mi">49</span>       <span class="mi">1</span>
+<span class="mi">14</span><span class="o">/</span><span class="mi">3</span><span class="o">/</span><span class="mi">40</span>       <span class="mi">1</span>
+<span class="mi">24</span><span class="o">/</span><span class="mi">10</span><span class="o">/</span><span class="mi">44</span>      <span class="mi">1</span>
+<span class="n">Name</span><span class="p">:</span> <span class="n">CustomerDOB</span><span class="p">,</span> <span class="n">Length</span><span class="p">:</span> <span class="mi">17232</span><span class="p">,</span> <span class="n">dtype</span><span class="p">:</span> <span class="n">int64</span>
+</pre></div>
+</div>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Range of CustomerDOB object type as string</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;min: &quot;</span> <span class="o">+</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;CustomerDOB&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">()</span> <span class="o">+</span> <span class="s2">&quot; max: &quot;</span> <span class="o">+</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;CustomerDOB&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">())</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">min</span><span class="p">:</span> <span class="mi">1</span><span class="o">/</span><span class="mi">1</span><span class="o">/</span><span class="mi">00</span> <span class="nb">max</span><span class="p">:</span> <span class="mi">9</span><span class="o">/</span><span class="mi">9</span><span class="o">/</span><span class="mi">97</span>
+</pre></div>
+</div>
+<h5><p>Determine minority group of people aged over 100 years</p>
+</h5><div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># We filter our dataframe specifically on the DOB column to make a decision regarding date ambiguity.</span>
+<span class="n">df_filtered</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;CustomerDOB&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span> <span class="k">if</span> <span class="n">x</span><span class="o">.</span><span class="n">year</span> <span class="o">&lt;</span> <span class="mi">1917</span> <span class="k">else</span> <span class="mi">0</span><span class="p">)</span>
+<span class="c1"># Amortizing and removing values ​​greater than 1917 represented as 0</span>
+<span class="n">counts</span> <span class="o">=</span> <span class="n">df_filtered</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="c1"># Amount of customer in this age range</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">counts</span><span class="p">))</span>
+<span class="c1"># Plot the amortized</span>
+<span class="n">counts</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="mi">254</span>
+</pre></div>
+</div>
+<img alt="_images/Customer_Segmentation_20_1.png" src="_images/Customer_Segmentation_20_1.png" />
+<h5><p>Convert type of columns TransactionDate, CustomerDOB from string to
+datetime.</p>
+</h5><div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Using pandas convert to datetime tool for CustomerDOB variable with specific format</span>
+<span class="n">df</span><span class="p">[</span><span class="s1">&#39;CustomerDOB&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;CustomerDOB&#39;</span><span class="p">],</span> <span class="n">dayfirst</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Checking converting problem of to_datetime pandas function</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;CustomerDOB&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;CustomerDOB&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">())</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="mi">1973</span><span class="o">-</span><span class="mi">01</span><span class="o">-</span><span class="mi">01</span> <span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span> <span class="mi">2072</span><span class="o">-</span><span class="mi">12</span><span class="o">-</span><span class="mi">31</span> <span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span>
+</pre></div>
+</div>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Fixing the problem base on analysis above</span>
+<span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;CustomerDOB&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">dt</span><span class="o">.</span><span class="n">year</span> <span class="o">&gt;</span> <span class="mi">1999</span><span class="p">,</span> <span class="s1">&#39;CustomerDOB&#39;</span><span class="p">]</span> <span class="o">-=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DateOffset</span><span class="p">(</span><span class="n">years</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Checking range of CustomerDOB variable</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;CustomerDOB&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;CustomerDOB&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">())</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="mi">1900</span><span class="o">-</span><span class="mi">01</span><span class="o">-</span><span class="mi">01</span> <span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span> <span class="mi">1999</span><span class="o">-</span><span class="mi">12</span><span class="o">-</span><span class="mi">28</span> <span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span>
+</pre></div>
+</div>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Using pandas convert to datetime tool for TransactionDate variable</span>
+<span class="n">df</span><span class="p">[</span><span class="s1">&#39;TransactionDate&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;TransactionDate&#39;</span><span class="p">])</span>
+</pre></div>
+</div>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Checking range of TransactionDate variable</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;TransactionDate&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;TransactionDate&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">())</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="mi">2016</span><span class="o">-</span><span class="mi">01</span><span class="o">-</span><span class="mi">08</span> <span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span> <span class="mi">2016</span><span class="o">-</span><span class="mi">12</span><span class="o">-</span><span class="mi">09</span> <span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span>
+</pre></div>
+</div>
+<h4><p>Calculate customer age :</p>
+</h4><h6><p>CustomerDOB is the birth date of the customer , TransactionDate : is the
+date of transaction that customer is done</p>
+</h6><div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Getting the customer age at transaction moment and adding a new column in our dataframe</span>
+<span class="n">df</span><span class="p">[</span><span class="s1">&#39;CustomerAge&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;TransactionDate&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">dt</span><span class="o">.</span><span class="n">year</span> <span class="o">-</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;CustomerDOB&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">dt</span><span class="o">.</span><span class="n">year</span>
+</pre></div>
+</div>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Checking range of CustomerAge variable</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;min: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;CustomerAge&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">())</span> <span class="o">+</span> <span class="s2">&quot; max: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;CustomerAge&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">()))</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">min</span><span class="p">:</span> <span class="mi">16</span> <span class="nb">max</span><span class="p">:</span> <span class="mi">115</span>
+</pre></div>
+</div>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Getting distinct values from CustGender variable</span>
+<span class="n">df</span><span class="o">.</span><span class="n">CustGender</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">M</span>    <span class="mi">712454</span>
+<span class="n">F</span>    <span class="mi">272868</span>
+<span class="n">Name</span><span class="p">:</span> <span class="n">CustGender</span><span class="p">,</span> <span class="n">dtype</span><span class="p">:</span> <span class="n">int64</span>
+</pre></div>
+</div>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">num_col</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">select_dtypes</span><span class="p">(</span><span class="n">include</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">number</span><span class="p">)</span>
+<span class="n">cat_col</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">select_dtypes</span><span class="p">(</span><span class="n">exclude</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">number</span><span class="p">)</span>
+</pre></div>
+</div>
+<h5><p>Visualize the distribution of the numeric data and detect posible
+outliers. Boxplots show the median, quartiles, and extreme values ​​of
+the data, and points that are above or below the extreme values ​​are
+considered outliers.</p>
+</h5><div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Setting Figure specific sizes</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">30</span><span class="p">,</span><span class="mi">30</span><span class="p">))</span>
+<span class="c1"># Creating boxplot</span>
+<span class="k">for</span> <span class="n">index</span><span class="p">,</span><span class="n">column</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">num_col</span><span class="p">):</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="n">index</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">sns</span><span class="o">.</span><span class="n">boxplot</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">num_col</span><span class="p">,</span><span class="n">x</span><span class="o">=</span><span class="n">column</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">(</span><span class="n">pad</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">)</span>
+</pre></div>
+</div>
+<img alt="_images/Customer_Segmentation_34_0.png" src="_images/Customer_Segmentation_34_0.png" />
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Number of initial rows: &quot;</span><span class="p">,</span> <span class="n">initialRows</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Number of rows after: &quot;</span><span class="p">,</span> <span class="n">df</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Number of rows deleted: &quot;</span><span class="p">,</span> <span class="n">initialRows</span> <span class="o">-</span> <span class="n">df</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Percentage of rows deleted: &quot;</span><span class="p">,</span> <span class="p">(</span><span class="n">initialRows</span> <span class="o">-</span> <span class="n">df</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">/</span> <span class="n">initialRows</span> <span class="o">*</span> <span class="mi">100</span><span class="p">,</span> <span class="s2">&quot;%&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Number</span> <span class="n">of</span> <span class="n">initial</span> <span class="n">rows</span><span class="p">:</span>  <span class="mi">1048567</span>
+<span class="n">Number</span> <span class="n">of</span> <span class="n">rows</span> <span class="n">after</span><span class="p">:</span>  <span class="mi">985322</span>
+<span class="n">Number</span> <span class="n">of</span> <span class="n">rows</span> <span class="n">deleted</span><span class="p">:</span>  <span class="mi">63245</span>
+<span class="n">Percentage</span> <span class="n">of</span> <span class="n">rows</span> <span class="n">deleted</span><span class="p">:</span>  <span class="mf">6.03156498344884</span> <span class="o">%</span>
+</pre></div>
+</div>
+<h3 style="color:MediumVioletRed; font-family:Cursive"><p>Observations 💡:</p>
+</h3><p><p>We will not remove outliers for the following two reasons: First, in
+boxplots those values ​​can be outliers because they represent points
+that are above or below extreme values. However, these were not
+measurement errors and are both true and significant, given that while
+customers 100+ do not represent a key demographic for most banks.
+Secoind it is important that banks are aware of the specific needs and
+challenges that these clients may face, and that they adapt their
+strategies accordingly.</p>
+</p><p style="color:DarkSlateGray"><p>those two articles will help you to understand this topic 📜:</p>
+</p><p>What Are RFM Scores and How To Calculate Them Introduction to Customer
+Segmentation in Python</p>
+<p><p>Recency: number of days since the last purchase or order so we will
+create a new column of TransactionDate to subtract the last transaction
+from the first transaction</p>
+</p><div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;TransactionDate1&#39;</span><span class="p">]</span><span class="o">=</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;TransactionDate&#39;</span><span class="p">]</span> <span class="c1"># ==&gt; to calculate the minimum (first transaction)</span>
+<span class="n">df</span><span class="p">[</span><span class="s1">&#39;TransactionDate2&#39;</span><span class="p">]</span><span class="o">=</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;TransactionDate&#39;</span><span class="p">]</span> <span class="c1"># ==&gt; to calculate the maximum (last transaction)</span>
+</pre></div>
+</div>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#Creating MRF Table Strategy</span>
+<span class="n">RFM_df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">&quot;CustomerID&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">agg</span><span class="p">({</span>
+                                        <span class="s2">&quot;TransactionID&quot;</span> <span class="p">:</span> <span class="s2">&quot;count&quot;</span><span class="p">,</span>
+                                        <span class="s2">&quot;CustGender&quot;</span> <span class="p">:</span> <span class="s2">&quot;first&quot;</span><span class="p">,</span>
+                                        <span class="s2">&quot;CustLocation&quot;</span><span class="p">:</span><span class="s2">&quot;first&quot;</span><span class="p">,</span>
+                                        <span class="s2">&quot;CustAccountBalance&quot;</span>  <span class="p">:</span> <span class="s2">&quot;mean&quot;</span><span class="p">,</span>
+                                        <span class="s2">&quot;TransactionTime&quot;</span><span class="p">:</span> <span class="s2">&quot;mean&quot;</span><span class="p">,</span>
+                                        <span class="s2">&quot;TransactionAmount&quot;</span> <span class="p">:</span> <span class="s2">&quot;mean&quot;</span><span class="p">,</span>
+                                        <span class="s2">&quot;CustomerAge&quot;</span> <span class="p">:</span> <span class="s2">&quot;median&quot;</span><span class="p">,</span>
+                                        <span class="s2">&quot;TransactionDate2&quot;</span><span class="p">:</span><span class="s2">&quot;max&quot;</span><span class="p">,</span>
+                                        <span class="s2">&quot;TransactionDate1&quot;</span><span class="p">:</span><span class="s2">&quot;min&quot;</span><span class="p">,</span>
+                                        <span class="s2">&quot;TransactionDate&quot;</span><span class="p">:</span><span class="s2">&quot;median&quot;</span>
+                        <span class="p">})</span>
+
+<span class="n">RFM_df</span> <span class="o">=</span> <span class="n">RFM_df</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span>
+<span class="n">RFM_df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>CustomerID</th>
+      <th>TransactionID</th>
+      <th>CustGender</th>
+      <th>CustLocation</th>
+      <th>CustAccountBalance</th>
+      <th>TransactionTime</th>
+      <th>TransactionAmount</th>
+      <th>CustomerAge</th>
+      <th>TransactionDate2</th>
+      <th>TransactionDate1</th>
+      <th>TransactionDate</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>C1010011</td>
+      <td>2</td>
+      <td>F</td>
+      <td>NOIDA</td>
+      <td>76340.635</td>
+      <td>67521.0</td>
+      <td>2553.0</td>
+      <td>28.5</td>
+      <td>2016-09-26</td>
+      <td>2016-09-08</td>
+      <td>2016-09-17</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>C1010012</td>
+      <td>1</td>
+      <td>M</td>
+      <td>MUMBAI</td>
+      <td>24204.490</td>
+      <td>204409.0</td>
+      <td>1499.0</td>
+      <td>22.0</td>
+      <td>2016-08-14</td>
+      <td>2016-08-14</td>
+      <td>2016-08-14</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>C1010014</td>
+      <td>2</td>
+      <td>F</td>
+      <td>MUMBAI</td>
+      <td>100112.950</td>
+      <td>187378.0</td>
+      <td>727.5</td>
+      <td>28.0</td>
+      <td>2016-07-08</td>
+      <td>2016-01-08</td>
+      <td>2016-04-08</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>C1010018</td>
+      <td>1</td>
+      <td>F</td>
+      <td>CHAMPARAN</td>
+      <td>496.180</td>
+      <td>170254.0</td>
+      <td>30.0</td>
+      <td>26.0</td>
+      <td>2016-09-15</td>
+      <td>2016-09-15</td>
+      <td>2016-09-15</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>C1010024</td>
+      <td>1</td>
+      <td>M</td>
+      <td>KOLKATA</td>
+      <td>87058.650</td>
+      <td>141103.0</td>
+      <td>5000.0</td>
+      <td>51.0</td>
+      <td>2016-08-18</td>
+      <td>2016-08-18</td>
+      <td>2016-08-18</td>
+    </tr>
+  </tbody>
+</table>
+</div><div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># After Grouping by CustomerID</span>
+<span class="n">RFM_df</span><span class="o">.</span><span class="n">shape</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">(</span><span class="mi">839081</span><span class="p">,</span> <span class="mi">11</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># The id of the customer is irrelevant</span>
+<span class="n">RFM_df</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;CustomerID&quot;</span><span class="p">],</span><span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Renaming specific column adapting to problem goal and replacing with inplace property of function</span>
+<span class="n">RFM_df</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;TransactionID&quot;</span><span class="p">:</span><span class="s2">&quot;Frequency&quot;</span><span class="p">},</span><span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Getting Recency that is by definition: number of days since the last purchase or order</span>
+<span class="n">RFM_df</span><span class="p">[</span><span class="s1">&#39;Recency&#39;</span><span class="p">]</span><span class="o">=</span><span class="n">RFM_df</span><span class="p">[</span><span class="s1">&#39;TransactionDate2&#39;</span><span class="p">]</span><span class="o">-</span><span class="n">RFM_df</span><span class="p">[</span><span class="s1">&#39;TransactionDate1&#39;</span><span class="p">]</span>
+<span class="c1"># Conversion from timedelta64[ns] to string representtion in days of weeks of Recency variable</span>
+<span class="n">RFM_df</span><span class="p">[</span><span class="s1">&#39;Recency&#39;</span><span class="p">]</span><span class="o">=</span><span class="n">RFM_df</span><span class="p">[</span><span class="s1">&#39;Recency&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Using re library for apply an regular expresion in each value of Recency column for extract the number of days in this string representation.</span>
+<span class="n">RFM_df</span><span class="p">[</span><span class="s1">&#39;Recency&#39;</span><span class="p">]</span><span class="o">=</span><span class="n">RFM_df</span><span class="p">[</span><span class="s1">&#39;Recency&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span> <span class="p">:</span><span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="s1">&#39;\d+&#39;</span><span class="p">,</span><span class="n">x</span><span class="p">)</span><span class="o">.</span><span class="n">group</span><span class="p">())</span>
+<span class="c1"># Conversion from string &#39;18&#39; to int representtion for folloeing operations</span>
+<span class="n">RFM_df</span><span class="p">[</span><span class="s1">&#39;Recency&#39;</span><span class="p">]</span><span class="o">=</span><span class="n">RFM_df</span><span class="p">[</span><span class="s1">&#39;Recency&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><p>Appreciation: Days mean that a customer has done transaction recently
+one time by logic so I will convert 0 to 1</p>
+</p><div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Transformation of 0 days base on business meaning</span>
+<span class="n">RFM_df</span><span class="p">[</span><span class="s1">&#39;Recency&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">RFM_df</span><span class="p">[</span><span class="s1">&#39;Recency&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="mi">1</span> <span class="k">if</span> <span class="n">x</span> <span class="o">==</span> <span class="mi">0</span> <span class="k">else</span> <span class="n">x</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Columns that were only needed for the calculation we eliminated</span>
+<span class="n">RFM_df</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;TransactionDate1&quot;</span><span class="p">,</span><span class="s2">&quot;TransactionDate2&quot;</span><span class="p">],</span><span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># To calculate the otliers for each feature</span>
+<span class="n">lower_list</span><span class="o">=</span><span class="p">[]</span>
+<span class="n">upper_list</span><span class="o">=</span><span class="p">[]</span>
+<span class="n">num_list</span><span class="o">=</span><span class="p">[]</span>
+<span class="n">perc_list</span><span class="o">=</span><span class="p">[]</span>
+<span class="n">cols</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Frequency&#39;</span><span class="p">,</span> <span class="s1">&#39;CustAccountBalance&#39;</span><span class="p">,</span><span class="s1">&#39;TransactionAmount&#39;</span><span class="p">,</span> <span class="s1">&#39;CustomerAge&#39;</span><span class="p">,</span> <span class="s1">&#39;Recency&#39;</span><span class="p">]</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">cols</span><span class="p">:</span>
+    <span class="n">Q1</span> <span class="o">=</span> <span class="n">RFM_df</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">quantile</span><span class="p">(</span><span class="mf">0.25</span><span class="p">)</span>
+    <span class="n">Q3</span> <span class="o">=</span> <span class="n">RFM_df</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">quantile</span><span class="p">(</span><span class="mf">0.75</span><span class="p">)</span>
+    <span class="n">IQR</span> <span class="o">=</span> <span class="n">Q3</span> <span class="o">-</span> <span class="n">Q1</span>
+    <span class="n">lower</span> <span class="o">=</span> <span class="n">Q1</span> <span class="o">-</span> <span class="mf">1.5</span> <span class="o">*</span> <span class="n">IQR</span>
+    <span class="n">upper</span> <span class="o">=</span> <span class="n">Q3</span> <span class="o">+</span> <span class="mf">1.5</span> <span class="o">*</span> <span class="n">IQR</span>
+    <span class="c1"># Calculate number of outliers</span>
+    <span class="n">num</span><span class="o">=</span><span class="n">RFM_df</span><span class="p">[(</span><span class="n">RFM_df</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">lower</span><span class="p">)</span> <span class="o">|</span> <span class="p">(</span><span class="n">RFM_df</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">upper</span><span class="p">)]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="c1"># Calculate percentage of outliers</span>
+    <span class="n">perc</span> <span class="o">=</span> <span class="p">(</span><span class="n">num</span> <span class="o">/</span> <span class="n">RFM_df</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">*</span> <span class="mi">100</span>
+    <span class="n">lower_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">lower</span><span class="p">)</span>
+    <span class="n">upper_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">upper</span><span class="p">)</span>
+    <span class="n">num_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">num</span><span class="p">)</span>
+    <span class="n">perc_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">perc</span><span class="p">,</span><span class="mi">2</span><span class="p">))</span>
+
+
+<span class="n">dic</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;lower&#39;</span><span class="p">:</span> <span class="n">lower_list</span><span class="p">,</span> <span class="s1">&#39;upper&#39;</span><span class="p">:</span> <span class="n">upper_list</span><span class="p">,</span> <span class="s1">&#39;outliers&#39;</span><span class="p">:</span> <span class="n">num_list</span><span class="p">,</span> <span class="s1">&#39;Perc%&#39;</span><span class="p">:</span><span class="n">perc_list</span> <span class="p">}</span>
+<span class="n">outliers_df</span><span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">dic</span><span class="p">,</span><span class="n">index</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Frequency&#39;</span><span class="p">,</span> <span class="s1">&#39;CustAccountBalance&#39;</span><span class="p">,</span><span class="s1">&#39;TransactionAmount&#39;</span><span class="p">,</span> <span class="s1">&#39;CustomerAge&#39;</span><span class="p">,</span> <span class="s1">&#39;Recency&#39;</span><span class="p">])</span>
+<span class="n">outliers_df</span>
+</pre></div>
+</div>
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>lower</th>
+      <th>upper</th>
+      <th>outliers</th>
+      <th>Perc%</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>Frequency</th>
+      <td>1.000</td>
+      <td>1.000</td>
+      <td>128896</td>
+      <td>15.36</td>
+    </tr>
+    <tr>
+      <th>CustAccountBalance</th>
+      <td>-72439.305</td>
+      <td>135042.015</td>
+      <td>110026</td>
+      <td>13.11</td>
+    </tr>
+    <tr>
+      <th>TransactionAmount</th>
+      <td>-1313.595</td>
+      <td>2669.325</td>
+      <td>87229</td>
+      <td>10.40</td>
+    </tr>
+    <tr>
+      <th>CustomerAge</th>
+      <td>11.500</td>
+      <td>47.500</td>
+      <td>42222</td>
+      <td>5.03</td>
+    </tr>
+    <tr>
+      <th>Recency</th>
+      <td>1.000</td>
+      <td>1.000</td>
+      <td>123525</td>
+      <td>14.72</td>
+    </tr>
+  </tbody>
+</table>
+</div><p><p>May Some variables seem like outliers but they are not, I decided spare
+any data.</p>
+</p><div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">RFM_df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Frequency</th>
+      <th>CustGender</th>
+      <th>CustLocation</th>
+      <th>CustAccountBalance</th>
+      <th>TransactionTime</th>
+      <th>TransactionAmount</th>
+      <th>CustomerAge</th>
+      <th>TransactionDate</th>
+      <th>Recency</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>2</td>
+      <td>F</td>
+      <td>NOIDA</td>
+      <td>76340.635</td>
+      <td>67521.0</td>
+      <td>2553.0</td>
+      <td>28.5</td>
+      <td>2016-09-17</td>
+      <td>18</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>1</td>
+      <td>M</td>
+      <td>MUMBAI</td>
+      <td>24204.490</td>
+      <td>204409.0</td>
+      <td>1499.0</td>
+      <td>22.0</td>
+      <td>2016-08-14</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>2</td>
+      <td>F</td>
+      <td>MUMBAI</td>
+      <td>100112.950</td>
+      <td>187378.0</td>
+      <td>727.5</td>
+      <td>28.0</td>
+      <td>2016-04-08</td>
+      <td>182</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>1</td>
+      <td>F</td>
+      <td>CHAMPARAN</td>
+      <td>496.180</td>
+      <td>170254.0</td>
+      <td>30.0</td>
+      <td>26.0</td>
+      <td>2016-09-15</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>1</td>
+      <td>M</td>
+      <td>KOLKATA</td>
+      <td>87058.650</td>
+      <td>141103.0</td>
+      <td>5000.0</td>
+      <td>51.0</td>
+      <td>2016-08-18</td>
+      <td>1</td>
+    </tr>
+  </tbody>
+</table>
+</div><h2  style="color:darkmagenta;text-align: center; background-color: AliceBlue;padding: 20px;"><ol class="arabic" start="4">
+<li><p>Exploratory Data Analysis</p>
+</h2></li>
+</ol>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">RFM_df</span><span class="o">.</span><span class="n">describe</span><span class="p">()</span>
+</pre></div>
+</div>
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Frequency</th>
+      <th>CustAccountBalance</th>
+      <th>TransactionTime</th>
+      <th>TransactionAmount</th>
+      <th>CustomerAge</th>
+      <th>Recency</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>count</th>
+      <td>839081.000000</td>
+      <td>8.390810e+05</td>
+      <td>839081.000000</td>
+      <td>8.390810e+05</td>
+      <td>839081.000000</td>
+      <td>839081.000000</td>
+    </tr>
+    <tr>
+      <th>mean</th>
+      <td>1.174287</td>
+      <td>1.058545e+05</td>
+      <td>157446.381829</td>
+      <td>1.453624e+03</td>
+      <td>31.068668</td>
+      <td>15.132148</td>
+    </tr>
+    <tr>
+      <th>std</th>
+      <td>0.435129</td>
+      <td>7.862524e+05</td>
+      <td>49194.229430</td>
+      <td>6.045200e+03</td>
+      <td>8.600795</td>
+      <td>45.535132</td>
+    </tr>
+    <tr>
+      <th>min</th>
+      <td>1.000000</td>
+      <td>0.000000e+00</td>
+      <td>0.000000</td>
+      <td>0.000000e+00</td>
+      <td>16.000000</td>
+      <td>1.000000</td>
+    </tr>
+    <tr>
+      <th>25%</th>
+      <td>1.000000</td>
+      <td>5.366190e+03</td>
+      <td>125604.000000</td>
+      <td>1.800000e+02</td>
+      <td>25.000000</td>
+      <td>1.000000</td>
+    </tr>
+    <tr>
+      <th>50%</th>
+      <td>1.000000</td>
+      <td>1.768220e+04</td>
+      <td>163936.000000</td>
+      <td>4.750000e+02</td>
+      <td>29.000000</td>
+      <td>1.000000</td>
+    </tr>
+    <tr>
+      <th>75%</th>
+      <td>1.000000</td>
+      <td>5.723652e+04</td>
+      <td>194953.000000</td>
+      <td>1.175730e+03</td>
+      <td>34.000000</td>
+      <td>1.000000</td>
+    </tr>
+    <tr>
+      <th>max</th>
+      <td>6.000000</td>
+      <td>1.150355e+08</td>
+      <td>235959.000000</td>
+      <td>1.560035e+06</td>
+      <td>115.000000</td>
+      <td>336.000000</td>
+    </tr>
+  </tbody>
+</table>
+</div><div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># correlation between features</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span><span class="mi">5</span><span class="p">))</span>
+<span class="n">correlation</span><span class="o">=</span><span class="n">RFM_df</span><span class="o">.</span><span class="n">corr</span><span class="p">()</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">heatmap</span><span class="p">(</span><span class="n">correlation</span><span class="p">,</span><span class="n">vmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">vmax</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span>
+    <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;rocket_r&#39;</span><span class="p">,</span>
+    <span class="n">annot</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">fmt</span><span class="o">=</span><span class="s1">&#39;.1f&#39;</span><span class="p">,</span>
+    <span class="n">linecolor</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">,</span>
+    <span class="n">cbar</span><span class="o">=</span><span class="kc">True</span><span class="p">);</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">/</span><span class="n">tmp</span><span class="o">/</span><span class="n">ipykernel_1886261</span><span class="o">/</span><span class="mf">3937467450.</span><span class="n">py</span><span class="p">:</span><span class="mi">3</span><span class="p">:</span> <span class="ne">FutureWarning</span><span class="p">:</span> <span class="n">The</span> <span class="n">default</span> <span class="n">value</span> <span class="n">of</span> <span class="n">numeric_only</span> <span class="ow">in</span> <span class="n">DataFrame</span><span class="o">.</span><span class="n">corr</span> <span class="ow">is</span> <span class="n">deprecated</span><span class="o">.</span> <span class="n">In</span> <span class="n">a</span> <span class="n">future</span> <span class="n">version</span><span class="p">,</span> <span class="n">it</span> <span class="n">will</span> <span class="n">default</span> <span class="n">to</span> <span class="kc">False</span><span class="o">.</span> <span class="n">Select</span> <span class="n">only</span> <span class="n">valid</span> <span class="n">columns</span> <span class="ow">or</span> <span class="n">specify</span> <span class="n">the</span> <span class="n">value</span> <span class="n">of</span> <span class="n">numeric_only</span> <span class="n">to</span> <span class="n">silence</span> <span class="n">this</span> <span class="n">warning</span><span class="o">.</span>
+  <span class="n">correlation</span><span class="o">=</span><span class="n">RFM_df</span><span class="o">.</span><span class="n">corr</span><span class="p">()</span>
+</pre></div>
+</div>
+<img alt="_images/Customer_Segmentation_54_1.png" src="_images/Customer_Segmentation_54_1.png" />
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="s2">&quot;fivethirtyeight&quot;</span><span class="p">)</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">pairplot</span><span class="p">(</span><span class="n">RFM_df</span><span class="p">,</span><span class="n">hue</span><span class="o">=</span><span class="s1">&#39;Frequency&#39;</span><span class="p">);</span>
+</pre></div>
+</div>
+<img alt="_images/Customer_Segmentation_55_0.png" src="_images/Customer_Segmentation_55_0.png" />
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="s2">&quot;fivethirtyeight&quot;</span><span class="p">)</span>
+<span class="n">chart</span><span class="o">=</span><span class="n">sns</span><span class="o">.</span><span class="n">countplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="s1">&#39;Frequency&#39;</span><span class="p">,</span><span class="n">data</span><span class="o">=</span><span class="n">RFM_df</span><span class="p">,</span><span class="n">palette</span><span class="o">=</span><span class="s1">&#39;rocket&#39;</span><span class="p">,</span> <span class="n">order</span> <span class="o">=</span> <span class="n">RFM_df</span><span class="p">[</span><span class="s1">&#39;Frequency&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Frequency&quot;</span><span class="p">,</span>
+          <span class="n">fontsize</span><span class="o">=</span><span class="s1">&#39;20&#39;</span><span class="p">,</span>
+          <span class="n">backgroundcolor</span><span class="o">=</span><span class="s1">&#39;AliceBlue&#39;</span><span class="p">,</span>
+          <span class="n">color</span><span class="o">=</span><span class="s1">&#39;magenta&#39;</span><span class="p">);</span>
+</pre></div>
+</div>
+<img alt="_images/Customer_Segmentation_56_0.png" src="_images/Customer_Segmentation_56_0.png" />
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="s2">&quot;fivethirtyeight&quot;</span><span class="p">)</span>
+<span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">ncols</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span><span class="n">nrows</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span><span class="mi">5</span><span class="p">))</span>
+<span class="n">palette_color</span> <span class="o">=</span> <span class="n">sns</span><span class="o">.</span><span class="n">color_palette</span><span class="p">(</span><span class="s1">&#39;rocket&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">RFM_df</span><span class="p">[</span><span class="s1">&#39;CustomerAge&#39;</span><span class="p">],</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;purple&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Distribution of Customer Age&quot;</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">pie</span><span class="p">(</span><span class="n">RFM_df</span><span class="p">[</span><span class="s1">&#39;CustGender&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">(),</span><span class="n">autopct</span><span class="o">=</span><span class="s1">&#39;%1.f</span><span class="si">%%</span><span class="s1">&#39;</span><span class="p">,</span><span class="n">colors</span><span class="o">=</span><span class="n">palette_color</span><span class="p">,</span><span class="n">labels</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Male&#39;</span><span class="p">,</span><span class="s1">&#39;Female&#39;</span><span class="p">])</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Customer Gender&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">();</span>
+</pre></div>
+</div>
+<img alt="_images/Customer_Segmentation_57_0.png" src="_images/Customer_Segmentation_57_0.png" />
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="s2">&quot;fivethirtyeight&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span><span class="mi">7</span><span class="p">))</span>
+<span class="n">chart</span><span class="o">=</span><span class="n">sns</span><span class="o">.</span><span class="n">countplot</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="s1">&#39;CustLocation&#39;</span><span class="p">,</span><span class="n">data</span><span class="o">=</span><span class="n">RFM_df</span><span class="p">,</span><span class="n">palette</span><span class="o">=</span><span class="s1">&#39;rocket&#39;</span><span class="p">,</span> <span class="n">order</span> <span class="o">=</span> <span class="n">RFM_df</span><span class="p">[</span><span class="s1">&#39;CustLocation&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()[:</span><span class="mi">20</span><span class="p">]</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Most 20 Location of Customer &quot;</span><span class="p">,</span>
+          <span class="n">fontsize</span><span class="o">=</span><span class="s1">&#39;20&#39;</span><span class="p">,</span>
+          <span class="n">backgroundcolor</span><span class="o">=</span><span class="s1">&#39;AliceBlue&#39;</span><span class="p">,</span>
+          <span class="n">color</span><span class="o">=</span><span class="s1">&#39;magenta&#39;</span><span class="p">);</span>
+</pre></div>
+</div>
+<img alt="_images/Customer_Segmentation_58_0.png" src="_images/Customer_Segmentation_58_0.png" />
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="s2">&quot;fivethirtyeight&quot;</span><span class="p">)</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">scatterplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="s1">&#39;TransactionAmount&#39;</span><span class="p">,</span><span class="n">y</span><span class="o">=</span><span class="s1">&#39;CustAccountBalance&#39;</span><span class="p">,</span><span class="n">data</span><span class="o">=</span><span class="n">RFM_df</span><span class="p">,</span><span class="n">palette</span><span class="o">=</span><span class="s1">&#39;rocket&#39;</span><span class="p">,</span><span class="n">hue</span><span class="o">=</span><span class="s1">&#39;Frequency&#39;</span><span class="p">,</span><span class="n">size</span><span class="o">=</span><span class="s1">&#39;Recency&#39;</span> <span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;TransactionAmount (INR) and CustAccountBalance&quot;</span><span class="p">,</span>
+          <span class="n">fontsize</span><span class="o">=</span><span class="s1">&#39;20&#39;</span><span class="p">,</span>
+          <span class="n">backgroundcolor</span><span class="o">=</span><span class="s1">&#39;AliceBlue&#39;</span><span class="p">,</span>
+          <span class="n">color</span><span class="o">=</span><span class="s1">&#39;magenta&#39;</span><span class="p">);</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">alejandro</span><span class="o">/.</span><span class="n">local</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">python3</span><span class="mf">.8</span><span class="o">/</span><span class="n">site</span><span class="o">-</span><span class="n">packages</span><span class="o">/</span><span class="n">IPython</span><span class="o">/</span><span class="n">core</span><span class="o">/</span><span class="n">events</span><span class="o">.</span><span class="n">py</span><span class="p">:</span><span class="mi">89</span><span class="p">:</span> <span class="ne">UserWarning</span><span class="p">:</span> <span class="n">Creating</span> <span class="n">legend</span> <span class="k">with</span> <span class="n">loc</span><span class="o">=</span><span class="s2">&quot;best&quot;</span> <span class="n">can</span> <span class="n">be</span> <span class="n">slow</span> <span class="k">with</span> <span class="n">large</span> <span class="n">amounts</span> <span class="n">of</span> <span class="n">data</span><span class="o">.</span>
+  <span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+<span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">alejandro</span><span class="o">/.</span><span class="n">local</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">python3</span><span class="mf">.8</span><span class="o">/</span><span class="n">site</span><span class="o">-</span><span class="n">packages</span><span class="o">/</span><span class="n">IPython</span><span class="o">/</span><span class="n">core</span><span class="o">/</span><span class="n">pylabtools</span><span class="o">.</span><span class="n">py</span><span class="p">:</span><span class="mi">152</span><span class="p">:</span> <span class="ne">UserWarning</span><span class="p">:</span> <span class="n">Creating</span> <span class="n">legend</span> <span class="k">with</span> <span class="n">loc</span><span class="o">=</span><span class="s2">&quot;best&quot;</span> <span class="n">can</span> <span class="n">be</span> <span class="n">slow</span> <span class="k">with</span> <span class="n">large</span> <span class="n">amounts</span> <span class="n">of</span> <span class="n">data</span><span class="o">.</span>
+  <span class="n">fig</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">print_figure</span><span class="p">(</span><span class="n">bytes_io</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+</pre></div>
+</div>
+<img alt="_images/Customer_Segmentation_59_1.png" src="_images/Customer_Segmentation_59_1.png" />
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># difference between maximum and minimum date</span>
+<span class="n">RFM_df</span><span class="p">[</span><span class="s1">&#39;TransactionDate&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">()</span><span class="o">-</span><span class="n">RFM_df</span><span class="p">[</span><span class="s1">&#39;TransactionDate&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Timedelta</span><span class="p">(</span><span class="s1">&#39;336 days 00:00:00&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">RFM_df</span><span class="o">=</span><span class="n">RFM_df</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="s1">&#39;TransactionDate&#39;</span><span class="p">)</span>
+<span class="n">groupbby_month</span><span class="o">=</span><span class="n">RFM_df</span><span class="o">.</span><span class="n">groupby</span><span class="p">([</span><span class="n">pd</span><span class="o">.</span><span class="n">Grouper</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="s1">&#39;TransactionDate&#39;</span><span class="p">,</span><span class="n">freq</span><span class="o">=</span><span class="s1">&#39;M&#39;</span><span class="p">)])</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">groupbby_month</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="n">groupbby_month</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">6</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">/</span><span class="n">tmp</span><span class="o">/</span><span class="n">ipykernel_1886261</span><span class="o">/</span><span class="mf">347716159.</span><span class="n">py</span><span class="p">:</span><span class="mi">2</span><span class="p">:</span> <span class="ne">FutureWarning</span><span class="p">:</span> <span class="n">The</span> <span class="n">default</span> <span class="n">value</span> <span class="n">of</span> <span class="n">numeric_only</span> <span class="ow">in</span> <span class="n">DataFrameGroupBy</span><span class="o">.</span><span class="n">mean</span> <span class="ow">is</span> <span class="n">deprecated</span><span class="o">.</span> <span class="n">In</span> <span class="n">a</span> <span class="n">future</span> <span class="n">version</span><span class="p">,</span> <span class="n">numeric_only</span> <span class="n">will</span> <span class="n">default</span> <span class="n">to</span> <span class="kc">False</span><span class="o">.</span> <span class="n">Either</span> <span class="n">specify</span> <span class="n">numeric_only</span> <span class="ow">or</span> <span class="n">select</span> <span class="n">only</span> <span class="n">columns</span> <span class="n">which</span> <span class="n">should</span> <span class="n">be</span> <span class="n">valid</span> <span class="k">for</span> <span class="n">the</span> <span class="n">function</span><span class="o">.</span>
+  <span class="n">groupbby_month</span><span class="o">=</span><span class="n">RFM_df</span><span class="o">.</span><span class="n">groupby</span><span class="p">([</span><span class="n">pd</span><span class="o">.</span><span class="n">Grouper</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="s1">&#39;TransactionDate&#39;</span><span class="p">,</span><span class="n">freq</span><span class="o">=</span><span class="s1">&#39;M&#39;</span><span class="p">)])</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+</pre></div>
+</div>
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Frequency</th>
+      <th>CustAccountBalance</th>
+      <th>TransactionTime</th>
+      <th>TransactionAmount</th>
+      <th>CustomerAge</th>
+      <th>Recency</th>
+    </tr>
+    <tr>
+      <th>TransactionDate</th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>2016-01-31</th>
+      <td>1.023535</td>
+      <td>99430.235124</td>
+      <td>157265.789770</td>
+      <td>1339.251024</td>
+      <td>30.834616</td>
+      <td>1.812399</td>
+    </tr>
+    <tr>
+      <th>2016-02-29</th>
+      <td>1.060922</td>
+      <td>93326.181885</td>
+      <td>158205.582772</td>
+      <td>1399.785006</td>
+      <td>30.849497</td>
+      <td>4.899824</td>
+    </tr>
+    <tr>
+      <th>2016-03-31</th>
+      <td>1.086487</td>
+      <td>103808.517021</td>
+      <td>158177.329631</td>
+      <td>1539.192142</td>
+      <td>31.066789</td>
+      <td>8.173665</td>
+    </tr>
+    <tr>
+      <th>2016-04-30</th>
+      <td>1.163838</td>
+      <td>105543.379683</td>
+      <td>157837.754316</td>
+      <td>1593.985274</td>
+      <td>31.051824</td>
+      <td>23.924108</td>
+    </tr>
+    <tr>
+      <th>2016-05-31</th>
+      <td>1.341184</td>
+      <td>100434.957463</td>
+      <td>157353.966707</td>
+      <td>1485.286222</td>
+      <td>30.856852</td>
+      <td>60.218238</td>
+    </tr>
+    <tr>
+      <th>2016-06-30</th>
+      <td>1.344024</td>
+      <td>101659.608711</td>
+      <td>157673.525936</td>
+      <td>1557.533949</td>
+      <td>30.887388</td>
+      <td>51.326862</td>
+    </tr>
+    <tr>
+      <th>2016-07-31</th>
+      <td>1.341087</td>
+      <td>96535.576484</td>
+      <td>157185.137192</td>
+      <td>1453.967449</td>
+      <td>30.926613</td>
+      <td>35.571659</td>
+    </tr>
+    <tr>
+      <th>2016-08-31</th>
+      <td>1.147972</td>
+      <td>111922.967559</td>
+      <td>156982.533508</td>
+      <td>1453.964534</td>
+      <td>31.239593</td>
+      <td>7.009712</td>
+    </tr>
+    <tr>
+      <th>2016-09-30</th>
+      <td>1.201000</td>
+      <td>107963.818667</td>
+      <td>157945.037096</td>
+      <td>1398.478069</td>
+      <td>31.038822</td>
+      <td>10.089098</td>
+    </tr>
+    <tr>
+      <th>2016-10-31</th>
+      <td>1.228312</td>
+      <td>101343.472476</td>
+      <td>158561.823716</td>
+      <td>1425.168714</td>
+      <td>30.905476</td>
+      <td>18.680699</td>
+    </tr>
+    <tr>
+      <th>2016-11-30</th>
+      <td>1.055598</td>
+      <td>100745.295199</td>
+      <td>157783.769600</td>
+      <td>1464.565195</td>
+      <td>31.013708</td>
+      <td>3.674762</td>
+    </tr>
+    <tr>
+      <th>2016-12-31</th>
+      <td>1.011268</td>
+      <td>93716.370712</td>
+      <td>156572.791719</td>
+      <td>1405.804742</td>
+      <td>30.918373</td>
+      <td>1.382713</td>
+    </tr>
+  </tbody>
+</table>
+</div><div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="s2">&quot;fivethirtyeight&quot;</span><span class="p">)</span>
+<span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">ncols</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span><span class="n">nrows</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span><span class="mi">5</span><span class="p">))</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">groupbby_month</span><span class="o">.</span><span class="n">index</span><span class="p">,</span><span class="n">groupbby_month</span><span class="p">[</span><span class="s1">&#39;CustAccountBalance&#39;</span><span class="p">],</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;purple&#39;</span><span class="p">,</span><span class="n">marker</span><span class="o">=</span><span class="s1">&#39;o&#39;</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;Customer Account Balance&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Cust Account Balance Over The Time&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">groupbby_month</span><span class="o">.</span><span class="n">index</span><span class="p">,</span><span class="n">groupbby_month</span><span class="p">[</span><span class="s1">&#39;TransactionAmount&#39;</span><span class="p">],</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;purple&#39;</span><span class="p">,</span><span class="n">marker</span><span class="o">=</span><span class="s1">&#39;o&#39;</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;Transaction Amount&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Transaction Amount Over The Time&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">();</span>
+</pre></div>
+</div>
+<img alt="_images/Customer_Segmentation_62_0.png" src="_images/Customer_Segmentation_62_0.png" />
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="#">customer-segmentation</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="#">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2023, Alejandro Varela.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 6.1.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.13</a>
+      
+      |
+      <a href="_sources/index.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
