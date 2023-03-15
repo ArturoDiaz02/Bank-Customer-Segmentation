@@ -1,0 +1,1635 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bank Customer Segmentation &mdash; Bank-Customer-Segmentation 1 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="_static/nbsphinx-code-cells.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+        <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Welcome to Bank-Customer-Segmentation’s documentation!" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Bank-Customer-Segmentation
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Bank Customer Segmentation</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Bank-Customer-Segmentation</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Bank Customer Segmentation</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/Customer_Segmentation.ipynb.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="Bank-Customer-Segmentation">
+<h1>Bank Customer Segmentation<a class="headerlink" href="#Bank-Customer-Segmentation" title="Permalink to this heading"></a></h1>
+<h2 style="font-weight:bold; font-family:sans-serif"><p>Goal of creating this Notebook</p>
+</h2><ol class="arabic simple">
+<li><p>Perform Clustering / Segmentation on the dataset and identify popular customer groups along with their definitions/rules</p></li>
+<li><p>Perform Location-wise analysis to identify regional trends in India</p></li>
+<li><p>Perform transaction-related analysis to identify interesting trends that can be used by a bank to improve / optimi their user experiences</p></li>
+<li><p>Customer Recency, Frequency, Monetary analysis</p></li>
+<li><p>Network analysis or Graph analysis of customer data.</p></li>
+</ol>
+<p><strong>Table of contents of this notebook:</strong></p>
+<p><strong>1.</strong> Importing Necessary Libraries <strong>2.</strong> Data Collection <strong>3.</strong> Data Cleaning <strong>4.</strong> Exploratory Data Analysis</p>
+<h2  style="text-align: center; padding: 20px; font-weight:bold"><ol class="arabic">
+<li><p>Importing Libraries</p>
+</h2></li>
+</ol>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="o">%</span><span class="k">matplotlib</span> inline
+<span class="n">plt</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="s2">&quot;fivethirtyeight&quot;</span><span class="p">)</span>
+<span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
+</pre></div>
+</div>
+</div>
+<h2  style="text-align: center; padding: 20px; font-weight:bold"><ol class="arabic" start="2">
+<li><p>Data Collection</p>
+</h2></li>
+</ol>
+<p>We import our relative path Dataset and in addition to that, we rename the TransactionAmount (INR) column in TransactionAmount, this in order to avoid that in the future the special characters of the original name give us problems.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">import_data</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This function get the DataSet and rename a column.</span>
+<span class="sd">    :param:</span>
+<span class="sd">    :return: Dataframe</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">dfGet</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;../data/bank_transactions.csv&quot;</span><span class="p">)</span>
+    <span class="n">initialRows</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">dfGet</span><span class="p">)</span>
+    <span class="n">dfGet</span> <span class="o">=</span> <span class="n">dfGet</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;TransactionAmount (INR)&#39;</span><span class="p">:</span><span class="s1">&#39;TransactionAmount&#39;</span><span class="p">})</span>
+    <span class="k">return</span> <span class="n">dfGet</span>
+
+<span class="n">df</span> <span class="o">=</span> <span class="n">import_data</span><span class="p">()</span>
+<span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+<br/></pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>TransactionID</th>
+      <th>CustomerID</th>
+      <th>CustomerDOB</th>
+      <th>CustGender</th>
+      <th>CustLocation</th>
+      <th>CustAccountBalance</th>
+      <th>TransactionDate</th>
+      <th>TransactionTime</th>
+      <th>TransactionAmount</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>T1</td>
+      <td>C5841053</td>
+      <td>10/1/94</td>
+      <td>F</td>
+      <td>JAMSHEDPUR</td>
+      <td>17819.05</td>
+      <td>2/8/16</td>
+      <td>143207</td>
+      <td>25.0</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>T2</td>
+      <td>C2142763</td>
+      <td>4/4/57</td>
+      <td>M</td>
+      <td>JHAJJAR</td>
+      <td>2270.69</td>
+      <td>2/8/16</td>
+      <td>141858</td>
+      <td>27999.0</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>T3</td>
+      <td>C4417068</td>
+      <td>26/11/96</td>
+      <td>F</td>
+      <td>MUMBAI</td>
+      <td>17874.44</td>
+      <td>2/8/16</td>
+      <td>142712</td>
+      <td>459.0</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>T4</td>
+      <td>C5342380</td>
+      <td>14/9/73</td>
+      <td>F</td>
+      <td>MUMBAI</td>
+      <td>866503.21</td>
+      <td>2/8/16</td>
+      <td>142714</td>
+      <td>2060.0</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>T5</td>
+      <td>C9031234</td>
+      <td>24/3/88</td>
+      <td>F</td>
+      <td>NAVI MUMBAI</td>
+      <td>6714.43</td>
+      <td>2/8/16</td>
+      <td>181156</td>
+      <td>1762.5</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+<p>We obtain the initial information of the Dataset, the number of records, number of variables, non-null objects and data type.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">display</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">info</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+&lt;class &#39;pandas.core.frame.DataFrame&#39;&gt;
+RangeIndex: 1048567 entries, 0 to 1048566
+Data columns (total 9 columns):
+ #   Column              Non-Null Count    Dtype
+---  ------              --------------    -----
+ 0   TransactionID       1048567 non-null  object
+ 1   CustomerID          1048567 non-null  object
+ 2   CustomerDOB         1045170 non-null  object
+ 3   CustGender          1047467 non-null  object
+ 4   CustLocation        1048416 non-null  object
+ 5   CustAccountBalance  1046198 non-null  float64
+ 6   TransactionDate     1048567 non-null  object
+ 7   TransactionTime     1048567 non-null  int64
+ 8   TransactionAmount   1048567 non-null  float64
+dtypes: float64(2), int64(1), object(6)
+memory usage: 72.0+ MB
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+None
+</pre></div></div>
+</div>
+<h2  style="text-align: center; padding: 20px; font-weight:bold"><ol class="arabic" start="3">
+<li><p>Data Cleaning</p>
+</h2></li>
+</ol>
+<p>The amount of null data and unique is calculated</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">check</span><span class="p">(</span><span class="n">df</span><span class="p">):</span>
+    <span class="n">l</span><span class="o">=</span><span class="p">[]</span>
+    <span class="n">columns</span><span class="o">=</span><span class="n">df</span><span class="o">.</span><span class="n">columns</span>
+    <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">columns</span><span class="p">:</span>
+        <span class="n">dtypes</span><span class="o">=</span><span class="n">df</span><span class="p">[</span><span class="n">col</span><span class="p">]</span><span class="o">.</span><span class="n">dtypes</span>
+        <span class="n">nunique</span><span class="o">=</span><span class="n">df</span><span class="p">[</span><span class="n">col</span><span class="p">]</span><span class="o">.</span><span class="n">nunique</span><span class="p">()</span>
+        <span class="n">sum_null</span><span class="o">=</span><span class="n">df</span><span class="p">[</span><span class="n">col</span><span class="p">]</span><span class="o">.</span><span class="n">isnull</span><span class="p">()</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+        <span class="n">l</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">col</span><span class="p">,</span><span class="n">dtypes</span><span class="p">,</span><span class="n">nunique</span><span class="p">,</span><span class="n">sum_null</span><span class="p">])</span>
+    <span class="n">df_check</span><span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">l</span><span class="p">)</span>
+    <span class="n">df_check</span><span class="o">.</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Column&#39;</span><span class="p">,</span><span class="s1">&#39;Types&#39;</span><span class="p">,</span><span class="s1">&#39;Unique&#39;</span><span class="p">,</span><span class="s1">&#39;Nulls&#39;</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">df_check</span>
+<span class="n">check</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+<br/></pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Column</th>
+      <th>Types</th>
+      <th>Unique</th>
+      <th>Nulls</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>TransactionID</td>
+      <td>object</td>
+      <td>1048567</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>CustomerID</td>
+      <td>object</td>
+      <td>884265</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>CustomerDOB</td>
+      <td>object</td>
+      <td>17254</td>
+      <td>3397</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>CustGender</td>
+      <td>object</td>
+      <td>3</td>
+      <td>1100</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>CustLocation</td>
+      <td>object</td>
+      <td>9355</td>
+      <td>151</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>CustAccountBalance</td>
+      <td>float64</td>
+      <td>161328</td>
+      <td>2369</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>TransactionDate</td>
+      <td>object</td>
+      <td>55</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>TransactionTime</td>
+      <td>int64</td>
+      <td>81918</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>TransactionAmount</td>
+      <td>float64</td>
+      <td>93024</td>
+      <td>0</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+<p>Eliminamos los valores nulos</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">shapeInitial</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">df</span><span class="o">.</span><span class="n">dropna</span><span class="p">(</span><span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">shapeFinal</span> <span class="o">=</span> <span class="n">shapeInitial</span><span class="o">-</span><span class="n">df</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Amount to remove &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">shapeFinal</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Amount to remove 6953
+</pre></div></div>
+</div>
+<p>The amount of null values to eliminate is equal to 6953 data, we eliminate these values because they do not represent more than 0.7% of the total data. We check if there are repeated elements in our DataSet</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">duplicated</span><span class="p">()</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+0
+</pre></div></div>
+</div>
+<p>The CustomerDOB column is analyzed because it may contain atypical data. We analyze the number of records for each client’s date of birth.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Getting distinct values from CustomerDOB variable</span>
+<span class="n">df</span><span class="p">[</span><span class="s1">&#39;CustomerDOB&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+1/1/1800    56292
+1/1/89        809
+1/1/90        784
+6/8/91        698
+1/1/91        665
+            ...
+2/12/51         1
+20/3/52         1
+26/9/47         1
+4/10/41         1
+24/10/44        1
+Name: CustomerDOB, Length: 17233, dtype: int64
+</pre></div></div>
+</div>
+<p>Dates 1/1/1800 are deleted because it is not possible to define whether they are children, adults or persons without date of birth. This is an important variable for the business, for this reason we cannot make assumptions that bias the project, for this reason, it is better to eliminate these outliers or erroneously measured data.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Removing CustomerDOB == &#39;1/1/1800&#39;</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="o">~</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;CustomerDOB&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;1/1/1800&#39;</span><span class="p">)]</span>
+<span class="c1"># Cheking distinct values from dataframe</span>
+<span class="n">df</span><span class="p">[</span><span class="s1">&#39;CustomerDOB&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+1/1/89      809
+1/1/90      784
+6/8/91      698
+1/1/91      665
+1/1/92      631
+           ...
+23/2/05       1
+28/11/42      1
+23/9/49       1
+14/3/40       1
+24/10/44      1
+Name: CustomerDOB, Length: 17232, dtype: int64
+</pre></div></div>
+</div>
+<p>We print the minimum and maximum date of the CustomerDOB column in order to see in which range the values in this column oscillate.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Range of CustomerDOB object type as string</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;min: &quot;</span> <span class="o">+</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;CustomerDOB&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">()</span> <span class="o">+</span> <span class="s2">&quot; max: &quot;</span> <span class="o">+</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;CustomerDOB&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+min: 1/1/00 max: 9/9/97
+</pre></div></div>
+</div>
+<p>It can be seen that the person with the oldest birth date has a date of January 1, 1900 and the youngest person has a date of September 9, 1997.</p>
+<p>Convert type of columns TransactionDate, CustomerDOB from string to datetime, this convertation will be in the format of dayfirst, so the date will be DD/MM/YY</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Using pandas convert to datetime tool for CustomerDOB variable with specific format</span>
+<span class="n">df</span><span class="p">[</span><span class="s1">&#39;CustomerDOB&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;CustomerDOB&#39;</span><span class="p">],</span> <span class="n">dayfirst</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p>Now we will check if the conversion was as expected and in the required format.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Checking converting problem of to_datetime pandas function</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;CustomerDOB&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;CustomerDOB&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+1973-01-01 00:00:00 2072-12-31 00:00:00
+</pre></div></div>
+</div>
+<p>We can see that the most “recent” date is December 31, 2072, but it is illogical because this is a future date, so we subtract 100 from all values greater than 1999 to get the real value. (This is a problem Pandas has when converting a date).</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Fixing the problem base on analysis above</span>
+<span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;CustomerDOB&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">dt</span><span class="o">.</span><span class="n">year</span> <span class="o">&gt;</span> <span class="mi">1999</span><span class="p">,</span> <span class="s1">&#39;CustomerDOB&#39;</span><span class="p">]</span> <span class="o">-=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DateOffset</span><span class="p">(</span><span class="n">years</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;CustomerDOB&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;CustomerDOB&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+1900-01-01 00:00:00 1999-12-28 00:00:00
+</pre></div></div>
+</div>
+<p>In the same way that we converted the CustomerDOB column, we convert the TransactionDate column with the same expected format as the first day.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Using pandas convert to datetime tool for TransactionDate variable</span>
+<span class="n">df</span><span class="p">[</span><span class="s1">&#39;TransactionDate&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;TransactionDate&#39;</span><span class="p">],</span> <span class="n">dayfirst</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="c1"># Checking range of TransactionDate variable</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;TransactionDate&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;TransactionDate&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+2016-08-01 00:00:00 2016-10-21 00:00:00
+</pre></div></div>
+</div>
+<p>All the trnasactions took place in a roughly two month period from August to October, this could account for the low transaction frequency</p>
+<p>Once all the unnecessary data for the study has been eliminated, we can see the following summary, which shows us how much data we lost and what is the percentage of loss obtained</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot; Number of initial rows: &quot;</span><span class="p">,</span> <span class="n">initialRows</span><span class="p">,</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span>
+<span class="s2">&quot;Number of rows after: &quot;</span><span class="p">,</span> <span class="n">df</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span>
+<span class="s2">&quot;Number of rows deleted: &quot;</span><span class="p">,</span> <span class="n">initialRows</span> <span class="o">-</span> <span class="n">df</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span>
+<span class="s2">&quot;Percentage of rows deleted: &quot;</span><span class="p">,</span> <span class="p">(</span><span class="n">initialRows</span> <span class="o">-</span> <span class="n">df</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">/</span> <span class="n">initialRows</span> <span class="o">*</span> <span class="mi">100</span><span class="p">,</span> <span class="s2">&quot;%&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+ Number of initial rows:  1048567
+ Number of rows after:  985322
+ Number of rows deleted:  63245
+ Percentage of rows deleted:  6.03156498344884 %
+</pre></div></div>
+</div>
+<p>We can see that we lost 6.03% of the data, although what is expected by theory is to lose less than 5% in this case we must ignore this metric because there are null values and measurement failure errors that force us to eliminate them, because we cannot speculate about them.</p>
+<h2  style="text-align: center;padding: 20px;font-weight:bold"><ol class="arabic" start="4">
+<li><p>Exploratory Data Analysis</p>
+</h2></li>
+</ol>
+<p>Determine minority group of people aged over 100 years</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># We filter our dataframe specifically on the DOB column to make a decision regarding date ambiguity.</span>
+<span class="n">df_filtered</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;CustomerDOB&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span> <span class="k">if</span> <span class="n">x</span><span class="o">.</span><span class="n">year</span> <span class="o">&lt;</span> <span class="mi">1917</span> <span class="k">else</span> <span class="mi">0</span><span class="p">)</span>
+<span class="c1"># Amortizing and removing values ​​greater than 1917 represented as 0</span>
+<span class="n">counts</span> <span class="o">=</span> <span class="n">df_filtered</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">counts</span><span class="p">)</span>
+<span class="c1"># Amount of customer in this age range</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">counts</span><span class="p">))</span>
+<span class="c1"># Plot the amortized</span>
+<span class="n">counts</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+<span class="k">del</span> <span class="n">df_filtered</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+1900-04-11    18
+1902-03-31    18
+1903-02-19    18
+1901-09-22    18
+1907-01-02    16
+              ..
+1913-10-22     1
+1913-02-04     1
+1905-02-23     1
+1903-03-07     1
+1915-11-18     1
+Name: CustomerDOB, Length: 254, dtype: int64
+254
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/Customer_Segmentation_37_1.png" src="_images/Customer_Segmentation_37_1.png" />
+</div>
+</div>
+<h3><p>Calculate customer age :</p>
+</h3><p>CustomerDOB: is the birth date of the customer TransactionDate: is the date of transaction that customer is done The age calculation is done by subtracting the TransactionDate from the CustomerDOB.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Getting the customer age at transaction moment and adding a new column in our dataframe</span>
+<span class="n">df</span><span class="p">[</span><span class="s1">&#39;CustomerAge&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;TransactionDate&#39;</span><span class="p">]</span> <span class="o">-</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;CustomerDOB&#39;</span><span class="p">])</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">timedelta64</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;Y&#39;</span><span class="p">)</span>
+<span class="n">df</span><span class="p">[</span><span class="s1">&#39;CustomerAge&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;CustomerAge&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+<span class="c1"># Checking range of CustomerAge variable</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;min: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;CustomerAge&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">())</span> <span class="o">+</span> <span class="s2">&quot; max: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;CustomerAge&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">()))</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+min: 16 max: 116
+</pre></div></div>
+</div>
+<p>Once this is obtained, we have that the minimum age is equal to 16 years and the maximum age is equal to 116 years, it should be noted that the ages over 100 are a minimum percentage.</p>
+<p>We obtain the percentage between customers who are women and men.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Getting distinct values from CustGender variable</span>
+<span class="n">df</span><span class="o">.</span><span class="n">CustGender</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+M    712454
+F    272868
+Name: CustGender, dtype: int64
+</pre></div></div>
+</div>
+<h5><p>Visualize the distribution of the numeric data and detect posible outliers. Boxplots show the median, quartiles, and extreme values ​​of the data, and points that are above or below the extreme values ​​are considered outliers.</p>
+</h5><div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">num_col</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">select_dtypes</span><span class="p">(</span><span class="n">include</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">number</span><span class="p">)</span>
+<span class="n">cat_col</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">select_dtypes</span><span class="p">(</span><span class="n">exclude</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">number</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">num_col</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+    <span class="n">sns</span><span class="o">.</span><span class="n">boxplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">num_col</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Boxplot &quot;</span> <span class="o">+</span> <span class="n">i</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/Customer_Segmentation_44_0.png" src="_images/Customer_Segmentation_44_0.png" />
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/Customer_Segmentation_44_1.png" src="_images/Customer_Segmentation_44_1.png" />
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/Customer_Segmentation_44_2.png" src="_images/Customer_Segmentation_44_2.png" />
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/Customer_Segmentation_44_3.png" src="_images/Customer_Segmentation_44_3.png" />
+</div>
+</div>
+<h3 style="font-family:Sans-Serif; font-weight:bold"><p>RFM Metrics:</p>
+</h3><ul><li><p>Recency: The freshness of customer activity e.g. time since last activity</p>
+</li><li><p>Frequency: The requency of customer transactions e.g. the totla number of recorded transactions</p>
+</li><li><p>Monetary: The willingness to spend e.g. the thoal transaction value</p>
+</li></ul><p><p>Those two articles will help you to understand this topic:</p>
+</p><p>What Are RFM Scores and How To Calculate Them Introduction to Customer Segmentation in Python</p>
+<p>We prepare some columns to make the RFM table</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[25]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;TransactionDate1&#39;</span><span class="p">]</span><span class="o">=</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;TransactionDate&#39;</span><span class="p">]</span> <span class="c1"># ==&gt; to calculate the minimum (first transaction)</span>
+<span class="n">df</span><span class="p">[</span><span class="s1">&#39;TransactionDate2&#39;</span><span class="p">]</span><span class="o">=</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;TransactionDate&#39;</span><span class="p">]</span> <span class="c1"># ==&gt; to calculate the maximum (last transaction)</span>
+</pre></div>
+</div>
+</div>
+<p>Este código es utilizado para crear una tabla RFM (Recency, Frequency, Monetary) Se agrupan los datos por CustomerID utilizando el método groupby y luego se utiliza la función agg para calcular distintas métricas para cada cliente.</p>
+<p>Las métricas que se calculan son las siguientes:</p>
+<ul><li><p>TransactionID: cantidad de transacciones realizadas por el cliente.</p>
+</li><li><p>CustGender: género del cliente (tomado de la primera transacción registrada para el cliente).</p>
+</li><li><p>CustLocation: ubicación del cliente (también tomada de la primera transacción registrada para el cliente).</p>
+</li><li><p>CustAccountBalance: saldo promedio de la cuenta del cliente.</p>
+</li><li><p>TransactionTime: hora promedio de las transacciones realizadas por el cliente.</p>
+</li><li><p>TransactionAmount: monto promedio de las transacciones realizadas por el cliente.</p>
+</li><li><p>CustomerAge: edad mediana del cliente.</p>
+</li><li><p>TransactionDate2: fecha más reciente en la que el cliente realizó una transacción.</p>
+</li><li><p>TransactionDate1: fecha más antigua en la que el cliente realizó una transacción.</p>
+</li><li><p>TransactionDate: fecha mediana en la que el cliente realizó una transacción.</p>
+</li></ul><div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[26]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#Creating MRF Table Strategy</span>
+<span class="n">RFM_df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">&quot;CustomerID&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">agg</span><span class="p">({</span>
+                                        <span class="s2">&quot;TransactionID&quot;</span> <span class="p">:</span> <span class="s2">&quot;count&quot;</span><span class="p">,</span>
+                                        <span class="s2">&quot;CustGender&quot;</span> <span class="p">:</span> <span class="s2">&quot;first&quot;</span><span class="p">,</span>
+                                        <span class="s2">&quot;CustLocation&quot;</span><span class="p">:</span><span class="s2">&quot;first&quot;</span><span class="p">,</span>
+                                        <span class="s2">&quot;CustAccountBalance&quot;</span>  <span class="p">:</span> <span class="s2">&quot;mean&quot;</span><span class="p">,</span>
+                                        <span class="s2">&quot;TransactionTime&quot;</span><span class="p">:</span> <span class="s2">&quot;mean&quot;</span><span class="p">,</span>
+                                        <span class="s2">&quot;TransactionAmount&quot;</span> <span class="p">:</span> <span class="s2">&quot;mean&quot;</span><span class="p">,</span>
+                                        <span class="s2">&quot;CustomerAge&quot;</span> <span class="p">:</span> <span class="s2">&quot;median&quot;</span><span class="p">,</span>
+                                        <span class="s2">&quot;TransactionDate2&quot;</span><span class="p">:</span><span class="s2">&quot;max&quot;</span><span class="p">,</span>
+                                        <span class="s2">&quot;TransactionDate1&quot;</span><span class="p">:</span><span class="s2">&quot;min&quot;</span><span class="p">,</span>
+                                        <span class="s2">&quot;TransactionDate&quot;</span><span class="p">:</span><span class="s2">&quot;median&quot;</span>
+                        <span class="p">})</span>
+
+<span class="n">RFM_df</span> <span class="o">=</span> <span class="n">RFM_df</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span>
+<span class="n">RFM_df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[26]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>CustomerID</th>
+      <th>TransactionID</th>
+      <th>CustGender</th>
+      <th>CustLocation</th>
+      <th>CustAccountBalance</th>
+      <th>TransactionTime</th>
+      <th>TransactionAmount</th>
+      <th>CustomerAge</th>
+      <th>TransactionDate2</th>
+      <th>TransactionDate1</th>
+      <th>TransactionDate</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>C1010011</td>
+      <td>2</td>
+      <td>F</td>
+      <td>NOIDA</td>
+      <td>76340.635</td>
+      <td>67521.0</td>
+      <td>2553.0</td>
+      <td>28.5</td>
+      <td>2016-09-26</td>
+      <td>2016-08-09</td>
+      <td>2016-09-02</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>C1010012</td>
+      <td>1</td>
+      <td>M</td>
+      <td>MUMBAI</td>
+      <td>24204.490</td>
+      <td>204409.0</td>
+      <td>1499.0</td>
+      <td>22.0</td>
+      <td>2016-08-14</td>
+      <td>2016-08-14</td>
+      <td>2016-08-14</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>C1010014</td>
+      <td>2</td>
+      <td>F</td>
+      <td>MUMBAI</td>
+      <td>100112.950</td>
+      <td>187378.0</td>
+      <td>727.5</td>
+      <td>27.5</td>
+      <td>2016-08-07</td>
+      <td>2016-08-01</td>
+      <td>2016-08-04</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>C1010018</td>
+      <td>1</td>
+      <td>F</td>
+      <td>CHAMPARAN</td>
+      <td>496.180</td>
+      <td>170254.0</td>
+      <td>30.0</td>
+      <td>26.0</td>
+      <td>2016-09-15</td>
+      <td>2016-09-15</td>
+      <td>2016-09-15</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>C1010024</td>
+      <td>1</td>
+      <td>M</td>
+      <td>KOLKATA</td>
+      <td>87058.650</td>
+      <td>141103.0</td>
+      <td>5000.0</td>
+      <td>51.0</td>
+      <td>2016-08-18</td>
+      <td>2016-08-18</td>
+      <td>2016-08-18</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+<p>Now we calculate the number of records we have left after grouping by CustomerID</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[27]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># After Grouping by CustomerID</span>
+<span class="n">RFM_df</span><span class="o">.</span><span class="n">shape</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[27]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+(839081, 11)
+</pre></div></div>
+</div>
+<p>The ID of the customer is irrelevant to solve our problem, so we decided to remove it</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[28]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># The id of the customer is irrelevant</span>
+<span class="n">RFM_df</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;CustomerID&quot;</span><span class="p">],</span><span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<h4><p>Frequency</p>
+</h4><p><p>As we count the TransactionID column, we can replace the name of this column by Frequency, because this is the number of times a customer has made a transaction.</p>
+</p><div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[29]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Renaming specific column adapting to problem goal and replacing with inplace property of function</span>
+<span class="n">RFM_df</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;TransactionID&quot;</span><span class="p">:</span><span class="s2">&quot;Frequency&quot;</span><span class="p">},</span><span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<h4><p>Recency</p>
+</h4><p><p>The recency is the number of days since the last purchase or order so we will create a new column of TransactionDate to subtract the last transaction from the first transaction</p>
+</p><div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[30]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Getting Recency that is by definition: number of days since the last purchase or order</span>
+<span class="n">RFM_df</span><span class="p">[</span><span class="s1">&#39;Recency&#39;</span><span class="p">]</span><span class="o">=</span><span class="n">RFM_df</span><span class="p">[</span><span class="s1">&#39;TransactionDate2&#39;</span><span class="p">]</span><span class="o">-</span><span class="n">RFM_df</span><span class="p">[</span><span class="s1">&#39;TransactionDate1&#39;</span><span class="p">]</span>
+<span class="c1"># Conversion from timedelta64[ns] to string representtion in days of weeks of Recency variable</span>
+<span class="n">RFM_df</span><span class="p">[</span><span class="s1">&#39;Recency&#39;</span><span class="p">]</span><span class="o">=</span><span class="n">RFM_df</span><span class="p">[</span><span class="s1">&#39;Recency&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p>We apply a lambda function to adjust the format of our output in the Recency variable</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[31]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Using re library for apply an regular expresion in each value of Recency column for extract the number of days in this string representation.</span>
+<span class="n">RFM_df</span><span class="p">[</span><span class="s1">&#39;Recency&#39;</span><span class="p">]</span><span class="o">=</span><span class="n">RFM_df</span><span class="p">[</span><span class="s1">&#39;Recency&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span> <span class="p">:</span><span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="s1">&#39;\d+&#39;</span><span class="p">,</span><span class="n">x</span><span class="p">)</span><span class="o">.</span><span class="n">group</span><span class="p">())</span>
+<span class="c1"># Conversion from string &#39;18&#39; to int representtion for folloeing operations</span>
+<span class="n">RFM_df</span><span class="p">[</span><span class="s1">&#39;Recency&#39;</span><span class="p">]</span><span class="o">=</span><span class="n">RFM_df</span><span class="p">[</span><span class="s1">&#39;Recency&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p><p>Appreciation: Days mean that a customer has done transaction recently one time by logic so I will convert 0 to 1</p>
+</p><div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[32]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Transformation of 0 days base on business meaning</span>
+<span class="n">RFM_df</span><span class="p">[</span><span class="s1">&#39;Recency&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">RFM_df</span><span class="p">[</span><span class="s1">&#39;Recency&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="mi">1</span> <span class="k">if</span> <span class="n">x</span> <span class="o">==</span> <span class="mi">0</span> <span class="k">else</span> <span class="n">x</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p>The TransactionDate1 and TransactionDate2 columns have already fulfilled their objectives, which is to calculate the Recency, we can eliminate these columns.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[33]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Columns that were only needed for the calculation we eliminated</span>
+<span class="n">RFM_df</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;TransactionDate1&quot;</span><span class="p">,</span><span class="s2">&quot;TransactionDate2&quot;</span><span class="p">],</span><span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p>Now, let’s see if our DataSet once cleaned contains atypical data</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[34]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># To calculate the otliers for each feature</span>
+<span class="n">lower_list</span><span class="o">=</span><span class="p">[]</span>
+<span class="n">upper_list</span><span class="o">=</span><span class="p">[]</span>
+<span class="n">num_list</span><span class="o">=</span><span class="p">[]</span>
+<span class="n">perc_list</span><span class="o">=</span><span class="p">[]</span>
+<span class="n">cols</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Frequency&#39;</span><span class="p">,</span> <span class="s1">&#39;CustAccountBalance&#39;</span><span class="p">,</span><span class="s1">&#39;TransactionAmount&#39;</span><span class="p">,</span> <span class="s1">&#39;CustomerAge&#39;</span><span class="p">,</span> <span class="s1">&#39;Recency&#39;</span><span class="p">]</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">cols</span><span class="p">:</span>
+    <span class="n">Q1</span> <span class="o">=</span> <span class="n">RFM_df</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">quantile</span><span class="p">(</span><span class="mf">0.25</span><span class="p">)</span>
+    <span class="n">Q3</span> <span class="o">=</span> <span class="n">RFM_df</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">quantile</span><span class="p">(</span><span class="mf">0.75</span><span class="p">)</span>
+    <span class="n">IQR</span> <span class="o">=</span> <span class="n">Q3</span> <span class="o">-</span> <span class="n">Q1</span>
+    <span class="n">lower</span> <span class="o">=</span> <span class="n">Q1</span> <span class="o">-</span> <span class="mf">1.5</span> <span class="o">*</span> <span class="n">IQR</span>
+    <span class="n">upper</span> <span class="o">=</span> <span class="n">Q3</span> <span class="o">+</span> <span class="mf">1.5</span> <span class="o">*</span> <span class="n">IQR</span>
+    <span class="c1"># Calculate number of outliers</span>
+    <span class="n">num</span><span class="o">=</span><span class="n">RFM_df</span><span class="p">[(</span><span class="n">RFM_df</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">lower</span><span class="p">)</span> <span class="o">|</span> <span class="p">(</span><span class="n">RFM_df</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">upper</span><span class="p">)]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="c1"># Calculate percentage of outliers</span>
+    <span class="n">perc</span> <span class="o">=</span> <span class="p">(</span><span class="n">num</span> <span class="o">/</span> <span class="n">RFM_df</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">*</span> <span class="mi">100</span>
+    <span class="n">lower_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">lower</span><span class="p">)</span>
+    <span class="n">upper_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">upper</span><span class="p">)</span>
+    <span class="n">num_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">num</span><span class="p">)</span>
+    <span class="n">perc_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">perc</span><span class="p">,</span><span class="mi">2</span><span class="p">))</span>
+
+
+<span class="n">dic</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;lower&#39;</span><span class="p">:</span> <span class="n">lower_list</span><span class="p">,</span> <span class="s1">&#39;upper&#39;</span><span class="p">:</span> <span class="n">upper_list</span><span class="p">,</span> <span class="s1">&#39;outliers&#39;</span><span class="p">:</span> <span class="n">num_list</span><span class="p">,</span> <span class="s1">&#39;Perc%&#39;</span><span class="p">:</span><span class="n">perc_list</span> <span class="p">}</span>
+<span class="n">outliers_df</span><span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">dic</span><span class="p">,</span><span class="n">index</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Frequency&#39;</span><span class="p">,</span> <span class="s1">&#39;CustAccountBalance&#39;</span><span class="p">,</span><span class="s1">&#39;TransactionAmount&#39;</span><span class="p">,</span> <span class="s1">&#39;CustomerAge&#39;</span><span class="p">,</span> <span class="s1">&#39;Recency&#39;</span><span class="p">])</span>
+<span class="n">outliers_df</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[34]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>lower</th>
+      <th>upper</th>
+      <th>outliers</th>
+      <th>Perc%</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>Frequency</th>
+      <td>1.000</td>
+      <td>1.000</td>
+      <td>128896</td>
+      <td>15.36</td>
+    </tr>
+    <tr>
+      <th>CustAccountBalance</th>
+      <td>-72439.305</td>
+      <td>135042.015</td>
+      <td>110026</td>
+      <td>13.11</td>
+    </tr>
+    <tr>
+      <th>TransactionAmount</th>
+      <td>-1313.595</td>
+      <td>2669.325</td>
+      <td>87229</td>
+      <td>10.40</td>
+    </tr>
+    <tr>
+      <th>CustomerAge</th>
+      <td>11.500</td>
+      <td>47.500</td>
+      <td>40804</td>
+      <td>4.86</td>
+    </tr>
+    <tr>
+      <th>Recency</th>
+      <td>1.000</td>
+      <td>1.000</td>
+      <td>122150</td>
+      <td>14.56</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+<h3 style="font-family:Sans-Serif; font-weight:bold"><p>Observations:</p>
+</h3><p><p>We will not remove outliers for the following two reasons: First, in boxplots those values ​​can be outliers because they represent points that are above or below extreme values. However, these were not measurement errors and are both true and significant, given that while customers 100+ do not represent a key demographic for most banks. Secoind it is important that banks are aware of the specific needs and challenges that these clients may face, and that they adapt their strategies accordingly.</p>
+</p><p>Now, let’s go to see our RFM Table</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[35]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">RFM_df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[35]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Frequency</th>
+      <th>CustGender</th>
+      <th>CustLocation</th>
+      <th>CustAccountBalance</th>
+      <th>TransactionTime</th>
+      <th>TransactionAmount</th>
+      <th>CustomerAge</th>
+      <th>TransactionDate</th>
+      <th>Recency</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>2</td>
+      <td>F</td>
+      <td>NOIDA</td>
+      <td>76340.635</td>
+      <td>67521.0</td>
+      <td>2553.0</td>
+      <td>28.5</td>
+      <td>2016-09-02</td>
+      <td>48</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>1</td>
+      <td>M</td>
+      <td>MUMBAI</td>
+      <td>24204.490</td>
+      <td>204409.0</td>
+      <td>1499.0</td>
+      <td>22.0</td>
+      <td>2016-08-14</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>2</td>
+      <td>F</td>
+      <td>MUMBAI</td>
+      <td>100112.950</td>
+      <td>187378.0</td>
+      <td>727.5</td>
+      <td>27.5</td>
+      <td>2016-08-04</td>
+      <td>6</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>1</td>
+      <td>F</td>
+      <td>CHAMPARAN</td>
+      <td>496.180</td>
+      <td>170254.0</td>
+      <td>30.0</td>
+      <td>26.0</td>
+      <td>2016-09-15</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>1</td>
+      <td>M</td>
+      <td>KOLKATA</td>
+      <td>87058.650</td>
+      <td>141103.0</td>
+      <td>5000.0</td>
+      <td>51.0</td>
+      <td>2016-08-18</td>
+      <td>1</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+<p>We describe each of the columns with different factors</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[36]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">RFM_df</span><span class="o">.</span><span class="n">describe</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[36]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Frequency</th>
+      <th>CustAccountBalance</th>
+      <th>TransactionTime</th>
+      <th>TransactionAmount</th>
+      <th>CustomerAge</th>
+      <th>Recency</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>count</th>
+      <td>839081.000000</td>
+      <td>8.390810e+05</td>
+      <td>839081.000000</td>
+      <td>8.390810e+05</td>
+      <td>839081.000000</td>
+      <td>839081.000000</td>
+    </tr>
+    <tr>
+      <th>mean</th>
+      <td>1.174287</td>
+      <td>1.058545e+05</td>
+      <td>157446.381829</td>
+      <td>1.453624e+03</td>
+      <td>30.755438</td>
+      <td>3.666118</td>
+    </tr>
+    <tr>
+      <th>std</th>
+      <td>0.435129</td>
+      <td>7.862524e+05</td>
+      <td>49194.229430</td>
+      <td>6.045200e+03</td>
+      <td>8.706026</td>
+      <td>8.061373</td>
+    </tr>
+    <tr>
+      <th>min</th>
+      <td>1.000000</td>
+      <td>0.000000e+00</td>
+      <td>0.000000</td>
+      <td>0.000000e+00</td>
+      <td>16.000000</td>
+      <td>1.000000</td>
+    </tr>
+    <tr>
+      <th>25%</th>
+      <td>1.000000</td>
+      <td>5.366190e+03</td>
+      <td>125604.000000</td>
+      <td>1.800000e+02</td>
+      <td>25.000000</td>
+      <td>1.000000</td>
+    </tr>
+    <tr>
+      <th>50%</th>
+      <td>1.000000</td>
+      <td>1.768220e+04</td>
+      <td>163936.000000</td>
+      <td>4.750000e+02</td>
+      <td>29.000000</td>
+      <td>1.000000</td>
+    </tr>
+    <tr>
+      <th>75%</th>
+      <td>1.000000</td>
+      <td>5.723652e+04</td>
+      <td>194953.000000</td>
+      <td>1.175730e+03</td>
+      <td>34.000000</td>
+      <td>1.000000</td>
+    </tr>
+    <tr>
+      <th>max</th>
+      <td>6.000000</td>
+      <td>1.150355e+08</td>
+      <td>235959.000000</td>
+      <td>1.560035e+06</td>
+      <td>116.000000</td>
+      <td>81.000000</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+<p>It creates a correlation matrix between the different features in the RFM table (RFM_df), and then plots this matrix as a heat map using it. The correlation matrix is a square matrix that shows how the different features are related to each other.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[37]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># correlation between features</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span><span class="mi">5</span><span class="p">))</span>
+<span class="n">correlation</span><span class="o">=</span><span class="n">RFM_df</span><span class="o">.</span><span class="n">corr</span><span class="p">(</span><span class="n">numeric_only</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">heatmap</span><span class="p">(</span><span class="n">correlation</span><span class="p">,</span><span class="n">vmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">vmax</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span>
+    <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;rocket_r&#39;</span><span class="p">,</span>
+    <span class="n">annot</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">fmt</span><span class="o">=</span><span class="s1">&#39;.1f&#39;</span><span class="p">,</span>
+    <span class="n">linecolor</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">,</span>
+    <span class="n">cbar</span><span class="o">=</span><span class="kc">True</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/Customer_Segmentation_73_0.png" src="_images/Customer_Segmentation_73_0.png" />
+</div>
+</div>
+<p>We obtain the frequency bar chart, this chart shows the distribution of the variable Frequency, it is worth noting that the frequency is the number of times a customer has made transactions in the period from August to October.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[38]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="s2">&quot;fivethirtyeight&quot;</span><span class="p">)</span>
+<span class="n">chart</span><span class="o">=</span><span class="n">sns</span><span class="o">.</span><span class="n">countplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="s1">&#39;Frequency&#39;</span><span class="p">,</span><span class="n">data</span><span class="o">=</span><span class="n">RFM_df</span><span class="p">,</span><span class="n">palette</span><span class="o">=</span><span class="s1">&#39;rocket&#39;</span><span class="p">,</span> <span class="n">order</span> <span class="o">=</span> <span class="n">RFM_df</span><span class="p">[</span><span class="s1">&#39;Frequency&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Frequency&quot;</span><span class="p">,</span>
+          <span class="n">fontsize</span><span class="o">=</span><span class="s1">&#39;20&#39;</span><span class="p">,</span>
+          <span class="n">backgroundcolor</span><span class="o">=</span><span class="s1">&#39;AliceBlue&#39;</span><span class="p">,</span>
+          <span class="n">color</span><span class="o">=</span><span class="s1">&#39;magenta&#39;</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/Customer_Segmentation_75_0.png" src="_images/Customer_Segmentation_75_0.png" />
+</div>
+</div>
+<p>We obtain the age distribution of the clients and also the percentage of women and men in the records we have.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[40]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="s2">&quot;fivethirtyeight&quot;</span><span class="p">)</span>
+<span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">ncols</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span><span class="n">nrows</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span><span class="mi">5</span><span class="p">))</span>
+<span class="n">palette_color</span> <span class="o">=</span> <span class="n">sns</span><span class="o">.</span><span class="n">color_palette</span><span class="p">(</span><span class="s1">&#39;rocket&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">RFM_df</span><span class="p">[</span><span class="s1">&#39;CustomerAge&#39;</span><span class="p">],</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;purple&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Distribution of Customer Age&quot;</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">pie</span><span class="p">(</span><span class="n">RFM_df</span><span class="p">[</span><span class="s1">&#39;CustGender&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">(),</span><span class="n">autopct</span><span class="o">=</span><span class="s1">&#39;%1.f</span><span class="si">%%</span><span class="s1">&#39;</span><span class="p">,</span><span class="n">colors</span><span class="o">=</span><span class="n">palette_color</span><span class="p">,</span><span class="n">labels</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Male&#39;</span><span class="p">,</span><span class="s1">&#39;Female&#39;</span><span class="p">])</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Customer Gender&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">();</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/Customer_Segmentation_77_0.png" src="_images/Customer_Segmentation_77_0.png" />
+</div>
+</div>
+<p>In this graph we obtain the number of times a transaction was made in different areas of the country, only the top 20 locations with the most transactions made will be shown.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[40]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="s2">&quot;fivethirtyeight&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span><span class="mi">7</span><span class="p">))</span>
+<span class="n">chart</span><span class="o">=</span><span class="n">sns</span><span class="o">.</span><span class="n">countplot</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="s1">&#39;CustLocation&#39;</span><span class="p">,</span><span class="n">data</span><span class="o">=</span><span class="n">RFM_df</span><span class="p">,</span><span class="n">palette</span><span class="o">=</span><span class="s1">&#39;rocket&#39;</span><span class="p">,</span> <span class="n">order</span> <span class="o">=</span> <span class="n">RFM_df</span><span class="p">[</span><span class="s1">&#39;CustLocation&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()[:</span><span class="mi">20</span><span class="p">]</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Most 20 Location of Customer &quot;</span><span class="p">,</span>
+          <span class="n">fontsize</span><span class="o">=</span><span class="s1">&#39;15&#39;</span><span class="p">,</span>
+          <span class="n">backgroundcolor</span><span class="o">=</span><span class="s1">&#39;AliceBlue&#39;</span><span class="p">,</span>
+          <span class="n">color</span><span class="o">=</span><span class="s1">&#39;magenta&#39;</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/Customer_Segmentation_79_0.png" src="_images/Customer_Segmentation_79_0.png" />
+</div>
+</div>
+<p>We generate the scatter plot of the data referring to the variable Frequency.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[55]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="s2">&quot;fivethirtyeight&quot;</span><span class="p">)</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">pairplot</span><span class="p">(</span><span class="n">RFM_df</span><span class="p">,</span><span class="n">hue</span><span class="o">=</span><span class="s1">&#39;Frequency&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[55]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+&lt;seaborn.axisgrid.PairGrid at 0x2238b194bb0&gt;
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/Customer_Segmentation_81_1.png" src="_images/Customer_Segmentation_81_1.png" />
+</div>
+</div>
+<p>This code generates a scatter plot. The data used comes from the RFM_df dataframe and is represented on the X axis (horizontal) the transaction amounts (TransactionAmount) and on the Y axis (vertical) the customer’s account balance (CustAccountBalance). We add a third dimension to the graph which is Frequency and a fourth one with Recency.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[42]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="s2">&quot;fivethirtyeight&quot;</span><span class="p">)</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">scatterplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="s1">&#39;TransactionAmount&#39;</span><span class="p">,</span><span class="n">y</span><span class="o">=</span><span class="s1">&#39;CustAccountBalance&#39;</span><span class="p">,</span><span class="n">data</span><span class="o">=</span><span class="n">RFM_df</span><span class="p">,</span><span class="n">palette</span><span class="o">=</span><span class="s1">&#39;rocket&#39;</span><span class="p">,</span><span class="n">hue</span><span class="o">=</span><span class="s1">&#39;Frequency&#39;</span><span class="p">,</span><span class="n">size</span><span class="o">=</span><span class="s1">&#39;Recency&#39;</span> <span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span> <span class="o">=</span> <span class="s2">&quot;upper right&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;TransactionAmount (INR) and CustAccountBalance&quot;</span><span class="p">,</span>
+          <span class="n">fontsize</span><span class="o">=</span><span class="s1">&#39;15&#39;</span><span class="p">,</span>
+          <span class="n">backgroundcolor</span><span class="o">=</span><span class="s1">&#39;AliceBlue&#39;</span><span class="p">,</span>
+          <span class="n">color</span><span class="o">=</span><span class="s1">&#39;magenta&#39;</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/Customer_Segmentation_83_0.png" src="_images/Customer_Segmentation_83_0.png" />
+</div>
+</div>
+<p>We calculate the farthest distance between two completed transactions</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[43]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># difference between maximum and minimum date</span>
+<span class="n">RFM_df</span><span class="p">[</span><span class="s1">&#39;TransactionDate&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">()</span><span class="o">-</span><span class="n">RFM_df</span><span class="p">[</span><span class="s1">&#39;TransactionDate&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[43]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Timedelta(&#39;81 days 00:00:00&#39;)
+</pre></div></div>
+</div>
+<p>We group the transactions according to the month in which they were made and obtain the average for each table.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[52]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">RFM_df</span><span class="o">=</span><span class="n">RFM_df</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="s1">&#39;TransactionDate&#39;</span><span class="p">)</span>
+<span class="n">groupbby_month</span> <span class="o">=</span> <span class="n">RFM_df</span><span class="o">.</span><span class="n">groupby</span><span class="p">([</span><span class="n">pd</span><span class="o">.</span><span class="n">Grouper</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="s1">&#39;TransactionDate&#39;</span><span class="p">,</span> <span class="n">freq</span><span class="o">=</span><span class="s1">&#39;M&#39;</span><span class="p">)])[[</span><span class="s1">&#39;Frequency&#39;</span><span class="p">,</span> <span class="s1">&#39;TransactionAmount&#39;</span><span class="p">,</span> <span class="s1">&#39;CustAccountBalance&#39;</span><span class="p">,</span> <span class="s1">&#39;TransactionTime&#39;</span><span class="p">,</span> <span class="s1">&#39;CustomerAge&#39;</span><span class="p">,</span> <span class="s1">&#39;Recency&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">groupbby_month</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="n">groupbby_month</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+(3, 6)
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[52]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Frequency</th>
+      <th>TransactionAmount</th>
+      <th>CustAccountBalance</th>
+      <th>TransactionTime</th>
+      <th>CustomerAge</th>
+      <th>Recency</th>
+    </tr>
+    <tr>
+      <th>TransactionDate</th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>2016-08-31</th>
+      <td>1.196796</td>
+      <td>1455.968945</td>
+      <td>106177.136987</td>
+      <td>156767.237318</td>
+      <td>30.780328</td>
+      <td>4.099551</td>
+    </tr>
+    <tr>
+      <th>2016-09-30</th>
+      <td>1.135252</td>
+      <td>1445.607858</td>
+      <td>105375.580700</td>
+      <td>158413.057073</td>
+      <td>30.710065</td>
+      <td>2.902352</td>
+    </tr>
+    <tr>
+      <th>2016-10-31</th>
+      <td>1.056486</td>
+      <td>1904.367370</td>
+      <td>94726.805639</td>
+      <td>185756.771718</td>
+      <td>30.884106</td>
+      <td>2.816907</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+<p>We made line graphs of the information we obtained previously.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[54]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mf">13.4</span><span class="p">,</span><span class="mi">7</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Average of account balance per month&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">groupbby_month</span><span class="o">.</span><span class="n">index</span><span class="p">,</span><span class="n">groupbby_month</span><span class="p">[</span><span class="s1">&#39;CustAccountBalance&#39;</span><span class="p">],</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;purple&#39;</span><span class="p">,</span><span class="n">marker</span><span class="o">=</span><span class="s1">&#39;o&#39;</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;Customer Account Balance&#39;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;dashed&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">();</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mf">13.8</span><span class="p">,</span><span class="mi">7</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Average of transaction amount per month&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">groupbby_month</span><span class="o">.</span><span class="n">index</span><span class="p">,</span><span class="n">groupbby_month</span><span class="p">[</span><span class="s1">&#39;TransactionAmount&#39;</span><span class="p">],</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;green&#39;</span><span class="p">,</span><span class="n">marker</span><span class="o">=</span><span class="s1">&#39;o&#39;</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;Transaction Amount&#39;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;dashed&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[54]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+[&lt;matplotlib.lines.Line2D at 0x2238b3089d0&gt;]
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/Customer_Segmentation_89_1.png" src="_images/Customer_Segmentation_89_1.png" />
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/Customer_Segmentation_89_2.png" src="_images/Customer_Segmentation_89_2.png" />
+</div>
+</div>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="index.html" class="btn btn-neutral float-left" title="Welcome to Bank-Customer-Segmentation’s documentation!" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Gabriel Suarez - Alejandro Varela - Arturo Diaz - Daniela Bonilla.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
