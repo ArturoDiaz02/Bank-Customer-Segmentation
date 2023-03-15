@@ -12,5 +12,3 @@ Welcome to Bank-Customer-Segmentation's Documentation!
    :caption: Contents:
 
    rstCustomer_Segmentation.rst
-   
-
