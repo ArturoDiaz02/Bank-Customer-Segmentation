@@ -547,10 +547,14 @@ us to eliminate them, because we cannot speculate about them.
 
 Determine minority group of people aged over 100 years
 
+    
 .. code:: ipython3
 
-    # We filter our dataframe specifically on the DOB column to make a decision regarding date ambiguity.
-    df_filtered = df["CustomerDOB"].apply(lambda x: x if x.year < 1917 else 0)
+    def filterDOB(dataframe):  
+      return dataframe["CustomerDOB"].apply(lambda x: x if x.year < 1917 else 0)
+
+    df_filtered = filterDOB(df)
+
     # Amortizing and removing values ​​greater than 1917 represented as 0
     counts = df_filtered.value_counts().drop(0)
     print(counts)
@@ -648,13 +652,16 @@ considered outliers.
 
 .. code:: ipython3
 
-    num_col = df.select_dtypes(include=np.number)
-    cat_col = df.select_dtypes(exclude=np.number)
-    
-    for i in num_col.columns:
-        sns.boxplot(x=num_col[i])
-        plt.title("Boxplot " + i)
-        plt.show()
+    def outliers(dataframe):
+      num_col = df.select_dtypes(include=np.number)
+      cat_col = df.select_dtypes(exclude=np.number)
+
+      for i in num_col.columns:
+          sns.boxplot(x=num_col[i])
+          plt.title("Boxplot " + i)
+          plt.show()
+
+    outliers(df)
 
 
 
