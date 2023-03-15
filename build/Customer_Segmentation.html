@@ -20,8 +20,7 @@
         <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
-    <link rel="search" title="Search" href="search.html" />
-    <link rel="prev" title="Welcome to Bank-Customer-Segmentation’s documentation!" href="index.html" /> 
+    <link rel="search" title="Search" href="search.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -44,8 +43,8 @@
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
-<ul class="current">
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Bank Customer Segmentation</a></li>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="rstCustomer_Segmentation.html">Bank Customer Segmentation</a></li>
 </ul>
 
         </div>
@@ -80,7 +79,6 @@
 <li><p>Perform Location-wise analysis to identify regional trends in India</p></li>
 <li><p>Perform transaction-related analysis to identify interesting trends that can be used by a bank to improve / optimi their user experiences</p></li>
 <li><p>Customer Recency, Frequency, Monetary analysis</p></li>
-<li><p>Network analysis or Graph analysis of customer data.</p></li>
 </ol>
 <p><strong>Table of contents of this notebook:</strong></p>
 <p><strong>1.</strong> Importing Necessary Libraries <strong>2.</strong> Data Collection <strong>3.</strong> Data Cleaning <strong>4.</strong> Exploratory Data Analysis</p>
@@ -89,7 +87,7 @@
 </h2></li>
 </ol>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">re</span>
@@ -106,29 +104,28 @@
 <li><p>Data Collection</p>
 </h2></li>
 </ol>
-<p>We import our relative path Dataset and in addition to that, we rename the TransactionAmount (INR) column in TransactionAmount, this in order to avoid that in the future the special characters of the original name give us problems.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">import_data</span><span class="p">():</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    This function get the DataSet and rename a column.</span>
-<span class="sd">    :param:</span>
-<span class="sd">    :return: Dataframe</span>
+<span class="sd">    Imports our relative path Dataset and in addition to that, renames the TransactionAmount (INR) column in TransactionAmount,</span>
+<span class="sd">    this in order to avoid that in the future the special characters of the original name give us problems.</span>
+<span class="sd">    :return: dfGet source data</span>
+<span class="sd">    :rtype: pandas.DataFrame</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">dfGet</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;../data/bank_transactions.csv&quot;</span><span class="p">)</span>
-    <span class="n">initialRows</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">dfGet</span><span class="p">)</span>
     <span class="n">dfGet</span> <span class="o">=</span> <span class="n">dfGet</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;TransactionAmount (INR)&#39;</span><span class="p">:</span><span class="s1">&#39;TransactionAmount&#39;</span><span class="p">})</span>
     <span class="k">return</span> <span class="n">dfGet</span>
-
 <span class="n">df</span> <span class="o">=</span> <span class="n">import_data</span><span class="p">()</span>
+<span class="c1"># Showing or Checking results</span>
 <span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
-<br/></pre></div>
+</pre></div>
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
@@ -226,12 +223,23 @@
 </table>
 </div></div>
 </div>
-<p>We obtain the initial information of the Dataset, the number of records, number of variables, non-null objects and data type.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">display</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">info</span><span class="p">())</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">dfInformation</span><span class="p">(</span><span class="n">dataframe</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Gets the initial information of the Dataset, the number of records, number of variables, non-null objects and data type.</span>
+
+<span class="sd">    :param dataframe: Source dataset.</span>
+<span class="sd">    :type dataframe: pandas.DataFrame</span>
+<span class="sd">    :return: A range indes conforma by float64(2), int64(1), object(6)</span>
+<span class="sd">    :rtype: void</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">display</span><span class="p">(</span><span class="n">dataframe</span><span class="o">.</span><span class="n">info</span><span class="p">())</span>
+<span class="n">dfInformation</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+<span class="c1"># Getting the dataframe size for following amortized values</span>
+<span class="n">initialRows</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -270,28 +278,35 @@ None
 <li><p>Data Cleaning</p>
 </h2></li>
 </ol>
-<p>The amount of null data and unique is calculated</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">check</span><span class="p">(</span><span class="n">df</span><span class="p">):</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">check</span><span class="p">(</span><span class="n">dataframe</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Gets the amount of null data and unique is calculated</span>
+
+<span class="sd">    :param dataframe: Source dataset.</span>
+<span class="sd">    :type dataframe: pandas.DataFrame</span>
+<span class="sd">    :return: A new Dataframe tha represents de amortized values of null and unique values for each column.</span>
+<span class="sd">    :rtype: pandas.DataFrame</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">l</span><span class="o">=</span><span class="p">[]</span>
-    <span class="n">columns</span><span class="o">=</span><span class="n">df</span><span class="o">.</span><span class="n">columns</span>
+    <span class="n">columns</span><span class="o">=</span><span class="n">dataframe</span><span class="o">.</span><span class="n">columns</span>
     <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">columns</span><span class="p">:</span>
-        <span class="n">dtypes</span><span class="o">=</span><span class="n">df</span><span class="p">[</span><span class="n">col</span><span class="p">]</span><span class="o">.</span><span class="n">dtypes</span>
-        <span class="n">nunique</span><span class="o">=</span><span class="n">df</span><span class="p">[</span><span class="n">col</span><span class="p">]</span><span class="o">.</span><span class="n">nunique</span><span class="p">()</span>
-        <span class="n">sum_null</span><span class="o">=</span><span class="n">df</span><span class="p">[</span><span class="n">col</span><span class="p">]</span><span class="o">.</span><span class="n">isnull</span><span class="p">()</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+        <span class="n">dtypes</span><span class="o">=</span><span class="n">dataframe</span><span class="p">[</span><span class="n">col</span><span class="p">]</span><span class="o">.</span><span class="n">dtypes</span>
+        <span class="n">nunique</span><span class="o">=</span><span class="n">dataframe</span><span class="p">[</span><span class="n">col</span><span class="p">]</span><span class="o">.</span><span class="n">nunique</span><span class="p">()</span>
+        <span class="n">sum_null</span><span class="o">=</span><span class="n">dataframe</span><span class="p">[</span><span class="n">col</span><span class="p">]</span><span class="o">.</span><span class="n">isnull</span><span class="p">()</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
         <span class="n">l</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">col</span><span class="p">,</span><span class="n">dtypes</span><span class="p">,</span><span class="n">nunique</span><span class="p">,</span><span class="n">sum_null</span><span class="p">])</span>
     <span class="n">df_check</span><span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">l</span><span class="p">)</span>
     <span class="n">df_check</span><span class="o">.</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Column&#39;</span><span class="p">,</span><span class="s1">&#39;Types&#39;</span><span class="p">,</span><span class="s1">&#39;Unique&#39;</span><span class="p">,</span><span class="s1">&#39;Nulls&#39;</span><span class="p">]</span>
     <span class="k">return</span> <span class="n">df_check</span>
 <span class="n">check</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
-<br/></pre></div>
+</pre></div>
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
@@ -387,15 +402,26 @@ None
 </table>
 </div></div>
 </div>
-<p>Eliminamos los valores nulos</p>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+<p>Observation:</p>
+<h6><p>The amount of null values to eliminate is equal to 6953 data, we eliminate these values because they do not represent more than 0.7% of the total data. We check if there are repeated elements in our DataSet</p>
+</h6><div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">shapeInitial</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-<span class="n">df</span><span class="o">.</span><span class="n">dropna</span><span class="p">(</span><span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="n">shapeFinal</span> <span class="o">=</span> <span class="n">shapeInitial</span><span class="o">-</span><span class="n">df</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Amount to remove &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">shapeFinal</span><span class="p">))</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">removeNullValues</span><span class="p">(</span><span class="n">dataframe</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Removes null values from data source and calculates the amount eliminated</span>
+
+<span class="sd">    :param dataframe: Source dataset.</span>
+<span class="sd">    :type dataframe: pandas.DataFrame</span>
+<span class="sd">    :return: The total of null values already deleted</span>
+<span class="sd">    :rtype: int</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">shapeInitial</span> <span class="o">=</span> <span class="n">dataframe</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">dataframe</span><span class="o">.</span><span class="n">dropna</span><span class="p">(</span><span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">shapeInitial</span><span class="o">-</span><span class="n">dataframe</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Amount to remove &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">removeNullValues</span><span class="p">(</span><span class="n">df</span><span class="p">)))</span>
 </pre></div>
 </div>
 </div>
@@ -407,17 +433,26 @@ None
 Amount to remove 6953
 </pre></div></div>
 </div>
-<p>The amount of null values to eliminate is equal to 6953 data, we eliminate these values because they do not represent more than 0.7% of the total data. We check if there are repeated elements in our DataSet</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">duplicated</span><span class="p">()</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">checkDuplicates</span><span class="p">(</span><span class="n">dataframe</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Checks duplicated values for each column and amortized this count.</span>
+
+<span class="sd">    :param dataframe: Source dataset.</span>
+<span class="sd">    :type dataframe: pandas.DataFrame</span>
+<span class="sd">    :return: The total of duplicated values in an specifica dataframe</span>
+<span class="sd">    :rtype: int</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">dataframe</span><span class="o">.</span><span class="n">duplicated</span><span class="p">()</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+<span class="n">checkDuplicates</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -425,18 +460,30 @@ Amount to remove 6953
 0
 </pre></div></div>
 </div>
-<p>The CustomerDOB column is analyzed because it may contain atypical data. We analyze the number of records for each client’s date of birth.</p>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+<p>Consideration</p>
+<h6><p>The CustomerDOB column is analyzed because it may contain atypical data. We analyze the number of records for each client’s date of birth.</p>
+</h6><div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Getting distinct values from CustomerDOB variable</span>
-<span class="n">df</span><span class="p">[</span><span class="s1">&#39;CustomerDOB&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">uniqueRows</span><span class="p">(</span><span class="n">dataframe</span><span class="p">,</span> <span class="n">column</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Getting distinct values from column or specific variable</span>
+
+<span class="sd">    :param dataframe: Source dataset.</span>
+<span class="sd">    :type dataframe: pandas.DataFrame</span>
+<span class="sd">    :param column: Variable or column in dataframe</span>
+<span class="sd">    :type dataframe: string</span>
+<span class="sd">    :return: A series containing counts of unique rows in the DataFrame.</span>
+<span class="sd">    :rtype: Series</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">dataframe</span><span class="p">[</span><span class="n">column</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span>
+<span class="n">uniqueRows</span><span class="p">(</span><span class="n">df</span><span class="p">,</span><span class="s1">&#39;CustomerDOB&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -455,20 +502,35 @@ Amount to remove 6953
 Name: CustomerDOB, Length: 17233, dtype: int64
 </pre></div></div>
 </div>
-<p>Dates 1/1/1800 are deleted because it is not possible to define whether they are children, adults or persons without date of birth. This is an important variable for the business, for this reason we cannot make assumptions that bias the project, for this reason, it is better to eliminate these outliers or erroneously measured data.</p>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+<p>Take in mind</p>
+<h6><p>Dates 1/1/1800 are deleted because it is not possible to define whether they are children, adults or persons without date of birth. This is an important variable for the business, for this reason we cannot make assumptions that bias the project, for this reason, it is better to eliminate these outliers or erroneously measured data.</p>
+</h6><div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Removing CustomerDOB == &#39;1/1/1800&#39;</span>
-<span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="o">~</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;CustomerDOB&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;1/1/1800&#39;</span><span class="p">)]</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">removeValues</span><span class="p">(</span><span class="n">dataframe</span><span class="p">,</span><span class="n">column</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Removes an specific value from a source column in a dataframe</span>
+
+<span class="sd">    :param dataframe: Source dataset.</span>
+<span class="sd">    :type dataframe: pandas.DataFrame</span>
+<span class="sd">    :param column: Variable or column in dataframe</span>
+<span class="sd">    :type dataframe: string</span>
+<span class="sd">    :param value: Value with column type</span>
+<span class="sd">    :type dataframe: any</span>
+<span class="sd">    :return: A pandas DataFrame already modified.</span>
+<span class="sd">    :rtype: pandas.DataFrame</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">dataframe</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="o">~</span><span class="p">(</span><span class="n">dataframe</span><span class="p">[</span><span class="n">column</span><span class="p">]</span> <span class="o">==</span> <span class="n">value</span><span class="p">)]</span>
+
+<span class="n">df</span> <span class="o">=</span> <span class="n">removeValues</span><span class="p">(</span><span class="n">df</span><span class="p">,</span><span class="s1">&#39;CustomerDOB&#39;</span><span class="p">,</span><span class="s1">&#39;1/1/1800&#39;</span><span class="p">)</span>
 <span class="c1"># Cheking distinct values from dataframe</span>
-<span class="n">df</span><span class="p">[</span><span class="s1">&#39;CustomerDOB&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span>
+<span class="n">uniqueRows</span><span class="p">(</span><span class="n">df</span><span class="p">,</span><span class="s1">&#39;CustomerDOB&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -487,13 +549,23 @@ Name: CustomerDOB, Length: 17233, dtype: int64
 Name: CustomerDOB, Length: 17232, dtype: int64
 </pre></div></div>
 </div>
-<p>We print the minimum and maximum date of the CustomerDOB column in order to see in which range the values in this column oscillate.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Range of CustomerDOB object type as string</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;min: &quot;</span> <span class="o">+</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;CustomerDOB&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">()</span> <span class="o">+</span> <span class="s2">&quot; max: &quot;</span> <span class="o">+</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;CustomerDOB&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">())</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">minAndMax</span><span class="p">(</span><span class="n">dataframe</span><span class="p">,</span> <span class="n">column</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Gets the minimum and maximum values of any column in order to see in which range the values in this column oscillate.</span>
+
+<span class="sd">    :param dataframe: Source dataset.</span>
+<span class="sd">    :type dataframe: pandas.DataFrame</span>
+<span class="sd">    :param column: Variable or column in dataframe</span>
+<span class="sd">    :type dataframe: string</span>
+<span class="sd">    :return: Shows the minimun and maximun values from this column</span>
+<span class="sd">    :rtype: void</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;min: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">dataframe</span><span class="p">[</span><span class="n">column</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">())</span> <span class="o">+</span> <span class="s2">&quot; max: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">dataframe</span><span class="p">[</span><span class="n">column</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">()))</span>
+<span class="n">minAndMax</span><span class="p">(</span><span class="n">df</span><span class="p">,</span><span class="s1">&#39;CustomerDOB&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -502,27 +574,38 @@ Name: CustomerDOB, Length: 17232, dtype: int64
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-min: 1/1/00 max: 9/9/97
+min: 1973-01-01 00:00:00 max: 2072-12-31 00:00:00
 </pre></div></div>
 </div>
-<p>It can be seen that the person with the oldest birth date has a date of January 1, 1900 and the youngest person has a date of September 9, 1997.</p>
+<p>It can be seen that the person with the oldest birth date has a date of January 1, 1900 and the youngest person has a date of September 9, 1997. (It looks weird)</p>
 <p>Convert type of columns TransactionDate, CustomerDOB from string to datetime, this convertation will be in the format of dayfirst, so the date will be DD/MM/YY</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Using pandas convert to datetime tool for CustomerDOB variable with specific format</span>
-<span class="n">df</span><span class="p">[</span><span class="s1">&#39;CustomerDOB&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;CustomerDOB&#39;</span><span class="p">],</span> <span class="n">dayfirst</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">dateConvertion</span><span class="p">(</span><span class="n">dataframe</span><span class="p">,</span> <span class="n">column</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Converts dataframe column to datetime format using pandas tool with specific format &#39;dayfirst&#39;</span>
+
+<span class="sd">    :param dataframe: Source dataset.</span>
+<span class="sd">    :type dataframe: pandas.DataFrame</span>
+<span class="sd">    :param column: Variable or column in dataframe</span>
+<span class="sd">    :type dataframe: string</span>
+<span class="sd">    :return: New Dataframe already modified</span>
+<span class="sd">    :rtype: pandas.DataFrame</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">dataframe</span><span class="p">[</span><span class="n">column</span><span class="p">],</span> <span class="n">dayfirst</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">df</span><span class="p">[</span><span class="s1">&#39;CustomerDOB&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">dateConvertion</span><span class="p">(</span><span class="n">df</span><span class="p">,</span><span class="s1">&#39;CustomerDOB&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <p>Now we will check if the conversion was as expected and in the required format.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Checking converting problem of to_datetime pandas function</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;CustomerDOB&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;CustomerDOB&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">())</span>
+<span class="n">minAndMax</span><span class="p">(</span><span class="n">df</span><span class="p">,</span><span class="s1">&#39;CustomerDOB&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -531,17 +614,27 @@ min: 1/1/00 max: 9/9/97
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-1973-01-01 00:00:00 2072-12-31 00:00:00
+min: 1973-01-01 00:00:00 max: 2072-12-31 00:00:00
 </pre></div></div>
 </div>
 <p>We can see that the most “recent” date is December 31, 2072, but it is illogical because this is a future date, so we subtract 100 from all values greater than 1999 to get the real value. (This is a problem Pandas has when converting a date).</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[28]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Fixing the problem base on analysis above</span>
-<span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;CustomerDOB&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">dt</span><span class="o">.</span><span class="n">year</span> <span class="o">&gt;</span> <span class="mi">1999</span><span class="p">,</span> <span class="s1">&#39;CustomerDOB&#39;</span><span class="p">]</span> <span class="o">-=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DateOffset</span><span class="p">(</span><span class="n">years</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;CustomerDOB&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;CustomerDOB&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">())</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">refactorDates</span><span class="p">(</span><span class="n">dataframe</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Refactors date dob column substrating 100 from values greater than 1999</span>
+<span class="sd">    Note: Fixing the problem base on analysis above</span>
+<span class="sd">    :param dataframe: Source dataset.</span>
+<span class="sd">    :type dataframe: pandas.DataFrame</span>
+<span class="sd">    :return: New Dataframe already modified</span>
+<span class="sd">    :rtype: pandas.DataFrame</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">dataframe</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;CustomerDOB&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">dt</span><span class="o">.</span><span class="n">year</span> <span class="o">&gt;</span> <span class="mi">1999</span><span class="p">,</span> <span class="s1">&#39;CustomerDOB&#39;</span><span class="p">]</span> <span class="o">-=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DateOffset</span><span class="p">(</span><span class="n">years</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">dataframe</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">refactorDates</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+<span class="n">minAndMax</span><span class="p">(</span><span class="n">df</span><span class="p">,</span><span class="s1">&#39;CustomerDOB&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -550,18 +643,22 @@ min: 1/1/00 max: 9/9/97
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-1900-01-01 00:00:00 1999-12-28 00:00:00
+<span class="ansi-cyan-fg">  Cell </span><span class="ansi-green-fg">In[28], line 10</span>
+<span class="ansi-red-fg">    return (dataframe.loc[df[&#39;CustomerDOB&#39;].dt.year &gt; 1999, &#39;CustomerDOB&#39;] -= pd.DateOffset(years=100))</span>
+                                                                           ^
+<span class="ansi-red-fg">SyntaxError</span><span class="ansi-red-fg">:</span> invalid syntax
+
 </pre></div></div>
 </div>
 <p>In the same way that we converted the CustomerDOB column, we convert the TransactionDate column with the same expected format as the first day.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[26]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Using pandas convert to datetime tool for TransactionDate variable</span>
-<span class="n">df</span><span class="p">[</span><span class="s1">&#39;TransactionDate&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;TransactionDate&#39;</span><span class="p">],</span> <span class="n">dayfirst</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">df</span><span class="p">[</span><span class="s1">&#39;TransactionDate&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">dateConvertion</span><span class="p">(</span><span class="n">df</span><span class="p">,</span><span class="s1">&#39;TransactionDate&#39;</span><span class="p">)</span>
 <span class="c1"># Checking range of TransactionDate variable</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;TransactionDate&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;TransactionDate&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">())</span>
+<span class="n">minAndMax</span><span class="p">(</span><span class="n">df</span><span class="p">,</span><span class="s1">&#39;TransactionDate&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -570,13 +667,13 @@ min: 1/1/00 max: 9/9/97
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-2016-08-01 00:00:00 2016-10-21 00:00:00
+min: 2016-08-01 00:00:00 max: 2016-10-21 00:00:00
 </pre></div></div>
 </div>
 <p>All the trnasactions took place in a roughly two month period from August to October, this could account for the low transaction frequency</p>
 <p>Once all the unnecessary data for the study has been eliminated, we can see the following summary, which shows us how much data we lost and what is the percentage of loss obtained</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[27]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot; Number of initial rows: &quot;</span><span class="p">,</span> <span class="n">initialRows</span><span class="p">,</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span>
@@ -645,7 +742,7 @@ Name: CustomerDOB, Length: 254, dtype: int64
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="_images/Customer_Segmentation_37_1.png" src="_images/Customer_Segmentation_37_1.png" />
+<img alt="_images/Customer_Segmentation_32_1.png" src="_images/Customer_Segmentation_32_1.png" />
 </div>
 </div>
 <h3><p>Calculate customer age :</p>
@@ -711,28 +808,28 @@ Name: CustGender, dtype: int64
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="_images/Customer_Segmentation_44_0.png" src="_images/Customer_Segmentation_44_0.png" />
+<img alt="_images/Customer_Segmentation_39_0.png" src="_images/Customer_Segmentation_39_0.png" />
 </div>
 </div>
 <div class="nboutput docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="_images/Customer_Segmentation_44_1.png" src="_images/Customer_Segmentation_44_1.png" />
+<img alt="_images/Customer_Segmentation_39_1.png" src="_images/Customer_Segmentation_39_1.png" />
 </div>
 </div>
 <div class="nboutput docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="_images/Customer_Segmentation_44_2.png" src="_images/Customer_Segmentation_44_2.png" />
+<img alt="_images/Customer_Segmentation_39_2.png" src="_images/Customer_Segmentation_39_2.png" />
 </div>
 </div>
 <div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="_images/Customer_Segmentation_44_3.png" src="_images/Customer_Segmentation_44_3.png" />
+<img alt="_images/Customer_Segmentation_39_3.png" src="_images/Customer_Segmentation_39_3.png" />
 </div>
 </div>
 <h3 style="font-family:Sans-Serif; font-weight:bold"><p>RFM Metrics:</p>
@@ -1333,7 +1430,7 @@ Name: CustGender, dtype: int64
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="_images/Customer_Segmentation_73_0.png" src="_images/Customer_Segmentation_73_0.png" />
+<img alt="_images/Customer_Segmentation_68_0.png" src="_images/Customer_Segmentation_68_0.png" />
 </div>
 </div>
 <p>We obtain the frequency bar chart, this chart shows the distribution of the variable Frequency, it is worth noting that the frequency is the number of times a customer has made transactions in the period from August to October.</p>
@@ -1354,7 +1451,7 @@ Name: CustGender, dtype: int64
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="_images/Customer_Segmentation_75_0.png" src="_images/Customer_Segmentation_75_0.png" />
+<img alt="_images/Customer_Segmentation_70_0.png" src="_images/Customer_Segmentation_70_0.png" />
 </div>
 </div>
 <p>We obtain the age distribution of the clients and also the percentage of women and men in the records we have.</p>
@@ -1377,7 +1474,7 @@ Name: CustGender, dtype: int64
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="_images/Customer_Segmentation_77_0.png" src="_images/Customer_Segmentation_77_0.png" />
+<img alt="_images/Customer_Segmentation_72_0.png" src="_images/Customer_Segmentation_72_0.png" />
 </div>
 </div>
 <p>In this graph we obtain the number of times a transaction was made in different areas of the country, only the top 20 locations with the most transactions made will be shown.</p>
@@ -1399,7 +1496,7 @@ Name: CustGender, dtype: int64
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="_images/Customer_Segmentation_79_0.png" src="_images/Customer_Segmentation_79_0.png" />
+<img alt="_images/Customer_Segmentation_74_0.png" src="_images/Customer_Segmentation_74_0.png" />
 </div>
 </div>
 <p>We generate the scatter plot of the data referring to the variable Frequency.</p>
@@ -1425,7 +1522,7 @@ Name: CustGender, dtype: int64
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="_images/Customer_Segmentation_81_1.png" src="_images/Customer_Segmentation_81_1.png" />
+<img alt="_images/Customer_Segmentation_76_1.png" src="_images/Customer_Segmentation_76_1.png" />
 </div>
 </div>
 <p>This code generates a scatter plot. The data used comes from the RFM_df dataframe and is represented on the X axis (horizontal) the transaction amounts (TransactionAmount) and on the Y axis (vertical) the customer’s account balance (CustAccountBalance). We add a third dimension to the graph which is Frequency and a fourth one with Recency.</p>
@@ -1447,7 +1544,7 @@ Name: CustGender, dtype: int64
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="_images/Customer_Segmentation_83_0.png" src="_images/Customer_Segmentation_83_0.png" />
+<img alt="_images/Customer_Segmentation_78_0.png" src="_images/Customer_Segmentation_78_0.png" />
 </div>
 </div>
 <p>We calculate the farthest distance between two completed transactions</p>
@@ -1590,14 +1687,14 @@ Timedelta(&#39;81 days 00:00:00&#39;)
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="_images/Customer_Segmentation_89_1.png" src="_images/Customer_Segmentation_89_1.png" />
+<img alt="_images/Customer_Segmentation_84_1.png" src="_images/Customer_Segmentation_84_1.png" />
 </div>
 </div>
 <div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="_images/Customer_Segmentation_89_2.png" src="_images/Customer_Segmentation_89_2.png" />
+<img alt="_images/Customer_Segmentation_84_2.png" src="_images/Customer_Segmentation_84_2.png" />
 </div>
 </div>
 </section>
@@ -1605,9 +1702,7 @@ Timedelta(&#39;81 days 00:00:00&#39;)
 
            </div>
           </div>
-          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="index.html" class="btn btn-neutral float-left" title="Welcome to Bank-Customer-Segmentation’s documentation!" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-    </div>
+          <footer>
 
   <hr/>
 

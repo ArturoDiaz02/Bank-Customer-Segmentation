@@ -1,11 +1,11 @@
 # %% [markdown]
+# ## Bank Customer Segmentation
 # <h2 style="font-weight:bold; font-family:sans-serif"><b>Goal of creating this Notebook</h2>
 # 
 # 1. Perform Clustering / Segmentation on the dataset and identify popular customer groups along with their definitions/rules
 # 2. Perform Location-wise analysis to identify regional trends in India
 # 3. Perform transaction-related analysis to identify interesting trends that can be used by a bank to improve / optimi their user experiences
 # 4. Customer Recency, Frequency, Monetary analysis
-# 5. Network analysis or Graph analysis of customer data.
 
 # %% [markdown]
 # **Table of contents of this notebook:**
@@ -29,24 +29,14 @@ import seaborn as sns
 # %% [markdown]
 # <h2  style="text-align: center; padding: 20px; font-weight:bold">2. Data Collection</h2><a id = "2"></a>
 
-# %% [markdown]
-# We import our relative path Dataset and in addition to that, we rename the TransactionAmount (INR) column in TransactionAmount, this in order to avoid that in the future the special characters of the original name give us problems.
-
 # %%
 def import_data():
-    """This function import the data and rename a column.
-
-    This is a more detailed description of the function,
-    which can span multiple lines.
-
-    Args:
-        
-
+    """
+    Imports our relative path Dataset and in addition to that, renames the TransactionAmount (INR) column in TransactionAmount, 
+    this in order to avoid that in the future the special characters of the original name give us problems.
+    
     Returns:
-        DataFrame: A DataFrame with the DataSet.
-
-    Raises:
-        ValueError: If something goes wrong.
+        DataFrame: dfGet source data
     """
     dfGet = pd.read_csv(r"D:\Gabriel Suarez\Desktop\University\Semestre 7\Inteligencia Artificial\Final Project - AI\Bank-Customer-Segmentation\data\bank_transactions.csv")
     initialRows = len(dfGet)
@@ -159,7 +149,7 @@ df['TransactionDate'] = pd.to_datetime(df['TransactionDate'], dayfirst=True)
 print(df['TransactionDate'].min(), df['TransactionDate'].max())
 
 # %% [markdown]
-# All the transactions took place in a roughly two month period from August to October, this could account for the low transaction frequency
+# All the trnasactions took place in a roughly two month period from August to October, this could account for the low transaction frequency
 
 # %% [markdown]
 # Once all the unnecessary data for the study has been eliminated, we can see the following summary, which shows us how much data we lost and what is the percentage of loss obtained
@@ -178,48 +168,35 @@ print(" Number of initial rows: ", initialRows, "\n",
 
 # %% [markdown]
 # Determine minority group of people aged <b> over 100 years</b>
-# We filter our dataframe specifically on the DOB column to make a decision regarding date ambiguity.</br>
 
 # %%
-def filterDOB(dataframe):  
-    return dataframe["CustomerDOB"].apply(lambda x: x if x.year < 1917 else 0)
-
-df_filtered = filterDOB(df)
-
-# %% [markdown]
+# We filter our dataframe specifically on the DOB column to make a decision regarding date ambiguity.
+df_filtered = df["CustomerDOB"].apply(lambda x: x if x.year < 1917 else 0)
 # Amortizing and removing values ​​greater than 1917 represented as 0
-#%%
 counts = df_filtered.value_counts().drop(0)
 print(counts)
-# %% [markdown]
 # Amount of customer in this age range
-#%%
 print(len(counts))
-# %% [markdown]
 # Plot the amortized
-#%%
 counts.plot()
 plt.show()
 del df_filtered
 
 # %% [markdown]
 # <h3><b>Calculate customer age :</b></h3>
-# <b>CustomerDOB:</b> is the birth date of the customer</br>
-# <b>TransactionDate:</b> is the date of transaction that customer is done</br>
+# <b>CustomerDOB:</b> is the birth date of the customer 
+# <br>
+# <b>TransactionDate:</b> is the date of transaction that customer is done
+# <br>
 # The age calculation is done by <b>subtracting</b> the TransactionDate from the CustomerDOB.
 # 
 
-# %% [markdown]
+# %%
 # Getting the customer age at transaction moment and adding a new column in our dataframe
-#%%
-def getCustomerAge(dataframe):
-    
-    df['CustomerAge'] = (df['TransactionDate'] - df['CustomerDOB'])/np.timedelta64(1, 'Y')
-    df['CustomerAge'] = df['CustomerAge'].astype(int)
-    # Checking range of CustomerAge variable
-    print("min: " + str(df['CustomerAge'].min()) + " max: " + str(df['CustomerAge'].max()))
-
-getCustomerAge(df)
+df['CustomerAge'] = (df['TransactionDate'] - df['CustomerDOB'])/np.timedelta64(1, 'Y')
+df['CustomerAge'] = df['CustomerAge'].astype(int)
+# Checking range of CustomerAge variable
+print("min: " + str(df['CustomerAge'].min()) + " max: " + str(df['CustomerAge'].max()))
 
 # %% [markdown]
 # Once this is obtained, we have that the minimum age is equal to 16 years and the maximum age is equal to 116 years, it should be noted that the ages over 100 are a minimum percentage.
@@ -235,16 +212,13 @@ df.CustGender.value_counts()
 # <h5> Visualize the distribution of the numeric data and detect posible outliers. Boxplots show the median, quartiles, and extreme values ​​of the data, and points that are above or below the extreme values ​​are considered outliers.</h5>
 
 # %%
-def outliers(dataframe):
-    num_col = df.select_dtypes(include=np.number)
-    cat_col = df.select_dtypes(exclude=np.number)
+num_col = df.select_dtypes(include=np.number)
+cat_col = df.select_dtypes(exclude=np.number)
 
-    for i in num_col.columns:
-        sns.boxplot(x=num_col[i])
-        plt.title("Boxplot " + i)
-        plt.show()
-
-outliers(df)
+for i in num_col.columns:
+    sns.boxplot(x=num_col[i])
+    plt.title("Boxplot " + i)
+    plt.show()
 
 # %% [markdown]
 # <h3 style="font-family:Sans-Serif; font-weight:bold">RFM Metrics:</h3>
@@ -268,47 +242,39 @@ df['TransactionDate1']=df['TransactionDate'] # ==> to calculate the minimum (fir
 df['TransactionDate2']=df['TransactionDate'] # ==> to calculate the maximum (last transaction)
 
 # %% [markdown]
-# This code is used to create a RFM (Recency, Frequency, Monetary) table.
-# The data is grouped by CustomerID using the groupby method and then the agg function is used to calculate different metrics for each customer.
+# Este código es utilizado para crear una tabla RFM (Recency, Frequency, Monetary)
+# Se agrupan los datos por CustomerID utilizando el método groupby y luego se utiliza la función agg para calcular distintas métricas para cada cliente.
 # 
-# The metrics that are calculated are as follows:
+# Las métricas que se calculan son las siguientes:
 # <ul>
-# <li><b>TransactionID:</b> number of transactions performed by the customer.</li>
-# <li><b>CustGender:</b> customer's gender (taken from the first transaction recorded for the customer).</li>
-# <li><b>CustLocation:</b> location of the customer (also taken from the first transaction recorded for the customer).</li>
-# <li><b>CustAccountBalance:</b> average balance of the customer's account.</li>
-# <li><b>TransactionTime:</b> average time of transactions performed by the customer.</li>
-# <li><b>TransactionAmount:</b> average amount of transactions made by the customer.</li>
-# <li><b>CustomerAge:</b> median age of the client.</li>
-# <li><b>TransactionDate2:</b> most recent date on which the customer made a transaction.</li>
-# <li><b>TransactionDate1:</b> oldest date on which the customer made a transaction.</li>
-# <li><b>TransactionDate:</b> median date on which the customer made a transaction.</li>
+# <li><b>TransactionID:</b> cantidad de transacciones realizadas por el cliente.</li>
+# <li><b>CustGender:</b> género del cliente (tomado de la primera transacción registrada para el cliente).</li>
+# <li><b>CustLocation:</b> ubicación del cliente (también tomada de la primera transacción registrada para el cliente).</li>
+# <li><b>CustAccountBalance:</b> saldo promedio de la cuenta del cliente.</li>
+# <li><b>TransactionTime:</b> hora promedio de las transacciones realizadas por el cliente.</li>
+# <li><b>TransactionAmount:</b> monto promedio de las transacciones realizadas por el cliente.</li>
+# <li><b>CustomerAge:</b> edad mediana del cliente.</li>
+# <li><b>TransactionDate2:</b> fecha más reciente en la que el cliente realizó una transacción.</li>
+# <li><b>TransactionDate1:</b> fecha más antigua en la que el cliente realizó una transacción.</li>
+# <li><b>TransactionDate:</b> fecha mediana en la que el cliente realizó una transacción.</li>
 # </ul>
 
-# %% [markdown]
+# %%
 #Creating MRF Table Strategy
-#%%
+RFM_df = df.groupby("CustomerID").agg({
+                                        "TransactionID" : "count",
+                                        "CustGender" : "first",
+                                        "CustLocation":"first",
+                                        "CustAccountBalance"  : "mean",
+                                        "TransactionTime": "mean",
+                                        "TransactionAmount" : "mean",
+                                        "CustomerAge" : "median",
+                                        "TransactionDate2":"max",
+                                        "TransactionDate1":"min",
+                                        "TransactionDate":"median"
+                        })
 
-def MRFTable(df):
-    
-    RFM_df = df.groupby("CustomerID").agg({
-                                            "TransactionID" : "count",
-                                            "CustGender" : "first",
-                                            "CustLocation":"first",
-                                            "CustAccountBalance"  : "mean",
-                                            "TransactionTime": "mean",
-                                            "TransactionAmount" : "mean",
-                                            "CustomerAge" : "median",
-                                            "TransactionDate2":"max",
-                                            "TransactionDate1":"min",
-                                            "TransactionDate":"median"
-                            })
-
-    RFM_df.reset_index()
-    return RFM_df
-    
-
-RFM_df = MRFTable(df)
+RFM_df = RFM_df.reset_index()
 RFM_df.head()
 
 # %% [markdown]
@@ -337,26 +303,20 @@ RFM_df.rename(columns={"TransactionID":"Frequency"},inplace=True)
 # <h4><b>Recency</b></h4>
 # <p>The recency is the number of days since the last purchase or order so we will create a new column of TransactionDate to subtract the last transaction from the first transaction</p>
 
-# %%[markdown]
+# %%
 # Getting Recency that is by definition: number of days since the last purchase or order
-#%%
 RFM_df['Recency']=RFM_df['TransactionDate2']-RFM_df['TransactionDate1']
-#%%[markdown]
 # Conversion from timedelta64[ns] to string representtion in days of weeks of Recency variable
-#%%
 RFM_df['Recency']=RFM_df['Recency'].astype(str)
 
 # %% [markdown]
 # We apply a lambda function to adjust the format of our output in the Recency variable
 
 # %%
-def formatOutputInRecency(RFM_df):
-    # Using re library for apply an regular expresion in each value of Recency column for extract the number of days in this string representation. 
-    RFM_df['Recency']=RFM_df['Recency'].apply(lambda x :re.search('\d+',x).group())
-    # Conversion from string '18' to int representtion for folloeing operations
-    RFM_df['Recency']=RFM_df['Recency'].astype(int)
-
-formatOutputInRecency(RFM_df)
+# Using re library for apply an regular expresion in each value of Recency column for extract the number of days in this string representation. 
+RFM_df['Recency']=RFM_df['Recency'].apply(lambda x :re.search('\d+',x).group())
+# Conversion from string '18' to int representtion for folloeing operations
+RFM_df['Recency']=RFM_df['Recency'].astype(int)
 
 # %% [markdown]
 # <p> <b>Appreciation:</b> Days mean that a customer has done transaction recently one time by logic so I will convert 0 to 1 </p>
@@ -377,33 +337,30 @@ RFM_df.drop(columns=["TransactionDate1","TransactionDate2"],inplace=True)
 
 # %%
 # To calculate the otliers for each feature
-def outliersWhenCleaned():
-    lower_list=[]
-    upper_list=[]
-    num_list=[]
-    perc_list=[]
-    cols=['Frequency', 'CustAccountBalance','TransactionAmount', 'CustomerAge', 'Recency']
-    for i in cols:
-        Q1 = RFM_df[i].quantile(0.25)
-        Q3 = RFM_df[i].quantile(0.75)
-        IQR = Q3 - Q1
-        lower = Q1 - 1.5 * IQR
-        upper = Q3 + 1.5 * IQR
-        # Calculate number of outliers
-        num=RFM_df[(RFM_df[i] < lower) | (RFM_df[i] > upper)].shape[0]
-        # Calculate percentage of outliers
-        perc = (num / RFM_df.shape[0]) * 100
-        lower_list.append(lower)
-        upper_list.append(upper)
-        num_list.append(num)
-        perc_list.append(round(perc,2))
+lower_list=[]
+upper_list=[]
+num_list=[]
+perc_list=[]
+cols=['Frequency', 'CustAccountBalance','TransactionAmount', 'CustomerAge', 'Recency']
+for i in cols:
+    Q1 = RFM_df[i].quantile(0.25)
+    Q3 = RFM_df[i].quantile(0.75)
+    IQR = Q3 - Q1
+    lower = Q1 - 1.5 * IQR
+    upper = Q3 + 1.5 * IQR
+    # Calculate number of outliers
+    num=RFM_df[(RFM_df[i] < lower) | (RFM_df[i] > upper)].shape[0]
+    # Calculate percentage of outliers
+    perc = (num / RFM_df.shape[0]) * 100
+    lower_list.append(lower)
+    upper_list.append(upper)
+    num_list.append(num)
+    perc_list.append(round(perc,2))
 
-        
-    dic={'lower': lower_list, 'upper': upper_list, 'outliers': num_list, 'Perc%':perc_list }
-    outliers_df=pd.DataFrame(dic,index=['Frequency', 'CustAccountBalance','TransactionAmount', 'CustomerAge', 'Recency'])
-    outliers_df
-
-outliersWhenCleaned()
+    
+dic={'lower': lower_list, 'upper': upper_list, 'outliers': num_list, 'Perc%':perc_list }
+outliers_df=pd.DataFrame(dic,index=['Frequency', 'CustAccountBalance','TransactionAmount', 'CustomerAge', 'Recency'])
+outliers_df
 
 # %% [markdown]
 # <h3 style="font-family:Sans-Serif; font-weight:bold">Observations:</h3>
@@ -426,90 +383,70 @@ RFM_df.describe()
 
 # %%
 # correlation between features
-def correlation():
-    plt.figure(figsize=(7,5))
-    correlation=RFM_df.corr(numeric_only=True)
-    sns.heatmap(correlation,vmin=None,
-        vmax=0.8,
-        cmap='rocket_r',
-        annot=True,
-        fmt='.1f',
-        linecolor='white',
-        cbar=True);
-
-correlation()
+plt.figure(figsize=(7,5))
+correlation=RFM_df.corr(numeric_only=True)
+sns.heatmap(correlation,vmin=None,
+    vmax=0.8,
+    cmap='rocket_r',
+    annot=True,
+    fmt='.1f',
+    linecolor='white',
+    cbar=True);
 
 # %% [markdown]
 # We obtain the frequency bar chart, this chart shows the distribution of the variable Frequency, it is worth noting that the frequency is the number of times a customer has made transactions in the period from August to October.
 
 # %%
-def distributionFrequency():
-    plt.style.use("fivethirtyeight")
-    chart=sns.countplot(x='Frequency',data=RFM_df,palette='rocket', order = RFM_df['Frequency'].value_counts().index)
-    plt.title("Frequency",
-            fontsize='20',
-            backgroundcolor='AliceBlue',
-            color='magenta');
-
-distributionFrequency()
+plt.style.use("fivethirtyeight")
+chart=sns.countplot(x='Frequency',data=RFM_df,palette='rocket', order = RFM_df['Frequency'].value_counts().index)
+plt.title("Frequency",
+          fontsize='20',
+          backgroundcolor='AliceBlue',
+          color='magenta');
 
 # %% [markdown]
 # We obtain the age distribution of the clients and also the percentage of women and men in the records we have.
 
 # %%
-def graphAgeAndGender():
-
-    plt.style.use("fivethirtyeight")
-    fig,ax=plt.subplots(ncols=2,nrows=1,figsize=(15,5))
-    palette_color = sns.color_palette('rocket')
-    ax[0].hist(x=RFM_df['CustomerAge'],color='purple')
-    ax[0].set_title("Distribution of Customer Age")
-    ax[1].pie(RFM_df['CustGender'].value_counts(),autopct='%1.f%%',colors=palette_color,labels=['Male','Female'])
-    ax[1].set_title("Customer Gender")
-    plt.tight_layout();
-
-graphAgeAndGender()
+plt.style.use("fivethirtyeight")
+fig,ax=plt.subplots(ncols=2,nrows=1,figsize=(15,5))
+palette_color = sns.color_palette('rocket')
+ax[0].hist(x=RFM_df['CustomerAge'],color='purple')
+ax[0].set_title("Distribution of Customer Age")
+ax[1].pie(RFM_df['CustGender'].value_counts(),autopct='%1.f%%',colors=palette_color,labels=['Male','Female'])
+ax[1].set_title("Customer Gender")
+plt.tight_layout();
 
 # %% [markdown]
 # In this graph we obtain the number of times a transaction was made in different areas of the country, only the top 20 locations with the most transactions made will be shown.
 
 # %%
-def graphLocation():
-    plt.style.use("fivethirtyeight")
-    plt.figure(figsize=(15,7))
-    chart=sns.countplot(y='CustLocation',data=RFM_df,palette='rocket', order = RFM_df['CustLocation'].value_counts()[:20].index)
-    plt.title("Most 20 Location of Customer ",
-            fontsize='15',
-            backgroundcolor='AliceBlue',
-            color='magenta');
-
-graphLocation()
+plt.style.use("fivethirtyeight")
+plt.figure(figsize=(15,7))
+chart=sns.countplot(y='CustLocation',data=RFM_df,palette='rocket', order = RFM_df['CustLocation'].value_counts()[:20].index)
+plt.title("Most 20 Location of Customer ",
+          fontsize='15',
+          backgroundcolor='AliceBlue',
+          color='magenta');
 
 # %% [markdown]
 # We generate the scatter plot of the data referring to the variable Frequency.
 
 # %%
-def scatterOFData():
-    plt.style.use("fivethirtyeight")
-    sns.pairplot(RFM_df,hue='Frequency')
-
-scatterOFData()
+plt.style.use("fivethirtyeight")
+sns.pairplot(RFM_df,hue='Frequency')
 
 # %% [markdown]
 # This code generates a scatter plot. The data used comes from the RFM_df dataframe and is represented on the X axis (horizontal) the transaction amounts (TransactionAmount) and on the Y axis (vertical) the customer's account balance (CustAccountBalance). We add a third dimension to the graph which is Frequency and a fourth one with Recency.
 
 # %%
-def graphTransactionAmountAndCustAccountBalance():
-
-    plt.style.use("fivethirtyeight")
-    sns.scatterplot(x='TransactionAmount',y='CustAccountBalance',data=RFM_df,palette='rocket',hue='Frequency',size='Recency' )
-    plt.legend(loc = "upper right")
-    plt.title("TransactionAmount (INR) and CustAccountBalance",
-            fontsize='15',
-            backgroundcolor='AliceBlue',
-            color='magenta');
-
-graphTransactionAmountAndCustAccountBalance()
+plt.style.use("fivethirtyeight")
+sns.scatterplot(x='TransactionAmount',y='CustAccountBalance',data=RFM_df,palette='rocket',hue='Frequency',size='Recency' )
+plt.legend(loc = "upper right")
+plt.title("TransactionAmount (INR) and CustAccountBalance",
+          fontsize='15',
+          backgroundcolor='AliceBlue',
+          color='magenta');
 
 # %% [markdown]
 # We calculate the farthest distance between two completed transactions
@@ -522,29 +459,23 @@ RFM_df['TransactionDate'].max()-RFM_df['TransactionDate'].min()
 # We group the transactions according to the month in which they were made and obtain the average for each table.
 
 # %%
-def groupTransaccionsByMonth():
-
-    RFM_df=RFM_df.sort_values(by='TransactionDate')
-    groupbby_month = RFM_df.groupby([pd.Grouper(key='TransactionDate', freq='M')])[['Frequency', 'TransactionAmount', 'CustAccountBalance', 'TransactionTime', 'CustomerAge', 'Recency']].mean()
-    print(groupbby_month.shape)
-    return groupbby_month
-
-groupbby_month = groupTransaccionsByMonth()
+RFM_df=RFM_df.sort_values(by='TransactionDate')
+groupbby_month = RFM_df.groupby([pd.Grouper(key='TransactionDate', freq='M')])[['Frequency', 'TransactionAmount', 'CustAccountBalance', 'TransactionTime', 'CustomerAge', 'Recency']].mean()
+print(groupbby_month.shape)
+groupbby_month
 
 # %% [markdown]
 # We made line graphs of the information we obtained previously.
 
 # %%
-def grphLineBalanceAndTransactionAmount():
+plt.figure(figsize=(13.4,7))
+plt.title("Average of account balance per month")
+plt.plot(groupbby_month.index,groupbby_month['CustAccountBalance'],color='purple',marker='o',label='Customer Account Balance', linestyle='dashed', linewidth=2, markersize=10)
+plt.legend();
 
-    plt.figure(figsize=(13.4,7))
-    plt.title("Average of account balance per month")
-    plt.plot(groupbby_month.index,groupbby_month['CustAccountBalance'],color='purple',marker='o',label='Customer Account Balance', linestyle='dashed', linewidth=2, markersize=10)
-    plt.legend();
+plt.figure(figsize=(13.8,7))
+plt.title("Average of transaction amount per month")
+plt.plot(groupbby_month.index,groupbby_month['TransactionAmount'],color='green',marker='o',label='Transaction Amount', linestyle='dashed', linewidth=2, markersize=10)
 
-    plt.figure(figsize=(13.8,7))
-    plt.title("Average of transaction amount per month")
-    plt.plot(groupbby_month.index,groupbby_month['TransactionAmount'],color='green',marker='o',label='Transaction Amount', linestyle='dashed', linewidth=2, markersize=10)
 
-grphLineBalanceAndTransactionAmount()
 """

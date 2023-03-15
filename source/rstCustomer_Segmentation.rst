@@ -19,7 +19,6 @@ Goal of creating this Notebook
 3. Perform transaction-related analysis to identify interesting trends
    that can be used by a bank to improve / optimi their user experiences
 4. Customer Recency, Frequency, Monetary analysis
-5. Network analysis or Graph analysis of customer data.
 
 **Table of contents of this notebook:**
 
@@ -56,28 +55,18 @@ Cleaning **4.** Exploratory Data Analysis
 
       </h2>
 
-We import our relative path Dataset and in addition to that, we rename
-the TransactionAmount (INR) column in TransactionAmount, this in order
-to avoid that in the future the special characters of the original name
-give us problems.
 
 .. autofunction:: scriptNotebook.import_data
+
 .. code:: ipython3
 
     def import_data():
-        """
-        This function get the DataSet and rename a column.
-        :param:
-        :return: Dataframe
-        """
         dfGet = pd.read_csv("../data/bank_transactions.csv")
-        initialRows = len(dfGet)
         dfGet = dfGet.rename(columns={'TransactionAmount (INR)':'TransactionAmount'})
         return dfGet
-    
     df = import_data()
+    # Showing or Checking results
     df.head()
-    
 
 
 
@@ -180,12 +169,21 @@ give us problems.
 
 
 
-We obtain the initial information of the Dataset, the number of records,
-number of variables, non-null objects and data type.
-
 .. code:: ipython3
 
-    display(df.info())
+    def dfInformation(dataframe):
+        """
+        Gets the initial information of the Dataset, the number of records, number of variables, non-null objects and data type.
+    
+        :param dataframe: Source dataset.
+        :type dataframe: pandas.DataFrame
+        :return: A range indes conforma by float64(2), int64(1), object(6)
+        :rtype: void
+        """
+        display(dataframe.info())
+    dfInformation(df)
+    # Getting the dataframe size for following amortized values
+    initialRows = len(df)
 
 
 .. parsed-literal::
@@ -224,23 +222,28 @@ number of variables, non-null objects and data type.
 
       </h2>
 
-The amount of null data and unique is calculated
-
 .. code:: ipython3
 
-    def check(df):
+    def check(dataframe):
+        """
+        Gets the amount of null data and unique is calculated
+    
+        :param dataframe: Source dataset.
+        :type dataframe: pandas.DataFrame
+        :return: A new Dataframe tha represents de amortized values of null and unique values for each column.
+        :rtype: pandas.DataFrame
+        """
         l=[]
-        columns=df.columns
+        columns=dataframe.columns
         for col in columns:
-            dtypes=df[col].dtypes
-            nunique=df[col].nunique()
-            sum_null=df[col].isnull().sum()
+            dtypes=dataframe[col].dtypes
+            nunique=dataframe[col].nunique()
+            sum_null=dataframe[col].isnull().sum()
             l.append([col,dtypes,nunique,sum_null])
         df_check=pd.DataFrame(l)
         df_check.columns=['Column','Types','Unique','Nulls']
         return df_check 
     check(df)
-    
 
 
 
@@ -341,14 +344,36 @@ The amount of null data and unique is calculated
 
 
 
-Eliminamos los valores nulos
+Observation:
+
+.. raw:: html
+
+   <h6>
+
+The amount of null values to eliminate is equal to 6953 data, we
+eliminate these values because they do not represent more than 0.7% of
+the total data. We check if there are repeated elements in our DataSet
+
+.. raw:: html
+
+   </h6>
 
 .. code:: ipython3
 
-    shapeInitial = df.shape[0]
-    df.dropna(inplace=True)
-    shapeFinal = shapeInitial-df.shape[0]
-    print("Amount to remove " + str(shapeFinal))
+    def removeNullValues(dataframe):
+        """
+        Removes null values from data source and calculates the amount eliminated
+    
+        :param dataframe: Source dataset.
+        :type dataframe: pandas.DataFrame
+        :return: The total of null values already deleted
+        :rtype: int
+        """
+        shapeInitial = dataframe.shape[0]
+        dataframe.dropna(inplace=True)
+        return shapeInitial-dataframe.shape[0]
+    
+    print("Amount to remove " + str(removeNullValues(df)))
 
 
 .. parsed-literal::
@@ -356,13 +381,19 @@ Eliminamos los valores nulos
     Amount to remove 6953
     
 
-The amount of null values to eliminate is equal to 6953 data, we
-eliminate these values because they do not represent more than 0.7% of
-the total data. We check if there are repeated elements in our DataSet
-
 .. code:: ipython3
 
-    df.duplicated().sum()
+    def checkDuplicates(dataframe):
+        """
+        Checks duplicated values for each column and amortized this count.
+    
+        :param dataframe: Source dataset.
+        :type dataframe: pandas.DataFrame
+        :return: The total of duplicated values in an specifica dataframe
+        :rtype: int
+        """
+        return dataframe.duplicated().sum()
+    checkDuplicates(df)
 
 
 
@@ -373,13 +404,34 @@ the total data. We check if there are repeated elements in our DataSet
 
 
 
+Consideration
+
+.. raw:: html
+
+   <h6>
+
 The CustomerDOB column is analyzed because it may contain atypical data.
 We analyze the number of records for each client’s date of birth.
 
+.. raw:: html
+
+   </h6>
+
 .. code:: ipython3
 
-    # Getting distinct values from CustomerDOB variable
-    df['CustomerDOB'].value_counts()
+    def uniqueRows(dataframe, column):
+        """
+        Getting distinct values from column or specific variable
+    
+        :param dataframe: Source dataset.
+        :type dataframe: pandas.DataFrame
+        :param column: Variable or column in dataframe
+        :type dataframe: string
+        :return: A series containing counts of unique rows in the DataFrame.
+        :rtype: Series
+        """
+        return dataframe[column].value_counts()
+    uniqueRows(df,'CustomerDOB')
 
 
 
@@ -401,18 +453,42 @@ We analyze the number of records for each client’s date of birth.
 
 
 
+Take in mind
+
+.. raw:: html
+
+   <h6>
+
 Dates 1/1/1800 are deleted because it is not possible to define whether
 they are children, adults or persons without date of birth. This is an
 important variable for the business, for this reason we cannot make
 assumptions that bias the project, for this reason, it is better to
 eliminate these outliers or erroneously measured data.
 
+.. raw:: html
+
+   </h6>
+
 .. code:: ipython3
 
-    # Removing CustomerDOB == '1/1/1800'
-    df = df.loc[~(df['CustomerDOB'] == '1/1/1800')]
+    def removeValues(dataframe,column, value):
+        """
+        Removes an specific value from a source column in a dataframe
+    
+        :param dataframe: Source dataset.
+        :type dataframe: pandas.DataFrame
+        :param column: Variable or column in dataframe
+        :type dataframe: string
+        :param value: Value with column type
+        :type dataframe: any
+        :return: A pandas DataFrame already modified.
+        :rtype: pandas.DataFrame
+        """
+        return dataframe.loc[~(dataframe[column] == value)]
+    
+    df = removeValues(df,'CustomerDOB','1/1/1800')
     # Cheking distinct values from dataframe
-    df['CustomerDOB'].value_counts()
+    uniqueRows(df,'CustomerDOB')
 
 
 
@@ -434,22 +510,31 @@ eliminate these outliers or erroneously measured data.
 
 
 
-We print the minimum and maximum date of the CustomerDOB column in order
-to see in which range the values in this column oscillate.
-
 .. code:: ipython3
 
-    # Range of CustomerDOB object type as string
-    print("min: " + df['CustomerDOB'].min() + " max: " + df['CustomerDOB'].max())
+    def minAndMax(dataframe, column):
+        """
+        Gets the minimum and maximum values of any column in order to see in which range the values in this column oscillate.
+    
+        :param dataframe: Source dataset.
+        :type dataframe: pandas.DataFrame
+        :param column: Variable or column in dataframe
+        :type dataframe: string
+        :return: Shows the minimun and maximun values from this column
+        :rtype: void
+        """
+        print("min: " + str(dataframe[column].min()) + " max: " + str(dataframe[column].max()))
+    minAndMax(df,'CustomerDOB')
 
 
 .. parsed-literal::
 
-    min: 1/1/00 max: 9/9/97
+    min: 1973-01-01 00:00:00 max: 2072-12-31 00:00:00
     
 
 It can be seen that the person with the oldest birth date has a date of
 January 1, 1900 and the youngest person has a date of September 9, 1997.
+(It looks weird)
 
 Convert type of columns TransactionDate, CustomerDOB from string to
 datetime, this convertation will be in the format of dayfirst, so the
@@ -457,8 +542,19 @@ date will be DD/MM/YY
 
 .. code:: ipython3
 
-    # Using pandas convert to datetime tool for CustomerDOB variable with specific format
-    df['CustomerDOB'] = pd.to_datetime(df['CustomerDOB'], dayfirst=True)
+    def dateConvertion(dataframe, column):
+        """
+        Converts dataframe column to datetime format using pandas tool with specific format 'dayfirst'
+    
+        :param dataframe: Source dataset.
+        :type dataframe: pandas.DataFrame
+        :param column: Variable or column in dataframe
+        :type dataframe: string
+        :return: New Dataframe already modified
+        :rtype: pandas.DataFrame
+        """
+        return pd.to_datetime(dataframe[column], dayfirst=True)
+    df['CustomerDOB'] = dateConvertion(df,'CustomerDOB')
 
 Now we will check if the conversion was as expected and in the required
 format.
@@ -466,12 +562,12 @@ format.
 .. code:: ipython3
 
     # Checking converting problem of to_datetime pandas function
-    print(df['CustomerDOB'].min(), df['CustomerDOB'].max())
+    minAndMax(df,'CustomerDOB')
 
 
 .. parsed-literal::
 
-    1973-01-01 00:00:00 2072-12-31 00:00:00
+    min: 1973-01-01 00:00:00 max: 2072-12-31 00:00:00
     
 
 We can see that the most “recent” date is December 31, 2072, but it is
@@ -481,15 +577,30 @@ Pandas has when converting a date).
 
 .. code:: ipython3
 
-    # Fixing the problem base on analysis above
-    df.loc[df['CustomerDOB'].dt.year > 1999, 'CustomerDOB'] -= pd.DateOffset(years=100)
-    print(df['CustomerDOB'].min(), df['CustomerDOB'].max())
+    def refactorDates(dataframe):
+        """
+        Refactors date dob column substrating 100 from values greater than 1999
+        Note: Fixing the problem base on analysis above
+        :param dataframe: Source dataset.
+        :type dataframe: pandas.DataFrame
+        :return: New Dataframe already modified
+        :rtype: pandas.DataFrame
+        """
+        dataframe.loc[df['CustomerDOB'].dt.year > 1999, 'CustomerDOB'] -= pd.DateOffset(years=100)
+        return dataframe
+    df = refactorDates(df)
+    minAndMax(df,'CustomerDOB')
 
 
-.. parsed-literal::
+::
 
-    1900-01-01 00:00:00 1999-12-28 00:00:00
+
+      Cell In[28], line 10
+        return (dataframe.loc[df['CustomerDOB'].dt.year > 1999, 'CustomerDOB'] -= pd.DateOffset(years=100))
+                                                                               ^
+    SyntaxError: invalid syntax
     
+
 
 In the same way that we converted the CustomerDOB column, we convert the
 TransactionDate column with the same expected format as the first day.
@@ -497,14 +608,14 @@ TransactionDate column with the same expected format as the first day.
 .. code:: ipython3
 
     # Using pandas convert to datetime tool for TransactionDate variable
-    df['TransactionDate'] = pd.to_datetime(df['TransactionDate'], dayfirst=True)
+    df['TransactionDate'] = dateConvertion(df,'TransactionDate')
     # Checking range of TransactionDate variable
-    print(df['TransactionDate'].min(), df['TransactionDate'].max())
+    minAndMax(df,'TransactionDate')
 
 
 .. parsed-literal::
 
-    2016-08-01 00:00:00 2016-10-21 00:00:00
+    min: 2016-08-01 00:00:00 max: 2016-10-21 00:00:00
     
 
 All the trnasactions took place in a roughly two month period from
@@ -584,7 +695,7 @@ Determine minority group of people aged over 100 years
     
 
 
-.. image:: Customer_Segmentation_files/Customer_Segmentation_37_1.png
+.. image:: Customer_Segmentation_files/Customer_Segmentation_32_1.png
 
 
 .. raw:: html
@@ -665,19 +776,19 @@ considered outliers.
 
 
 
-.. image:: Customer_Segmentation_files/Customer_Segmentation_44_0.png
+.. image:: Customer_Segmentation_files/Customer_Segmentation_39_0.png
 
 
 
-.. image:: Customer_Segmentation_files/Customer_Segmentation_44_1.png
+.. image:: Customer_Segmentation_files/Customer_Segmentation_39_1.png
 
 
 
-.. image:: Customer_Segmentation_files/Customer_Segmentation_44_2.png
+.. image:: Customer_Segmentation_files/Customer_Segmentation_39_2.png
 
 
 
-.. image:: Customer_Segmentation_files/Customer_Segmentation_44_3.png
+.. image:: Customer_Segmentation_files/Customer_Segmentation_39_3.png
 
 
 .. raw:: html
@@ -1491,7 +1602,7 @@ features are related to each other.
 
 
 
-.. image:: Customer_Segmentation_files/Customer_Segmentation_73_0.png
+.. image:: Customer_Segmentation_files/Customer_Segmentation_68_0.png
 
 
 We obtain the frequency bar chart, this chart shows the distribution of
@@ -1510,7 +1621,7 @@ August to October.
 
 
 
-.. image:: Customer_Segmentation_files/Customer_Segmentation_75_0.png
+.. image:: Customer_Segmentation_files/Customer_Segmentation_70_0.png
 
 
 We obtain the age distribution of the clients and also the percentage of
@@ -1529,7 +1640,7 @@ women and men in the records we have.
 
 
 
-.. image:: Customer_Segmentation_files/Customer_Segmentation_77_0.png
+.. image:: Customer_Segmentation_files/Customer_Segmentation_72_0.png
 
 
 In this graph we obtain the number of times a transaction was made in
@@ -1548,7 +1659,7 @@ transactions made will be shown.
 
 
 
-.. image:: Customer_Segmentation_files/Customer_Segmentation_79_0.png
+.. image:: Customer_Segmentation_files/Customer_Segmentation_74_0.png
 
 
 We generate the scatter plot of the data referring to the variable
@@ -1569,7 +1680,7 @@ Frequency.
 
 
 
-.. image:: Customer_Segmentation_files/Customer_Segmentation_81_1.png
+.. image:: Customer_Segmentation_files/Customer_Segmentation_76_1.png
 
 
 This code generates a scatter plot. The data used comes from the RFM_df
@@ -1590,7 +1701,7 @@ graph which is Frequency and a fourth one with Recency.
 
 
 
-.. image:: Customer_Segmentation_files/Customer_Segmentation_83_0.png
+.. image:: Customer_Segmentation_files/Customer_Segmentation_78_0.png
 
 
 We calculate the farthest distance between two completed transactions
@@ -1721,9 +1832,9 @@ We made line graphs of the information we obtained previously.
 
 
 
-.. image:: Customer_Segmentation_files/Customer_Segmentation_89_1.png
+.. image:: Customer_Segmentation_files/Customer_Segmentation_84_1.png
 
 
 
-.. image:: Customer_Segmentation_files/Customer_Segmentation_89_2.png
+.. image:: Customer_Segmentation_files/Customer_Segmentation_84_2.png
 

@@ -8,9 +8,9 @@ Welcome to Bank-Customer-Segmentation's Documentation!
 
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
    :caption: Contents:
 
-   Customer_Segmentation.rst
+   rstCustomer_Segmentation.rst
    
 
