@@ -348,21 +348,11 @@ the total data. We check if there are repeated elements in our DataSet
 
    </h6>
 
+.. autofunction:: scriptNotebook.removeNullValues
+
 .. code:: ipython3
 
     def removeNullValues(dataframe):
-        """
-        Removes null values from data source and calculates the amount eliminated
-    
-        Args:
-            dataframe (DataFrame): Source dataset.
-    
-        Returns:
-            int: The total of null values already deleted
-    
-        Raises:
-            TypeError: If the dataframe is not a DataFrame.
-        """
         shapeInitial = dataframe.shape[0]
         dataframe.dropna(inplace=True)
         return shapeInitial-dataframe.shape[0]
@@ -374,22 +364,11 @@ the total data. We check if there are repeated elements in our DataSet
 
     Amount to remove 6953
     
+.. autofunction:: scriptNotebook.checkDuplicates
 
 .. code:: ipython3
 
     def checkDuplicates(dataframe):
-        """
-        Checks duplicated values for each column and amortized this count.
-    
-        Args:
-            dataframe (DataFrame): Source dataset.
-    
-        Returns:
-            int: The total of duplicated values in an specifica dataframe
-    
-        Raises:
-            TypeError: If the dataframe is not a DataFrame.
-        """
         return dataframe.duplicated().sum()
     checkDuplicates(df)
 
@@ -415,22 +394,11 @@ We analyze the number of records for each client’s date of birth.
 
    </h6>
 
+.. autofunction:: scriptNotebook.uniqueRows
+
 .. code:: ipython3
 
     def uniqueRows(dataframe, column):
-        """
-        Getting distinct values from column or specific variable
-    
-        Args:
-            dataframe (DataFrame): Source dataset.
-            column (string): Variable or column in dataframe
-    
-        Returns:
-            Series: A series containing counts of unique rows in the DataFrame.
-    
-        Raises:
-            TypeError: If the dataframe is not a DataFrame.
-        """
         return dataframe[column].value_counts()
     uniqueRows(df,'CustomerDOB')
 
@@ -470,23 +438,11 @@ eliminate these outliers or erroneously measured data.
 
    </h6>
 
+.. autofunction:: scriptNotebook.removeValues
+
 .. code:: ipython3
 
     def removeValues(dataframe,column, value):
-        """
-        Removes an specific value from a source column in a dataframe
-    
-        Args:
-            dataframe (DataFrame): Source dataset.
-            column (string): Variable or column in dataframe
-            value (any): Value with column type
-    
-        Returns:
-            DataFrame: A pandas DataFrame already modified.
-    
-        Raises:
-            TypeError: If the dataframe is not a DataFrame.
-        """
         return dataframe.loc[~(dataframe[column] == value)]
     
     df = removeValues(df,'CustomerDOB','1/1/1800')
@@ -512,23 +468,11 @@ eliminate these outliers or erroneously measured data.
     Name: CustomerDOB, Length: 17232, dtype: int64
 
 
+.. autofunction:: scriptNotebook.minAndMax
 
 .. code:: ipython3
 
     def minAndMax(dataframe, column):
-        """
-        Gets the minimum and maximum values of any column in order to see in which range the values in this column oscillate.
-    
-        Args:
-            dataframe (DataFrame): Source dataset.
-            column (string): Variable or column in dataframe
-    
-        Returns:
-            void: Shows the minimun and maximun values from this column
-    
-        Raises:
-            TypeError: If the dataframe is not a DataFrame.
-        """
         print("min: " + str(dataframe[column].min()) + " max: " + str(dataframe[column].max()))
     minAndMax(df,'CustomerDOB')
 
@@ -546,22 +490,11 @@ Convert type of columns TransactionDate, CustomerDOB from string to
 datetime, this convertation will be in the format of dayfirst, so the
 date will be DD/MM/YY
 
+.. autofunction:: scriptNotebook.dateConvertion
+
 .. code:: ipython3
 
     def dateConvertion(dataframe, column):
-        """
-        Converts dataframe column to datetime format using pandas tool with specific format 'dayfirst'
-    
-        Args:
-            dataframe (DataFrame): Source dataset.
-            column (string): Variable or column in dataframe
-    
-        Returns:
-            DataFrame: A pandas DataFrame already modified.
-    
-        Raises:
-            TypeError: If the dataframe is not a DataFrame.
-        """
         return pd.to_datetime(dataframe[column], dayfirst=True)
     df['CustomerDOB'] = dateConvertion(df,'CustomerDOB')
 
@@ -584,35 +517,20 @@ illogical because this is a future date, so we subtract 100 from all
 values greater than 1999 to get the real value. (This is a problem
 Pandas has when converting a date).
 
+.. autofunction:: scriptNotebook.refactorDates
+
 .. code:: ipython3
 
     def refactorDates(dataframe):
-        """
-        Refactors date dob column substrating 100 from values greater than 1999
-        Note: Fixing the problem base on analysis above
-    
-        Args:
-            dataframe (DataFrame): Source dataset.
-    
-        Returns:
-            DataFrame: A pandas DataFrame already modified.
-    
-        Raises:
-            TypeError: If the dataframe is not a DataFrame.
-        """
         dataframe.loc[df['CustomerDOB'].dt.year > 1999, 'CustomerDOB'] -= pd.DateOffset(years=100)
         return dataframe
     df = refactorDates(df)
     minAndMax(df,'CustomerDOB')
 
 
-::
+.. parsed-literal::
 
-
-      Cell In[28], line 10
-        return (dataframe.loc[df['CustomerDOB'].dt.year > 1999, 'CustomerDOB'] -= pd.DateOffset(years=100))
-                                                                               ^
-    SyntaxError: invalid syntax
+    min: 1900-01-01 00:00:00 max: 1999-12-28 00:00:00
     
 
 
@@ -672,22 +590,12 @@ us to eliminate them, because we cannot speculate about them.
 
 Determine minority group of people aged over 100 years
 
+.. autofunction:: scriptNotebook.filterDOB
+
 .. code:: ipython3
 
     # We filter our dataframe specifically on the DOB column to make a decision regarding date ambiguity.
     def filterDOB(dataframe):
-        """
-        Filters dataframe by DOB column
-    
-        Args:
-            dataframe (DataFrame): Source dataset.
-    
-        Returns:
-            DataFrame: A pandas DataFrame already modified.
-    
-        Raises:
-            TypeError: If the dataframe is not a DataFrame.
-        """
         return dataframe["CustomerDOB"].apply(lambda x: x if x.year < 1917 else 0)
     
     df_filtered = filterDOB(df)
@@ -739,22 +647,12 @@ CustomerDOB: is the birth date of the customer TransactionDate: is the
 date of transaction that customer is done The age calculation is done by
 subtracting the TransactionDate from the CustomerDOB.
 
+.. autofunction:: scriptNotebook.getCustomerAge
+
 .. code:: ipython3
 
     # Getting the customer age at transaction moment and adding a new column in our dataframe
     def getCustomerAge(dataframe):
-        """
-        Gets the customer age at transaction moment
-    
-        Args:
-            dataframe (DataFrame): Source dataset.
-    
-        Returns:
-            DataFrame: A pandas DataFrame already modified.
-    
-        Raises:
-            TypeError: If the dataframe is not a DataFrame.
-        """
         df['CustomerAge'] = (df['TransactionDate'] - df['CustomerDOB'])/np.timedelta64(1, 'Y')
         df['CustomerAge'] = df['CustomerAge'].astype(int)
         # Checking range of CustomerAge variable
@@ -804,21 +702,11 @@ considered outliers.
 
    </h5>
 
+.. autofunction:: scriptNotebook.outliers
+
 .. code:: ipython3
 
     def outliers(dataframe):
-        """
-        Calculates the outliers for each numeric column in dataframe
-    
-        Args:
-            dataframe (DataFrame): Source dataset.
-    
-        Returns:
-            DataFrame: A pandas DataFrame already modified.
-    
-        Raises:
-            TypeError: If the dataframe is not a DataFrame.
-        """
         num_col = df.select_dtypes(include=np.number)
         cat_col = df.select_dtypes(exclude=np.number)
     
@@ -1033,24 +921,13 @@ TransactionDate: median date on which the customer made a transaction.
 
    </ul>
 
+.. autofunction:: scriptNotebook.MRFTable
+
 .. code:: ipython3
 
     #Creating MRF Table Strategy
     
-    def MRFTable(df):   
-        """
-        Creates a MRF Table from a dataframe
-    
-        Args:
-            dataframe (DataFrame): Source dataset.
-    
-        Returns:
-            DataFrame: A pandas DataFrame already modified.
-    
-        Raises:
-            TypeError: If the dataframe is not a DataFrame.
-        """
-        
+    def MRFTable(df):       
         RFM_df = df.groupby("CustomerID").agg({
                                                 "TransactionID" : "count",
                                                 "CustGender" : "first",
@@ -1269,22 +1146,11 @@ transaction from the first transaction
 We apply a lambda function to adjust the format of our output in the
 Recency variable
 
+.. autofunction:: scriptNotebook.formatOutputInRecency
+
 .. code:: ipython3
 
     def formatOutputInRecency(RFM_df):
-        
-        """
-        Formats the output of Recency column
-    
-        Args:
-            dataframe (DataFrame): Source dataset.
-    
-        Returns:
-            DataFrame: A pandas DataFrame already modified.
-    
-        Raises:
-            TypeError: If the dataframe is not a DataFrame.
-        """
         # Using re library for apply an regular expresion in each value of Recency column for extract the number of days in this string representation. 
         RFM_df['Recency']=RFM_df['Recency'].apply(lambda x :re.search('\d+',x).group())
         # Conversion from string '18' to int representtion for folloeing operations
@@ -1319,24 +1185,12 @@ these columns.
 
 Now, let’s see if our DataSet once cleaned contains atypical data
 
+.. autofunction:: scriptNotebook.outliersWhenCleaned
+
 .. code:: ipython3
 
     # To calculate the otliers for each feature
     def outliersWhenCleaned():
-        
-        """
-        Calculates the outliers for each feature once the data is cleaned
-    
-        Args:
-            none
-        
-        Returns:
-           print: A print with the outliers for each feature
-    
-        Raises:
-            TypeError: If the dataframe is not a DataFrame.
-        """
-    
         lower_list=[]
         upper_list=[]
         num_list=[]
@@ -1690,24 +1544,12 @@ RFM table (RFM_df), and then plots this matrix as a heat map using it.
 The correlation matrix is a square matrix that shows how the different
 features are related to each other.
 
+.. autofunction:: scriptNotebook.correlation
+
 .. code:: ipython3
 
     # correlation between features
-    def correlation():
-        
-        """
-        Calculates the correlation between features
-    
-        Args:
-            none
-    
-        Returns:
-            heatmap: A heatmap with the correlation between features
-    
-        Raises:
-            TypeError: If the dataframe is not a DataFrame. 
-        """
-    
+    def correlation():   
         plt.figure(figsize=(7,5))
         correlation=RFM_df.corr(numeric_only=True)
         sns.heatmap(correlation,vmin=None,
@@ -1730,22 +1572,11 @@ the variable Frequency, it is worth noting that the frequency is the
 number of times a customer has made transactions in the period from
 August to October.
 
+.. autofunction:: scriptNotebook.distributionFrequency
+
 .. code:: ipython3
 
     def distributionFrequency():
-        
-        """
-        Plots the distribution of Frequency variable
-    
-        Args:
-            none
-    
-        Returns:
-            chart: A chart with the distribution of Frequency variable
-    
-        Raises:
-            TypeError: If the dataframe is not a DataFrame.
-        """
         plt.style.use("fivethirtyeight")
         chart=sns.countplot(x='Frequency',data=RFM_df,palette='rocket', order = RFM_df['Frequency'].value_counts().index)
         plt.title("Frequency",
@@ -1763,24 +1594,11 @@ August to October.
 We obtain the age distribution of the clients and also the percentage of
 women and men in the records we have.
 
+.. autofunction:: scriptNotebook.graphAgeAndGender
+
 .. code:: ipython3
 
     def graphAgeAndGender():
-        
-        """
-        Shows a graph with the distribution of the age and a pie graph of the gender in the dataset
-    
-        Args:
-            none
-    
-        Returns:
-            histogram: A histogram with the distribution of the age
-            pie: percentage of women and men
-    
-        Raises:
-            TypeError: If the dataframe is not a DataFrame.
-        """
-    
         plt.style.use("fivethirtyeight")
         fig,ax=plt.subplots(ncols=2,nrows=1,figsize=(15,5))
         palette_color = sns.color_palette('rocket')
@@ -1801,23 +1619,11 @@ In this graph we obtain the number of times a transaction was made in
 different areas of the country, only the top 20 locations with the most
 transactions made will be shown.
 
+.. autofunction:: scriptNotebook.graphLocation
+
 .. code:: ipython3
 
     def graphLocation():
-        
-        """
-        Shows a graph with the distribution of the location in the dataset
-    
-        Args:
-            none
-    
-        Returns:
-            chart: A chart with the distribution of the location
-    
-        Raises:
-            TypeError: If the dataframe is not a DataFrame.
-    
-        """
         plt.style.use("fivethirtyeight")
         plt.figure(figsize=(15,7))
         chart=sns.countplot(y='CustLocation',data=RFM_df,palette='rocket', order = RFM_df['CustLocation'].value_counts()[:20].index)
@@ -1836,22 +1642,11 @@ transactions made will be shown.
 We generate the scatter plot of the data referring to the variable
 Frequency.
 
+.. autofunction:: scriptNotebook.scatterOFData
+
 .. code:: ipython3
 
     def scatterOFData():
-        
-        """
-        Shows a scatter plot of the data
-    
-        Args:
-            none
-    
-        Returns:
-            chart: A chart with the scatter plot of the data
-    
-        Raises:
-            TypeError: If the dataframe is not a DataFrame.
-        """
         plt.style.use("fivethirtyeight")
         sns.pairplot(RFM_df,hue='Frequency')
     
@@ -1876,24 +1671,11 @@ amounts (TransactionAmount) and on the Y axis (vertical) the customer’s
 account balance (CustAccountBalance). We add a third dimension to the
 graph which is Frequency and a fourth one with Recency.
 
+.. autofunction:: scriptNotebook.graphTransactionAmountAndCustAccountBalance
+
 .. code:: ipython3
 
     def graphTransactionAmountAndCustAccountBalance():
-        
-        """
-        Shows a scatter plot of the TransactionAmount and CustAccountBalance
-    
-        Args:
-            none
-    
-        Returns:
-            chart: A chart with the scatter plot of the TransactionAmount and CustAccountBalance
-    
-        Raises:
-            TypeError: If the dataframe is not a DataFrame.
-            
-        """
-    
         plt.style.use("fivethirtyeight")
         sns.scatterplot(x='TransactionAmount',y='CustAccountBalance',data=RFM_df,palette='rocket',hue='Frequency',size='Recency' )
         plt.legend(loc = "upper right")
@@ -1928,23 +1710,11 @@ We calculate the farthest distance between two completed transactions
 We group the transactions according to the month in which they were made
 and obtain the average for each table.
 
+.. autofunction:: scriptNotebook.groupTransaccionsByMonth
+
 .. code:: ipython3
 
     def groupTransaccionsByMonth():
-        
-        """
-        Groups the transactions by month and calculates the mean of each feature
-    
-        Args:
-            none
-    
-        Returns:
-            groupbby_month: A dataframe with the mean of each feature
-    
-        Raises:
-            TypeError: If the dataframe is not a DataFrame.
-        """
-    
         RFM_df=RFM_df.sort_values(by='TransactionDate')
         groupbby_month = RFM_df.groupby([pd.Grouper(key='TransactionDate', freq='M')])[['Frequency', 'TransactionAmount', 'CustAccountBalance', 'TransactionTime', 'CustomerAge', 'Recency']].mean()
         print(groupbby_month.shape)
@@ -2033,22 +1803,11 @@ and obtain the average for each table.
 
 We made line graphs of the information we obtained previously.
 
+.. autofunction:: scriptNotebook.grphLineBalanceAndTransactionAmount
+
 .. code:: ipython3
 
     def grphLineBalanceAndTransactionAmount():
-        
-        """
-        Shows a line graph of the average of account balance and transaction amount per month
-    
-        Args:
-            none
-    
-        Returns:
-            chart: A chart with the line graph of the average of account balance and transaction amount per month
-    
-        Raises:
-            TypeError: If the dataframe is not a DataFrame.
-        """
         plt.figure(figsize=(13.4,7))
         plt.title("Average of account balance per month")
         plt.plot(groupbby_month.index,groupbby_month['CustAccountBalance'],color='purple',marker='o',label='Customer Account Balance', linestyle='dashed', linewidth=2, markersize=10)

@@ -46,6 +46,27 @@
 <li class="toctree-l2"><a class="reference internal" href="#scriptNotebook.import_data"><code class="docutils literal notranslate"><span class="pre">import_data()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#scriptNotebook.dfInformation"><code class="docutils literal notranslate"><span class="pre">dfInformation()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#scriptNotebook.check"><code class="docutils literal notranslate"><span class="pre">check()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#scriptNotebook.removeNullValues"><code class="docutils literal notranslate"><span class="pre">removeNullValues()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#scriptNotebook.checkDuplicates"><code class="docutils literal notranslate"><span class="pre">checkDuplicates()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#scriptNotebook.uniqueRows"><code class="docutils literal notranslate"><span class="pre">uniqueRows()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#scriptNotebook.removeValues"><code class="docutils literal notranslate"><span class="pre">removeValues()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#scriptNotebook.minAndMax"><code class="docutils literal notranslate"><span class="pre">minAndMax()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#scriptNotebook.dateConvertion"><code class="docutils literal notranslate"><span class="pre">dateConvertion()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#scriptNotebook.refactorDates"><code class="docutils literal notranslate"><span class="pre">refactorDates()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#scriptNotebook.filterDOB"><code class="docutils literal notranslate"><span class="pre">filterDOB()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#scriptNotebook.getCustomerAge"><code class="docutils literal notranslate"><span class="pre">getCustomerAge()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#scriptNotebook.outliers"><code class="docutils literal notranslate"><span class="pre">outliers()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#scriptNotebook.MRFTable"><code class="docutils literal notranslate"><span class="pre">MRFTable()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#scriptNotebook.formatOutputInRecency"><code class="docutils literal notranslate"><span class="pre">formatOutputInRecency()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#scriptNotebook.outliersWhenCleaned"><code class="docutils literal notranslate"><span class="pre">outliersWhenCleaned()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#scriptNotebook.correlation"><code class="docutils literal notranslate"><span class="pre">correlation()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#scriptNotebook.distributionFrequency"><code class="docutils literal notranslate"><span class="pre">distributionFrequency()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#scriptNotebook.graphAgeAndGender"><code class="docutils literal notranslate"><span class="pre">graphAgeAndGender()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#scriptNotebook.graphLocation"><code class="docutils literal notranslate"><span class="pre">graphLocation()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#scriptNotebook.scatterOFData"><code class="docutils literal notranslate"><span class="pre">scatterOFData()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#scriptNotebook.graphTransactionAmountAndCustAccountBalance"><code class="docutils literal notranslate"><span class="pre">graphTransactionAmountAndCustAccountBalance()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#scriptNotebook.groupTransaccionsByMonth"><code class="docutils literal notranslate"><span class="pre">groupTransaccionsByMonth()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#scriptNotebook.grphLineBalanceAndTransactionAmount"><code class="docutils literal notranslate"><span class="pre">grphLineBalanceAndTransactionAmount()</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -404,19 +425,27 @@ memory usage: 72.0+ MB
 <h6><p>The amount of null values to eliminate is equal to 6953 data, we
 eliminate these values because they do not represent more than 0.7% of
 the total data. We check if there are repeated elements in our DataSet</p>
-</h6><div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">removeNullValues</span><span class="p">(</span><span class="n">dataframe</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Removes null values from data source and calculates the amount eliminated</span>
+</h6><dl class="py function">
+<dt class="sig sig-object py" id="scriptNotebook.removeNullValues">
+<span class="sig-prename descclassname"><span class="pre">scriptNotebook.</span></span><span class="sig-name descname"><span class="pre">removeNullValues</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataframe</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#scriptNotebook.removeNullValues" title="Permalink to this definition"></a></dt>
+<dd><p>Removes null values from data source and calculates the amount eliminated</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>dataframe</strong> (<em>DataFrame</em>) – Source dataset.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The total of null values already deleted</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>TypeError</strong> – If the dataframe is not a DataFrame.</p>
+</dd>
+</dl>
+</dd></dl>
 
-<span class="sd">    Args:</span>
-<span class="sd">        dataframe (DataFrame): Source dataset.</span>
-
-<span class="sd">    Returns:</span>
-<span class="sd">        int: The total of null values already deleted</span>
-
-<span class="sd">    Raises:</span>
-<span class="sd">        TypeError: If the dataframe is not a DataFrame.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">removeNullValues</span><span class="p">(</span><span class="n">dataframe</span><span class="p">):</span>
     <span class="n">shapeInitial</span> <span class="o">=</span> <span class="n">dataframe</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
     <span class="n">dataframe</span><span class="o">.</span><span class="n">dropna</span><span class="p">(</span><span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">shapeInitial</span><span class="o">-</span><span class="n">dataframe</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
@@ -427,19 +456,27 @@ the total data. We check if there are repeated elements in our DataSet</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Amount</span> <span class="n">to</span> <span class="n">remove</span> <span class="mi">6953</span>
 </pre></div>
 </div>
+<dl class="py function">
+<dt class="sig sig-object py" id="scriptNotebook.checkDuplicates">
+<span class="sig-prename descclassname"><span class="pre">scriptNotebook.</span></span><span class="sig-name descname"><span class="pre">checkDuplicates</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataframe</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#scriptNotebook.checkDuplicates" title="Permalink to this definition"></a></dt>
+<dd><p>Checks duplicated values for each column and amortized this count.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>dataframe</strong> (<em>DataFrame</em>) – Source dataset.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The total of duplicated values in an specifica dataframe</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>TypeError</strong> – If the dataframe is not a DataFrame.</p>
+</dd>
+</dl>
+</dd></dl>
+
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">checkDuplicates</span><span class="p">(</span><span class="n">dataframe</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Checks duplicated values for each column and amortized this count.</span>
-
-<span class="sd">    Args:</span>
-<span class="sd">        dataframe (DataFrame): Source dataset.</span>
-
-<span class="sd">    Returns:</span>
-<span class="sd">        int: The total of duplicated values in an specifica dataframe</span>
-
-<span class="sd">    Raises:</span>
-<span class="sd">        TypeError: If the dataframe is not a DataFrame.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">dataframe</span><span class="o">.</span><span class="n">duplicated</span><span class="p">()</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
 <span class="n">checkDuplicates</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
 </pre></div>
@@ -450,20 +487,30 @@ the total data. We check if there are repeated elements in our DataSet</p>
 <p>Consideration</p>
 <h6><p>The CustomerDOB column is analyzed because it may contain atypical data.
 We analyze the number of records for each client’s date of birth.</p>
-</h6><div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">uniqueRows</span><span class="p">(</span><span class="n">dataframe</span><span class="p">,</span> <span class="n">column</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Getting distinct values from column or specific variable</span>
+</h6><dl class="py function">
+<dt class="sig sig-object py" id="scriptNotebook.uniqueRows">
+<span class="sig-prename descclassname"><span class="pre">scriptNotebook.</span></span><span class="sig-name descname"><span class="pre">uniqueRows</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataframe</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">column</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#scriptNotebook.uniqueRows" title="Permalink to this definition"></a></dt>
+<dd><p>Getting distinct values from column or specific variable</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dataframe</strong> (<em>DataFrame</em>) – Source dataset.</p></li>
+<li><p><strong>column</strong> (<em>string</em>) – Variable or column in dataframe</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A series containing counts of unique rows in the DataFrame.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Series</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>TypeError</strong> – If the dataframe is not a DataFrame.</p>
+</dd>
+</dl>
+</dd></dl>
 
-<span class="sd">    Args:</span>
-<span class="sd">        dataframe (DataFrame): Source dataset.</span>
-<span class="sd">        column (string): Variable or column in dataframe</span>
-
-<span class="sd">    Returns:</span>
-<span class="sd">        Series: A series containing counts of unique rows in the DataFrame.</span>
-
-<span class="sd">    Raises:</span>
-<span class="sd">        TypeError: If the dataframe is not a DataFrame.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">uniqueRows</span><span class="p">(</span><span class="n">dataframe</span><span class="p">,</span> <span class="n">column</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">dataframe</span><span class="p">[</span><span class="n">column</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span>
 <span class="n">uniqueRows</span><span class="p">(</span><span class="n">df</span><span class="p">,</span><span class="s1">&#39;CustomerDOB&#39;</span><span class="p">)</span>
 </pre></div>
@@ -488,21 +535,31 @@ they are children, adults or persons without date of birth. This is an
 important variable for the business, for this reason we cannot make
 assumptions that bias the project, for this reason, it is better to
 eliminate these outliers or erroneously measured data.</p>
-</h6><div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">removeValues</span><span class="p">(</span><span class="n">dataframe</span><span class="p">,</span><span class="n">column</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Removes an specific value from a source column in a dataframe</span>
+</h6><dl class="py function">
+<dt class="sig sig-object py" id="scriptNotebook.removeValues">
+<span class="sig-prename descclassname"><span class="pre">scriptNotebook.</span></span><span class="sig-name descname"><span class="pre">removeValues</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataframe</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">column</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#scriptNotebook.removeValues" title="Permalink to this definition"></a></dt>
+<dd><p>Removes an specific value from a source column in a dataframe</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dataframe</strong> (<em>DataFrame</em>) – Source dataset.</p></li>
+<li><p><strong>column</strong> (<em>string</em>) – Variable or column in dataframe</p></li>
+<li><p><strong>value</strong> (<em>any</em>) – Value with column type</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A pandas DataFrame already modified.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>DataFrame</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>TypeError</strong> – If the dataframe is not a DataFrame.</p>
+</dd>
+</dl>
+</dd></dl>
 
-<span class="sd">    Args:</span>
-<span class="sd">        dataframe (DataFrame): Source dataset.</span>
-<span class="sd">        column (string): Variable or column in dataframe</span>
-<span class="sd">        value (any): Value with column type</span>
-
-<span class="sd">    Returns:</span>
-<span class="sd">        DataFrame: A pandas DataFrame already modified.</span>
-
-<span class="sd">    Raises:</span>
-<span class="sd">        TypeError: If the dataframe is not a DataFrame.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">removeValues</span><span class="p">(</span><span class="n">dataframe</span><span class="p">,</span><span class="n">column</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">dataframe</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="o">~</span><span class="p">(</span><span class="n">dataframe</span><span class="p">[</span><span class="n">column</span><span class="p">]</span> <span class="o">==</span> <span class="n">value</span><span class="p">)]</span>
 
 <span class="n">df</span> <span class="o">=</span> <span class="n">removeValues</span><span class="p">(</span><span class="n">df</span><span class="p">,</span><span class="s1">&#39;CustomerDOB&#39;</span><span class="p">,</span><span class="s1">&#39;1/1/1800&#39;</span><span class="p">)</span>
@@ -524,20 +581,30 @@ eliminate these outliers or erroneously measured data.</p>
 <span class="n">Name</span><span class="p">:</span> <span class="n">CustomerDOB</span><span class="p">,</span> <span class="n">Length</span><span class="p">:</span> <span class="mi">17232</span><span class="p">,</span> <span class="n">dtype</span><span class="p">:</span> <span class="n">int64</span>
 </pre></div>
 </div>
+<dl class="py function">
+<dt class="sig sig-object py" id="scriptNotebook.minAndMax">
+<span class="sig-prename descclassname"><span class="pre">scriptNotebook.</span></span><span class="sig-name descname"><span class="pre">minAndMax</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataframe</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">column</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#scriptNotebook.minAndMax" title="Permalink to this definition"></a></dt>
+<dd><p>Gets the minimum and maximum values of any column in order to see in which range the values in this column oscillate.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dataframe</strong> (<em>DataFrame</em>) – Source dataset.</p></li>
+<li><p><strong>column</strong> (<em>string</em>) – Variable or column in dataframe</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Shows the minimun and maximun values from this column</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>void</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>TypeError</strong> – If the dataframe is not a DataFrame.</p>
+</dd>
+</dl>
+</dd></dl>
+
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">minAndMax</span><span class="p">(</span><span class="n">dataframe</span><span class="p">,</span> <span class="n">column</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Gets the minimum and maximum values of any column in order to see in which range the values in this column oscillate.</span>
-
-<span class="sd">    Args:</span>
-<span class="sd">        dataframe (DataFrame): Source dataset.</span>
-<span class="sd">        column (string): Variable or column in dataframe</span>
-
-<span class="sd">    Returns:</span>
-<span class="sd">        void: Shows the minimun and maximun values from this column</span>
-
-<span class="sd">    Raises:</span>
-<span class="sd">        TypeError: If the dataframe is not a DataFrame.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
     <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;min: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">dataframe</span><span class="p">[</span><span class="n">column</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">())</span> <span class="o">+</span> <span class="s2">&quot; max: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">dataframe</span><span class="p">[</span><span class="n">column</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">()))</span>
 <span class="n">minAndMax</span><span class="p">(</span><span class="n">df</span><span class="p">,</span><span class="s1">&#39;CustomerDOB&#39;</span><span class="p">)</span>
 </pre></div>
@@ -551,20 +618,30 @@ January 1, 1900 and the youngest person has a date of September 9, 1997.
 <p>Convert type of columns TransactionDate, CustomerDOB from string to
 datetime, this convertation will be in the format of dayfirst, so the
 date will be DD/MM/YY</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="scriptNotebook.dateConvertion">
+<span class="sig-prename descclassname"><span class="pre">scriptNotebook.</span></span><span class="sig-name descname"><span class="pre">dateConvertion</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataframe</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">column</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#scriptNotebook.dateConvertion" title="Permalink to this definition"></a></dt>
+<dd><p>Converts dataframe column to datetime format using pandas tool with specific format ‘dayfirst’</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dataframe</strong> (<em>DataFrame</em>) – Source dataset.</p></li>
+<li><p><strong>column</strong> (<em>string</em>) – Variable or column in dataframe</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A pandas DataFrame already modified.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>DataFrame</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>TypeError</strong> – If the dataframe is not a DataFrame.</p>
+</dd>
+</dl>
+</dd></dl>
+
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">dateConvertion</span><span class="p">(</span><span class="n">dataframe</span><span class="p">,</span> <span class="n">column</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Converts dataframe column to datetime format using pandas tool with specific format &#39;dayfirst&#39;</span>
-
-<span class="sd">    Args:</span>
-<span class="sd">        dataframe (DataFrame): Source dataset.</span>
-<span class="sd">        column (string): Variable or column in dataframe</span>
-
-<span class="sd">    Returns:</span>
-<span class="sd">        DataFrame: A pandas DataFrame already modified.</span>
-
-<span class="sd">    Raises:</span>
-<span class="sd">        TypeError: If the dataframe is not a DataFrame.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">dataframe</span><span class="p">[</span><span class="n">column</span><span class="p">],</span> <span class="n">dayfirst</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="n">df</span><span class="p">[</span><span class="s1">&#39;CustomerDOB&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">dateConvertion</span><span class="p">(</span><span class="n">df</span><span class="p">,</span><span class="s1">&#39;CustomerDOB&#39;</span><span class="p">)</span>
 </pre></div>
@@ -582,30 +659,35 @@ format.</p>
 illogical because this is a future date, so we subtract 100 from all
 values greater than 1999 to get the real value. (This is a problem
 Pandas has when converting a date).</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="scriptNotebook.refactorDates">
+<span class="sig-prename descclassname"><span class="pre">scriptNotebook.</span></span><span class="sig-name descname"><span class="pre">refactorDates</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataframe</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#scriptNotebook.refactorDates" title="Permalink to this definition"></a></dt>
+<dd><p>Refactors date dob column substrating 100 from values greater than 1999
+Note: Fixing the problem base on analysis above</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>dataframe</strong> (<em>DataFrame</em>) – Source dataset.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A pandas DataFrame already modified.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>DataFrame</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>TypeError</strong> – If the dataframe is not a DataFrame.</p>
+</dd>
+</dl>
+</dd></dl>
+
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">refactorDates</span><span class="p">(</span><span class="n">dataframe</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Refactors date dob column substrating 100 from values greater than 1999</span>
-<span class="sd">    Note: Fixing the problem base on analysis above</span>
-
-<span class="sd">    Args:</span>
-<span class="sd">        dataframe (DataFrame): Source dataset.</span>
-
-<span class="sd">    Returns:</span>
-<span class="sd">        DataFrame: A pandas DataFrame already modified.</span>
-
-<span class="sd">    Raises:</span>
-<span class="sd">        TypeError: If the dataframe is not a DataFrame.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">dataframe</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;CustomerDOB&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">dt</span><span class="o">.</span><span class="n">year</span> <span class="o">&gt;</span> <span class="mi">1999</span><span class="p">,</span> <span class="s1">&#39;CustomerDOB&#39;</span><span class="p">]</span> <span class="o">-=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DateOffset</span><span class="p">(</span><span class="n">years</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">dataframe</span>
 <span class="n">df</span> <span class="o">=</span> <span class="n">refactorDates</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
 <span class="n">minAndMax</span><span class="p">(</span><span class="n">df</span><span class="p">,</span><span class="s1">&#39;CustomerDOB&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>  <span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">28</span><span class="p">],</span> <span class="n">line</span> <span class="mi">10</span>
-    <span class="k">return</span> <span class="p">(</span><span class="n">dataframe</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;CustomerDOB&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">dt</span><span class="o">.</span><span class="n">year</span> <span class="o">&gt;</span> <span class="mi">1999</span><span class="p">,</span> <span class="s1">&#39;CustomerDOB&#39;</span><span class="p">]</span> <span class="o">-=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DateOffset</span><span class="p">(</span><span class="n">years</span><span class="o">=</span><span class="mi">100</span><span class="p">))</span>
-                                                                           <span class="o">^</span>
-<span class="ne">SyntaxError</span><span class="p">:</span> <span class="n">invalid</span> <span class="n">syntax</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">min</span><span class="p">:</span> <span class="mi">1900</span><span class="o">-</span><span class="mi">01</span><span class="o">-</span><span class="mi">01</span> <span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span> <span class="nb">max</span><span class="p">:</span> <span class="mi">1999</span><span class="o">-</span><span class="mi">12</span><span class="o">-</span><span class="mi">28</span> <span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span>
 </pre></div>
 </div>
 <p>In the same way that we converted the CustomerDOB column, we convert the
@@ -645,20 +727,28 @@ us to eliminate them, because we cannot speculate about them.</p>
 </h2></li>
 </ol>
 <p>Determine minority group of people aged over 100 years</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="scriptNotebook.filterDOB">
+<span class="sig-prename descclassname"><span class="pre">scriptNotebook.</span></span><span class="sig-name descname"><span class="pre">filterDOB</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataframe</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#scriptNotebook.filterDOB" title="Permalink to this definition"></a></dt>
+<dd><p>Filters dataframe by DOB column</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>dataframe</strong> (<em>DataFrame</em>) – Source dataset.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A pandas DataFrame already modified.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>DataFrame</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>TypeError</strong> – If the dataframe is not a DataFrame.</p>
+</dd>
+</dl>
+</dd></dl>
+
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># We filter our dataframe specifically on the DOB column to make a decision regarding date ambiguity.</span>
 <span class="k">def</span> <span class="nf">filterDOB</span><span class="p">(</span><span class="n">dataframe</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Filters dataframe by DOB column</span>
-
-<span class="sd">    Args:</span>
-<span class="sd">        dataframe (DataFrame): Source dataset.</span>
-
-<span class="sd">    Returns:</span>
-<span class="sd">        DataFrame: A pandas DataFrame already modified.</span>
-
-<span class="sd">    Raises:</span>
-<span class="sd">        TypeError: If the dataframe is not a DataFrame.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">dataframe</span><span class="p">[</span><span class="s2">&quot;CustomerDOB&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span> <span class="k">if</span> <span class="n">x</span><span class="o">.</span><span class="n">year</span> <span class="o">&lt;</span> <span class="mi">1917</span> <span class="k">else</span> <span class="mi">0</span><span class="p">)</span>
 
 <span class="n">df_filtered</span> <span class="o">=</span> <span class="n">filterDOB</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
@@ -695,20 +785,28 @@ us to eliminate them, because we cannot speculate about them.</p>
 </h3><p>CustomerDOB: is the birth date of the customer TransactionDate: is the
 date of transaction that customer is done The age calculation is done by
 subtracting the TransactionDate from the CustomerDOB.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="scriptNotebook.getCustomerAge">
+<span class="sig-prename descclassname"><span class="pre">scriptNotebook.</span></span><span class="sig-name descname"><span class="pre">getCustomerAge</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataframe</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#scriptNotebook.getCustomerAge" title="Permalink to this definition"></a></dt>
+<dd><p>Gets the customer age at transaction moment</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>dataframe</strong> (<em>DataFrame</em>) – Source dataset.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A pandas DataFrame already modified.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>DataFrame</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>TypeError</strong> – If the dataframe is not a DataFrame.</p>
+</dd>
+</dl>
+</dd></dl>
+
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Getting the customer age at transaction moment and adding a new column in our dataframe</span>
 <span class="k">def</span> <span class="nf">getCustomerAge</span><span class="p">(</span><span class="n">dataframe</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Gets the customer age at transaction moment</span>
-
-<span class="sd">    Args:</span>
-<span class="sd">        dataframe (DataFrame): Source dataset.</span>
-
-<span class="sd">    Returns:</span>
-<span class="sd">        DataFrame: A pandas DataFrame already modified.</span>
-
-<span class="sd">    Raises:</span>
-<span class="sd">        TypeError: If the dataframe is not a DataFrame.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">df</span><span class="p">[</span><span class="s1">&#39;CustomerAge&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;TransactionDate&#39;</span><span class="p">]</span> <span class="o">-</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;CustomerDOB&#39;</span><span class="p">])</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">timedelta64</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;Y&#39;</span><span class="p">)</span>
     <span class="n">df</span><span class="p">[</span><span class="s1">&#39;CustomerAge&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;CustomerAge&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
     <span class="c1"># Checking range of CustomerAge variable</span>
@@ -737,19 +835,27 @@ ages over 100 are a minimum percentage.</p>
 outliers. Boxplots show the median, quartiles, and extreme values ​​of the
 data, and points that are above or below the extreme values ​​are
 considered outliers.</p>
-</h5><div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">outliers</span><span class="p">(</span><span class="n">dataframe</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Calculates the outliers for each numeric column in dataframe</span>
+</h5><dl class="py function">
+<dt class="sig sig-object py" id="scriptNotebook.outliers">
+<span class="sig-prename descclassname"><span class="pre">scriptNotebook.</span></span><span class="sig-name descname"><span class="pre">outliers</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataframe</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#scriptNotebook.outliers" title="Permalink to this definition"></a></dt>
+<dd><p>Calculates the outliers for each numeric column in dataframe</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>dataframe</strong> (<em>DataFrame</em>) – Source dataset.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A pandas DataFrame already modified.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>DataFrame</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>TypeError</strong> – If the dataframe is not a DataFrame.</p>
+</dd>
+</dl>
+</dd></dl>
 
-<span class="sd">    Args:</span>
-<span class="sd">        dataframe (DataFrame): Source dataset.</span>
-
-<span class="sd">    Returns:</span>
-<span class="sd">        DataFrame: A pandas DataFrame already modified.</span>
-
-<span class="sd">    Raises:</span>
-<span class="sd">        TypeError: If the dataframe is not a DataFrame.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">outliers</span><span class="p">(</span><span class="n">dataframe</span><span class="p">):</span>
     <span class="n">num_col</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">select_dtypes</span><span class="p">(</span><span class="n">include</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">number</span><span class="p">)</span>
     <span class="n">cat_col</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">select_dtypes</span><span class="p">(</span><span class="n">exclude</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">number</span><span class="p">)</span>
 
@@ -796,22 +902,29 @@ transaction recorded for the customer).</p>
 transaction.</p>
 </li><li><p>TransactionDate1: oldest date on which the customer made a transaction.</p>
 </li><li><p>TransactionDate: median date on which the customer made a transaction.</p>
-</li></ul><div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#Creating MRF Table Strategy</span>
+</li></ul><dl class="py function">
+<dt class="sig sig-object py" id="scriptNotebook.MRFTable">
+<span class="sig-prename descclassname"><span class="pre">scriptNotebook.</span></span><span class="sig-name descname"><span class="pre">MRFTable</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#scriptNotebook.MRFTable" title="Permalink to this definition"></a></dt>
+<dd><p>Creates a MRF Table from a dataframe</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>dataframe</strong> (<em>DataFrame</em>) – Source dataset.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A pandas DataFrame already modified.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>DataFrame</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>TypeError</strong> – If the dataframe is not a DataFrame.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#Creating MRF Table Strategy</span>
 
 <span class="k">def</span> <span class="nf">MRFTable</span><span class="p">(</span><span class="n">df</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Creates a MRF Table from a dataframe</span>
-
-<span class="sd">    Args:</span>
-<span class="sd">        dataframe (DataFrame): Source dataset.</span>
-
-<span class="sd">    Returns:</span>
-<span class="sd">        DataFrame: A pandas DataFrame already modified.</span>
-
-<span class="sd">    Raises:</span>
-<span class="sd">        TypeError: If the dataframe is not a DataFrame.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-
     <span class="n">RFM_df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">&quot;CustomerID&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">agg</span><span class="p">({</span>
                                             <span class="s2">&quot;TransactionID&quot;</span> <span class="p">:</span> <span class="s2">&quot;count&quot;</span><span class="p">,</span>
                                             <span class="s2">&quot;CustGender&quot;</span> <span class="p">:</span> <span class="s2">&quot;first&quot;</span><span class="p">,</span>
@@ -972,20 +1085,27 @@ transaction from the first transaction</p>
 </div>
 <p>We apply a lambda function to adjust the format of our output in the
 Recency variable</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="scriptNotebook.formatOutputInRecency">
+<span class="sig-prename descclassname"><span class="pre">scriptNotebook.</span></span><span class="sig-name descname"><span class="pre">formatOutputInRecency</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">RFM_df</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#scriptNotebook.formatOutputInRecency" title="Permalink to this definition"></a></dt>
+<dd><p>Formats the output of Recency column</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>dataframe</strong> (<em>DataFrame</em>) – Source dataset.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A pandas DataFrame already modified.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>DataFrame</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>TypeError</strong> – If the dataframe is not a DataFrame.</p>
+</dd>
+</dl>
+</dd></dl>
+
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">formatOutputInRecency</span><span class="p">(</span><span class="n">RFM_df</span><span class="p">):</span>
-
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Formats the output of Recency column</span>
-
-<span class="sd">    Args:</span>
-<span class="sd">        dataframe (DataFrame): Source dataset.</span>
-
-<span class="sd">    Returns:</span>
-<span class="sd">        DataFrame: A pandas DataFrame already modified.</span>
-
-<span class="sd">    Raises:</span>
-<span class="sd">        TypeError: If the dataframe is not a DataFrame.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># Using re library for apply an regular expresion in each value of Recency column for extract the number of days in this string representation.</span>
     <span class="n">RFM_df</span><span class="p">[</span><span class="s1">&#39;Recency&#39;</span><span class="p">]</span><span class="o">=</span><span class="n">RFM_df</span><span class="p">[</span><span class="s1">&#39;Recency&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span> <span class="p">:</span><span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="s1">&#39;\d+&#39;</span><span class="p">,</span><span class="n">x</span><span class="p">)</span><span class="o">.</span><span class="n">group</span><span class="p">())</span>
     <span class="c1"># Conversion from string &#39;18&#39; to int representtion for folloeing operations</span>
@@ -1008,22 +1128,28 @@ these columns.</p>
 </pre></div>
 </div>
 <p>Now, let’s see if our DataSet once cleaned contains atypical data</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="scriptNotebook.outliersWhenCleaned">
+<span class="sig-prename descclassname"><span class="pre">scriptNotebook.</span></span><span class="sig-name descname"><span class="pre">outliersWhenCleaned</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#scriptNotebook.outliersWhenCleaned" title="Permalink to this definition"></a></dt>
+<dd><p>Calculates the outliers for each feature once the data is cleaned</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>none</strong> – </p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A print with the outliers for each feature</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>print</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>TypeError</strong> – If the dataframe is not a DataFrame.</p>
+</dd>
+</dl>
+</dd></dl>
+
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># To calculate the otliers for each feature</span>
 <span class="k">def</span> <span class="nf">outliersWhenCleaned</span><span class="p">():</span>
-
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Calculates the outliers for each feature once the data is cleaned</span>
-
-<span class="sd">    Args:</span>
-<span class="sd">        none</span>
-
-<span class="sd">    Returns:</span>
-<span class="sd">       print: A print with the outliers for each feature</span>
-
-<span class="sd">    Raises:</span>
-<span class="sd">        TypeError: If the dataframe is not a DataFrame.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-
     <span class="n">lower_list</span><span class="o">=</span><span class="p">[]</span>
     <span class="n">upper_list</span><span class="o">=</span><span class="p">[]</span>
     <span class="n">num_list</span><span class="o">=</span><span class="p">[]</span>
@@ -1328,22 +1454,28 @@ accordingly.</p>
 RFM table (RFM_df), and then plots this matrix as a heat map using it.
 The correlation matrix is a square matrix that shows how the different
 features are related to each other.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="scriptNotebook.correlation">
+<span class="sig-prename descclassname"><span class="pre">scriptNotebook.</span></span><span class="sig-name descname"><span class="pre">correlation</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#scriptNotebook.correlation" title="Permalink to this definition"></a></dt>
+<dd><p>Calculates the correlation between features</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>none</strong> – </p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A heatmap with the correlation between features</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>heatmap</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>TypeError</strong> – If the dataframe is not a DataFrame.</p>
+</dd>
+</dl>
+</dd></dl>
+
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># correlation between features</span>
 <span class="k">def</span> <span class="nf">correlation</span><span class="p">():</span>
-
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Calculates the correlation between features</span>
-
-<span class="sd">    Args:</span>
-<span class="sd">        none</span>
-
-<span class="sd">    Returns:</span>
-<span class="sd">        heatmap: A heatmap with the correlation between features</span>
-
-<span class="sd">    Raises:</span>
-<span class="sd">        TypeError: If the dataframe is not a DataFrame.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-
     <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span><span class="mi">5</span><span class="p">))</span>
     <span class="n">correlation</span><span class="o">=</span><span class="n">RFM_df</span><span class="o">.</span><span class="n">corr</span><span class="p">(</span><span class="n">numeric_only</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="n">sns</span><span class="o">.</span><span class="n">heatmap</span><span class="p">(</span><span class="n">correlation</span><span class="p">,</span><span class="n">vmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
@@ -1362,20 +1494,27 @@ features are related to each other.</p>
 the variable Frequency, it is worth noting that the frequency is the
 number of times a customer has made transactions in the period from
 August to October.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="scriptNotebook.distributionFrequency">
+<span class="sig-prename descclassname"><span class="pre">scriptNotebook.</span></span><span class="sig-name descname"><span class="pre">distributionFrequency</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#scriptNotebook.distributionFrequency" title="Permalink to this definition"></a></dt>
+<dd><p>Plots the distribution of Frequency variable</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>none</strong> – </p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A chart with the distribution of Frequency variable</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>chart</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>TypeError</strong> – If the dataframe is not a DataFrame.</p>
+</dd>
+</dl>
+</dd></dl>
+
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">distributionFrequency</span><span class="p">():</span>
-
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Plots the distribution of Frequency variable</span>
-
-<span class="sd">    Args:</span>
-<span class="sd">        none</span>
-
-<span class="sd">    Returns:</span>
-<span class="sd">        chart: A chart with the distribution of Frequency variable</span>
-
-<span class="sd">    Raises:</span>
-<span class="sd">        TypeError: If the dataframe is not a DataFrame.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="s2">&quot;fivethirtyeight&quot;</span><span class="p">)</span>
     <span class="n">chart</span><span class="o">=</span><span class="n">sns</span><span class="o">.</span><span class="n">countplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="s1">&#39;Frequency&#39;</span><span class="p">,</span><span class="n">data</span><span class="o">=</span><span class="n">RFM_df</span><span class="p">,</span><span class="n">palette</span><span class="o">=</span><span class="s1">&#39;rocket&#39;</span><span class="p">,</span> <span class="n">order</span> <span class="o">=</span> <span class="n">RFM_df</span><span class="p">[</span><span class="s1">&#39;Frequency&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Frequency&quot;</span><span class="p">,</span>
@@ -1389,22 +1528,28 @@ August to October.</p>
 <img alt="_images/Customer_Segmentation_70_01.png" src="_images/Customer_Segmentation_70_01.png" />
 <p>We obtain the age distribution of the clients and also the percentage of
 women and men in the records we have.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="scriptNotebook.graphAgeAndGender">
+<span class="sig-prename descclassname"><span class="pre">scriptNotebook.</span></span><span class="sig-name descname"><span class="pre">graphAgeAndGender</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#scriptNotebook.graphAgeAndGender" title="Permalink to this definition"></a></dt>
+<dd><p>Shows a graph with the distribution of the age and a pie graph of the gender in the dataset</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>none</strong> – </p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A histogram with the distribution of the age
+pie: percentage of women and men</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>histogram</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>TypeError</strong> – If the dataframe is not a DataFrame.</p>
+</dd>
+</dl>
+</dd></dl>
+
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">graphAgeAndGender</span><span class="p">():</span>
-
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Shows a graph with the distribution of the age and a pie graph of the gender in the dataset</span>
-
-<span class="sd">    Args:</span>
-<span class="sd">        none</span>
-
-<span class="sd">    Returns:</span>
-<span class="sd">        histogram: A histogram with the distribution of the age</span>
-<span class="sd">        pie: percentage of women and men</span>
-
-<span class="sd">    Raises:</span>
-<span class="sd">        TypeError: If the dataframe is not a DataFrame.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-
     <span class="n">plt</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="s2">&quot;fivethirtyeight&quot;</span><span class="p">)</span>
     <span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">ncols</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span><span class="n">nrows</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span><span class="mi">5</span><span class="p">))</span>
     <span class="n">palette_color</span> <span class="o">=</span> <span class="n">sns</span><span class="o">.</span><span class="n">color_palette</span><span class="p">(</span><span class="s1">&#39;rocket&#39;</span><span class="p">)</span>
@@ -1421,21 +1566,27 @@ women and men in the records we have.</p>
 <p>In this graph we obtain the number of times a transaction was made in
 different areas of the country, only the top 20 locations with the most
 transactions made will be shown.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="scriptNotebook.graphLocation">
+<span class="sig-prename descclassname"><span class="pre">scriptNotebook.</span></span><span class="sig-name descname"><span class="pre">graphLocation</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#scriptNotebook.graphLocation" title="Permalink to this definition"></a></dt>
+<dd><p>Shows a graph with the distribution of the location in the dataset</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>none</strong> – </p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A chart with the distribution of the location</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>chart</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>TypeError</strong> – If the dataframe is not a DataFrame.</p>
+</dd>
+</dl>
+</dd></dl>
+
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">graphLocation</span><span class="p">():</span>
-
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Shows a graph with the distribution of the location in the dataset</span>
-
-<span class="sd">    Args:</span>
-<span class="sd">        none</span>
-
-<span class="sd">    Returns:</span>
-<span class="sd">        chart: A chart with the distribution of the location</span>
-
-<span class="sd">    Raises:</span>
-<span class="sd">        TypeError: If the dataframe is not a DataFrame.</span>
-
-<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="s2">&quot;fivethirtyeight&quot;</span><span class="p">)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span><span class="mi">7</span><span class="p">))</span>
     <span class="n">chart</span><span class="o">=</span><span class="n">sns</span><span class="o">.</span><span class="n">countplot</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="s1">&#39;CustLocation&#39;</span><span class="p">,</span><span class="n">data</span><span class="o">=</span><span class="n">RFM_df</span><span class="p">,</span><span class="n">palette</span><span class="o">=</span><span class="s1">&#39;rocket&#39;</span><span class="p">,</span> <span class="n">order</span> <span class="o">=</span> <span class="n">RFM_df</span><span class="p">[</span><span class="s1">&#39;CustLocation&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()[:</span><span class="mi">20</span><span class="p">]</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
@@ -1450,20 +1601,27 @@ transactions made will be shown.</p>
 <img alt="_images/Customer_Segmentation_74_01.png" src="_images/Customer_Segmentation_74_01.png" />
 <p>We generate the scatter plot of the data referring to the variable
 Frequency.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="scriptNotebook.scatterOFData">
+<span class="sig-prename descclassname"><span class="pre">scriptNotebook.</span></span><span class="sig-name descname"><span class="pre">scatterOFData</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#scriptNotebook.scatterOFData" title="Permalink to this definition"></a></dt>
+<dd><p>Shows a scatter plot of the data</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>none</strong> – </p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A chart with the scatter plot of the data</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>chart</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>TypeError</strong> – If the dataframe is not a DataFrame.</p>
+</dd>
+</dl>
+</dd></dl>
+
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">scatterOFData</span><span class="p">():</span>
-
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Shows a scatter plot of the data</span>
-
-<span class="sd">    Args:</span>
-<span class="sd">        none</span>
-
-<span class="sd">    Returns:</span>
-<span class="sd">        chart: A chart with the scatter plot of the data</span>
-
-<span class="sd">    Raises:</span>
-<span class="sd">        TypeError: If the dataframe is not a DataFrame.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="s2">&quot;fivethirtyeight&quot;</span><span class="p">)</span>
     <span class="n">sns</span><span class="o">.</span><span class="n">pairplot</span><span class="p">(</span><span class="n">RFM_df</span><span class="p">,</span><span class="n">hue</span><span class="o">=</span><span class="s1">&#39;Frequency&#39;</span><span class="p">)</span>
 
@@ -1479,22 +1637,27 @@ dataframe and is represented on the X axis (horizontal) the transaction
 amounts (TransactionAmount) and on the Y axis (vertical) the customer’s
 account balance (CustAccountBalance). We add a third dimension to the
 graph which is Frequency and a fourth one with Recency.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="scriptNotebook.graphTransactionAmountAndCustAccountBalance">
+<span class="sig-prename descclassname"><span class="pre">scriptNotebook.</span></span><span class="sig-name descname"><span class="pre">graphTransactionAmountAndCustAccountBalance</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#scriptNotebook.graphTransactionAmountAndCustAccountBalance" title="Permalink to this definition"></a></dt>
+<dd><p>Shows a scatter plot of the TransactionAmount and CustAccountBalance</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>none</strong> – </p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A chart with the scatter plot of the TransactionAmount and CustAccountBalance</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>chart</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>TypeError</strong> – If the dataframe is not a DataFrame.</p>
+</dd>
+</dl>
+</dd></dl>
+
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">graphTransactionAmountAndCustAccountBalance</span><span class="p">():</span>
-
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Shows a scatter plot of the TransactionAmount and CustAccountBalance</span>
-
-<span class="sd">    Args:</span>
-<span class="sd">        none</span>
-
-<span class="sd">    Returns:</span>
-<span class="sd">        chart: A chart with the scatter plot of the TransactionAmount and CustAccountBalance</span>
-
-<span class="sd">    Raises:</span>
-<span class="sd">        TypeError: If the dataframe is not a DataFrame.</span>
-
-<span class="sd">    &quot;&quot;&quot;</span>
-
     <span class="n">plt</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="s2">&quot;fivethirtyeight&quot;</span><span class="p">)</span>
     <span class="n">sns</span><span class="o">.</span><span class="n">scatterplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="s1">&#39;TransactionAmount&#39;</span><span class="p">,</span><span class="n">y</span><span class="o">=</span><span class="s1">&#39;CustAccountBalance&#39;</span><span class="p">,</span><span class="n">data</span><span class="o">=</span><span class="n">RFM_df</span><span class="p">,</span><span class="n">palette</span><span class="o">=</span><span class="s1">&#39;rocket&#39;</span><span class="p">,</span><span class="n">hue</span><span class="o">=</span><span class="s1">&#39;Frequency&#39;</span><span class="p">,</span><span class="n">size</span><span class="o">=</span><span class="s1">&#39;Recency&#39;</span> <span class="p">)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span> <span class="o">=</span> <span class="s2">&quot;upper right&quot;</span><span class="p">)</span>
@@ -1517,21 +1680,27 @@ graph which is Frequency and a fourth one with Recency.</p>
 </div>
 <p>We group the transactions according to the month in which they were made
 and obtain the average for each table.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="scriptNotebook.groupTransaccionsByMonth">
+<span class="sig-prename descclassname"><span class="pre">scriptNotebook.</span></span><span class="sig-name descname"><span class="pre">groupTransaccionsByMonth</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#scriptNotebook.groupTransaccionsByMonth" title="Permalink to this definition"></a></dt>
+<dd><p>Groups the transactions by month and calculates the mean of each feature</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>none</strong> – </p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A dataframe with the mean of each feature</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>groupbby_month</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>TypeError</strong> – If the dataframe is not a DataFrame.</p>
+</dd>
+</dl>
+</dd></dl>
+
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">groupTransaccionsByMonth</span><span class="p">():</span>
-
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Groups the transactions by month and calculates the mean of each feature</span>
-
-<span class="sd">    Args:</span>
-<span class="sd">        none</span>
-
-<span class="sd">    Returns:</span>
-<span class="sd">        groupbby_month: A dataframe with the mean of each feature</span>
-
-<span class="sd">    Raises:</span>
-<span class="sd">        TypeError: If the dataframe is not a DataFrame.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-
     <span class="n">RFM_df</span><span class="o">=</span><span class="n">RFM_df</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="s1">&#39;TransactionDate&#39;</span><span class="p">)</span>
     <span class="n">groupbby_month</span> <span class="o">=</span> <span class="n">RFM_df</span><span class="o">.</span><span class="n">groupby</span><span class="p">([</span><span class="n">pd</span><span class="o">.</span><span class="n">Grouper</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="s1">&#39;TransactionDate&#39;</span><span class="p">,</span> <span class="n">freq</span><span class="o">=</span><span class="s1">&#39;M&#39;</span><span class="p">)])[[</span><span class="s1">&#39;Frequency&#39;</span><span class="p">,</span> <span class="s1">&#39;TransactionAmount&#39;</span><span class="p">,</span> <span class="s1">&#39;CustAccountBalance&#39;</span><span class="p">,</span> <span class="s1">&#39;TransactionTime&#39;</span><span class="p">,</span> <span class="s1">&#39;CustomerAge&#39;</span><span class="p">,</span> <span class="s1">&#39;Recency&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
     <span class="nb">print</span><span class="p">(</span><span class="n">groupbby_month</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
@@ -1609,20 +1778,27 @@ and obtain the average for each table.</p>
   </tbody>
 </table>
 </div><p>We made line graphs of the information we obtained previously.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="scriptNotebook.grphLineBalanceAndTransactionAmount">
+<span class="sig-prename descclassname"><span class="pre">scriptNotebook.</span></span><span class="sig-name descname"><span class="pre">grphLineBalanceAndTransactionAmount</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#scriptNotebook.grphLineBalanceAndTransactionAmount" title="Permalink to this definition"></a></dt>
+<dd><p>Shows a line graph of the average of account balance and transaction amount per month</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>none</strong> – </p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A chart with the line graph of the average of account balance and transaction amount per month</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>chart</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>TypeError</strong> – If the dataframe is not a DataFrame.</p>
+</dd>
+</dl>
+</dd></dl>
+
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">grphLineBalanceAndTransactionAmount</span><span class="p">():</span>
-
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Shows a line graph of the average of account balance and transaction amount per month</span>
-
-<span class="sd">    Args:</span>
-<span class="sd">        none</span>
-
-<span class="sd">    Returns:</span>
-<span class="sd">        chart: A chart with the line graph of the average of account balance and transaction amount per month</span>
-
-<span class="sd">    Raises:</span>
-<span class="sd">        TypeError: If the dataframe is not a DataFrame.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mf">13.4</span><span class="p">,</span><span class="mi">7</span><span class="p">))</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Average of account balance per month&quot;</span><span class="p">)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">groupbby_month</span><span class="o">.</span><span class="n">index</span><span class="p">,</span><span class="n">groupbby_month</span><span class="p">[</span><span class="s1">&#39;CustAccountBalance&#39;</span><span class="p">],</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;purple&#39;</span><span class="p">,</span><span class="n">marker</span><span class="o">=</span><span class="s1">&#39;o&#39;</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;Customer Account Balance&#39;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;dashed&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
