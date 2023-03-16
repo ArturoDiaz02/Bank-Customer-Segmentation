@@ -44,6 +44,8 @@
 <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Bank Customer Segmentation</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#scriptNotebook.import_data"><code class="docutils literal notranslate"><span class="pre">import_data()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#scriptNotebook.dfInformation"><code class="docutils literal notranslate"><span class="pre">dfInformation()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#scriptNotebook.check"><code class="docutils literal notranslate"><span class="pre">check()</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -219,16 +221,31 @@ this in order to avoid that in the future the special characters of the original
     </tr>
   </tbody>
 </table>
-</div><div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">dfInformation</span><span class="p">(</span><span class="n">dataframe</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Gets the initial information of the Dataset, the number of records, number of variables, non-null objects and data type.</span>
+<br>
+</div><dl class="py function">
+<dt class="sig sig-object py" id="scriptNotebook.dfInformation">
+<span class="sig-prename descclassname"><span class="pre">scriptNotebook.</span></span><span class="sig-name descname"><span class="pre">dfInformation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataframe</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#scriptNotebook.dfInformation" title="Permalink to this definition"></a></dt>
+<dd><p>Gets the initial information of the Dataset, the number of records, number of variables, non-null objects and data type.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>dataframe</strong> (<em>DataFrame</em>) – Source dataset.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A range indes conforma by float64(2), int64(1), object(6)</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>void</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>TypeError</strong> – If the dataframe is not a DataFrame.</p>
+</dd>
+</dl>
+</dd></dl>
 
-<span class="sd">    :param dataframe: Source dataset.</span>
-<span class="sd">    :type dataframe: pandas.DataFrame</span>
-<span class="sd">    :return: A range indes conforma by float64(2), int64(1), object(6)</span>
-<span class="sd">    :rtype: void</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">dfInformation</span><span class="p">(</span><span class="n">dataframe</span><span class="p">):</span>
+
     <span class="n">display</span><span class="p">(</span><span class="n">dataframe</span><span class="o">.</span><span class="n">info</span><span class="p">())</span>
+
 <span class="n">dfInformation</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
 <span class="c1"># Getting the dataframe size for following amortized values</span>
 <span class="n">initialRows</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
@@ -259,15 +276,27 @@ memory usage: 72.0+ MB
 <li><p>Data Cleaning</p>
 </h2></li>
 </ol>
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">check</span><span class="p">(</span><span class="n">dataframe</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Gets the amount of null data and unique is calculated</span>
+<dl class="py function">
+<dt class="sig sig-object py" id="scriptNotebook.check">
+<span class="sig-prename descclassname"><span class="pre">scriptNotebook.</span></span><span class="sig-name descname"><span class="pre">check</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataframe</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#scriptNotebook.check" title="Permalink to this definition"></a></dt>
+<dd><p>Gets the amount of null data and unique is calculated</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>dataframe</strong> (<em>DataFrame</em>) – Source dataset.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A new Dataframe tha represents de amortized values of null and unique values for each column.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>DataFrame</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>TypeError</strong> – If the dataframe is not a DataFrame.</p>
+</dd>
+</dl>
+</dd></dl>
 
-<span class="sd">    :param dataframe: Source dataset.</span>
-<span class="sd">    :type dataframe: pandas.DataFrame</span>
-<span class="sd">    :return: A new Dataframe tha represents de amortized values of null and unique values for each column.</span>
-<span class="sd">    :rtype: pandas.DataFrame</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">check</span><span class="p">(</span><span class="n">dataframe</span><span class="p">):</span>
     <span class="n">l</span><span class="o">=</span><span class="p">[]</span>
     <span class="n">columns</span><span class="o">=</span><span class="n">dataframe</span><span class="o">.</span><span class="n">columns</span>
     <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">columns</span><span class="p">:</span>
@@ -379,10 +408,14 @@ the total data. We check if there are repeated elements in our DataSet</p>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Removes null values from data source and calculates the amount eliminated</span>
 
-<span class="sd">    :param dataframe: Source dataset.</span>
-<span class="sd">    :type dataframe: pandas.DataFrame</span>
-<span class="sd">    :return: The total of null values already deleted</span>
-<span class="sd">    :rtype: int</span>
+<span class="sd">    Args:</span>
+<span class="sd">        dataframe (DataFrame): Source dataset.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        int: The total of null values already deleted</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        TypeError: If the dataframe is not a DataFrame.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">shapeInitial</span> <span class="o">=</span> <span class="n">dataframe</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
     <span class="n">dataframe</span><span class="o">.</span><span class="n">dropna</span><span class="p">(</span><span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -398,10 +431,14 @@ the total data. We check if there are repeated elements in our DataSet</p>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Checks duplicated values for each column and amortized this count.</span>
 
-<span class="sd">    :param dataframe: Source dataset.</span>
-<span class="sd">    :type dataframe: pandas.DataFrame</span>
-<span class="sd">    :return: The total of duplicated values in an specifica dataframe</span>
-<span class="sd">    :rtype: int</span>
+<span class="sd">    Args:</span>
+<span class="sd">        dataframe (DataFrame): Source dataset.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        int: The total of duplicated values in an specifica dataframe</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        TypeError: If the dataframe is not a DataFrame.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">dataframe</span><span class="o">.</span><span class="n">duplicated</span><span class="p">()</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
 <span class="n">checkDuplicates</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
@@ -417,12 +454,15 @@ We analyze the number of records for each client’s date of birth.</p>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Getting distinct values from column or specific variable</span>
 
-<span class="sd">    :param dataframe: Source dataset.</span>
-<span class="sd">    :type dataframe: pandas.DataFrame</span>
-<span class="sd">    :param column: Variable or column in dataframe</span>
-<span class="sd">    :type dataframe: string</span>
-<span class="sd">    :return: A series containing counts of unique rows in the DataFrame.</span>
-<span class="sd">    :rtype: Series</span>
+<span class="sd">    Args:</span>
+<span class="sd">        dataframe (DataFrame): Source dataset.</span>
+<span class="sd">        column (string): Variable or column in dataframe</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Series: A series containing counts of unique rows in the DataFrame.</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        TypeError: If the dataframe is not a DataFrame.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">dataframe</span><span class="p">[</span><span class="n">column</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span>
 <span class="n">uniqueRows</span><span class="p">(</span><span class="n">df</span><span class="p">,</span><span class="s1">&#39;CustomerDOB&#39;</span><span class="p">)</span>
@@ -452,14 +492,16 @@ eliminate these outliers or erroneously measured data.</p>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Removes an specific value from a source column in a dataframe</span>
 
-<span class="sd">    :param dataframe: Source dataset.</span>
-<span class="sd">    :type dataframe: pandas.DataFrame</span>
-<span class="sd">    :param column: Variable or column in dataframe</span>
-<span class="sd">    :type dataframe: string</span>
-<span class="sd">    :param value: Value with column type</span>
-<span class="sd">    :type dataframe: any</span>
-<span class="sd">    :return: A pandas DataFrame already modified.</span>
-<span class="sd">    :rtype: pandas.DataFrame</span>
+<span class="sd">    Args:</span>
+<span class="sd">        dataframe (DataFrame): Source dataset.</span>
+<span class="sd">        column (string): Variable or column in dataframe</span>
+<span class="sd">        value (any): Value with column type</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        DataFrame: A pandas DataFrame already modified.</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        TypeError: If the dataframe is not a DataFrame.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">dataframe</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="o">~</span><span class="p">(</span><span class="n">dataframe</span><span class="p">[</span><span class="n">column</span><span class="p">]</span> <span class="o">==</span> <span class="n">value</span><span class="p">)]</span>
 
@@ -486,12 +528,15 @@ eliminate these outliers or erroneously measured data.</p>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Gets the minimum and maximum values of any column in order to see in which range the values in this column oscillate.</span>
 
-<span class="sd">    :param dataframe: Source dataset.</span>
-<span class="sd">    :type dataframe: pandas.DataFrame</span>
-<span class="sd">    :param column: Variable or column in dataframe</span>
-<span class="sd">    :type dataframe: string</span>
-<span class="sd">    :return: Shows the minimun and maximun values from this column</span>
-<span class="sd">    :rtype: void</span>
+<span class="sd">    Args:</span>
+<span class="sd">        dataframe (DataFrame): Source dataset.</span>
+<span class="sd">        column (string): Variable or column in dataframe</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        void: Shows the minimun and maximun values from this column</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        TypeError: If the dataframe is not a DataFrame.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;min: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">dataframe</span><span class="p">[</span><span class="n">column</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">())</span> <span class="o">+</span> <span class="s2">&quot; max: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">dataframe</span><span class="p">[</span><span class="n">column</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">()))</span>
 <span class="n">minAndMax</span><span class="p">(</span><span class="n">df</span><span class="p">,</span><span class="s1">&#39;CustomerDOB&#39;</span><span class="p">)</span>
@@ -510,12 +555,15 @@ date will be DD/MM/YY</p>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Converts dataframe column to datetime format using pandas tool with specific format &#39;dayfirst&#39;</span>
 
-<span class="sd">    :param dataframe: Source dataset.</span>
-<span class="sd">    :type dataframe: pandas.DataFrame</span>
-<span class="sd">    :param column: Variable or column in dataframe</span>
-<span class="sd">    :type dataframe: string</span>
-<span class="sd">    :return: New Dataframe already modified</span>
-<span class="sd">    :rtype: pandas.DataFrame</span>
+<span class="sd">    Args:</span>
+<span class="sd">        dataframe (DataFrame): Source dataset.</span>
+<span class="sd">        column (string): Variable or column in dataframe</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        DataFrame: A pandas DataFrame already modified.</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        TypeError: If the dataframe is not a DataFrame.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">dataframe</span><span class="p">[</span><span class="n">column</span><span class="p">],</span> <span class="n">dayfirst</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="n">df</span><span class="p">[</span><span class="s1">&#39;CustomerDOB&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">dateConvertion</span><span class="p">(</span><span class="n">df</span><span class="p">,</span><span class="s1">&#39;CustomerDOB&#39;</span><span class="p">)</span>
@@ -538,10 +586,15 @@ Pandas has when converting a date).</p>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Refactors date dob column substrating 100 from values greater than 1999</span>
 <span class="sd">    Note: Fixing the problem base on analysis above</span>
-<span class="sd">    :param dataframe: Source dataset.</span>
-<span class="sd">    :type dataframe: pandas.DataFrame</span>
-<span class="sd">    :return: New Dataframe already modified</span>
-<span class="sd">    :rtype: pandas.DataFrame</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        dataframe (DataFrame): Source dataset.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        DataFrame: A pandas DataFrame already modified.</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        TypeError: If the dataframe is not a DataFrame.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">dataframe</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;CustomerDOB&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">dt</span><span class="o">.</span><span class="n">year</span> <span class="o">&gt;</span> <span class="mi">1999</span><span class="p">,</span> <span class="s1">&#39;CustomerDOB&#39;</span><span class="p">]</span> <span class="o">-=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DateOffset</span><span class="p">(</span><span class="n">years</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">dataframe</span>
@@ -593,7 +646,24 @@ us to eliminate them, because we cannot speculate about them.</p>
 </ol>
 <p>Determine minority group of people aged over 100 years</p>
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># We filter our dataframe specifically on the DOB column to make a decision regarding date ambiguity.</span>
-<span class="n">df_filtered</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;CustomerDOB&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span> <span class="k">if</span> <span class="n">x</span><span class="o">.</span><span class="n">year</span> <span class="o">&lt;</span> <span class="mi">1917</span> <span class="k">else</span> <span class="mi">0</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">filterDOB</span><span class="p">(</span><span class="n">dataframe</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Filters dataframe by DOB column</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        dataframe (DataFrame): Source dataset.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        DataFrame: A pandas DataFrame already modified.</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        TypeError: If the dataframe is not a DataFrame.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">dataframe</span><span class="p">[</span><span class="s2">&quot;CustomerDOB&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span> <span class="k">if</span> <span class="n">x</span><span class="o">.</span><span class="n">year</span> <span class="o">&lt;</span> <span class="mi">1917</span> <span class="k">else</span> <span class="mi">0</span><span class="p">)</span>
+
+<span class="n">df_filtered</span> <span class="o">=</span> <span class="n">filterDOB</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+
+
 <span class="c1"># Amortizing and removing values ​​greater than 1917 represented as 0</span>
 <span class="n">counts</span> <span class="o">=</span> <span class="n">df_filtered</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">counts</span><span class="p">)</span>
@@ -626,10 +696,25 @@ us to eliminate them, because we cannot speculate about them.</p>
 date of transaction that customer is done The age calculation is done by
 subtracting the TransactionDate from the CustomerDOB.</p>
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Getting the customer age at transaction moment and adding a new column in our dataframe</span>
-<span class="n">df</span><span class="p">[</span><span class="s1">&#39;CustomerAge&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;TransactionDate&#39;</span><span class="p">]</span> <span class="o">-</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;CustomerDOB&#39;</span><span class="p">])</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">timedelta64</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;Y&#39;</span><span class="p">)</span>
-<span class="n">df</span><span class="p">[</span><span class="s1">&#39;CustomerAge&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;CustomerAge&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
-<span class="c1"># Checking range of CustomerAge variable</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;min: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;CustomerAge&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">())</span> <span class="o">+</span> <span class="s2">&quot; max: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;CustomerAge&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">()))</span>
+<span class="k">def</span> <span class="nf">getCustomerAge</span><span class="p">(</span><span class="n">dataframe</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Gets the customer age at transaction moment</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        dataframe (DataFrame): Source dataset.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        DataFrame: A pandas DataFrame already modified.</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        TypeError: If the dataframe is not a DataFrame.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">df</span><span class="p">[</span><span class="s1">&#39;CustomerAge&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;TransactionDate&#39;</span><span class="p">]</span> <span class="o">-</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;CustomerDOB&#39;</span><span class="p">])</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">timedelta64</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;Y&#39;</span><span class="p">)</span>
+    <span class="n">df</span><span class="p">[</span><span class="s1">&#39;CustomerAge&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;CustomerAge&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+    <span class="c1"># Checking range of CustomerAge variable</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;min: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;CustomerAge&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">())</span> <span class="o">+</span> <span class="s2">&quot; max: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;CustomerAge&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">()))</span>
+
+<span class="n">getCustomerAge</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
 </pre></div>
 </div>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">min</span><span class="p">:</span> <span class="mi">16</span> <span class="nb">max</span><span class="p">:</span> <span class="mi">116</span>
@@ -652,13 +737,28 @@ ages over 100 are a minimum percentage.</p>
 outliers. Boxplots show the median, quartiles, and extreme values ​​of the
 data, and points that are above or below the extreme values ​​are
 considered outliers.</p>
-</h5><div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">num_col</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">select_dtypes</span><span class="p">(</span><span class="n">include</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">number</span><span class="p">)</span>
-<span class="n">cat_col</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">select_dtypes</span><span class="p">(</span><span class="n">exclude</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">number</span><span class="p">)</span>
+</h5><div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">outliers</span><span class="p">(</span><span class="n">dataframe</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Calculates the outliers for each numeric column in dataframe</span>
 
-<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">num_col</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
-    <span class="n">sns</span><span class="o">.</span><span class="n">boxplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">num_col</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Boxplot &quot;</span> <span class="o">+</span> <span class="n">i</span><span class="p">)</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+<span class="sd">    Args:</span>
+<span class="sd">        dataframe (DataFrame): Source dataset.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        DataFrame: A pandas DataFrame already modified.</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        TypeError: If the dataframe is not a DataFrame.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">num_col</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">select_dtypes</span><span class="p">(</span><span class="n">include</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">number</span><span class="p">)</span>
+    <span class="n">cat_col</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">select_dtypes</span><span class="p">(</span><span class="n">exclude</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">number</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">num_col</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+        <span class="n">sns</span><span class="o">.</span><span class="n">boxplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">num_col</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Boxplot &quot;</span> <span class="o">+</span> <span class="n">i</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="n">outliers</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
 </pre></div>
 </div>
 <img alt="_images/Customer_Segmentation_39_01.png" src="_images/Customer_Segmentation_39_01.png" />
@@ -679,43 +779,57 @@ Segmentation in Python</p>
 <span class="n">df</span><span class="p">[</span><span class="s1">&#39;TransactionDate2&#39;</span><span class="p">]</span><span class="o">=</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;TransactionDate&#39;</span><span class="p">]</span> <span class="c1"># ==&gt; to calculate the maximum (last transaction)</span>
 </pre></div>
 </div>
-<p>Este código es utilizado para crear una tabla RFM (Recency, Frequency,
-Monetary) Se agrupan los datos por CustomerID utilizando el método
-groupby y luego se utiliza la función agg para calcular distintas
-métricas para cada cliente.</p>
-<p>Las métricas que se calculan son las siguientes:</p>
-<ul><li><p>TransactionID: cantidad de transacciones realizadas por el cliente.</p>
-</li><li><p>CustGender: género del cliente (tomado de la primera transacción
-registrada para el cliente).</p>
-</li><li><p>CustLocation: ubicación del cliente (también tomada de la primera
-transacción registrada para el cliente).</p>
-</li><li><p>CustAccountBalance: saldo promedio de la cuenta del cliente.</p>
-</li><li><p>TransactionTime: hora promedio de las transacciones realizadas por el
-cliente.</p>
-</li><li><p>TransactionAmount: monto promedio de las transacciones realizadas por el
-cliente.</p>
-</li><li><p>CustomerAge: edad mediana del cliente.</p>
-</li><li><p>TransactionDate2: fecha más reciente en la que el cliente realizó una
-transacción.</p>
-</li><li><p>TransactionDate1: fecha más antigua en la que el cliente realizó una
-transacción.</p>
-</li><li><p>TransactionDate: fecha mediana en la que el cliente realizó una
-transacción.</p>
+<p>This code is used to create a RFM (Recency, Frequency, Monetary) table.
+The data is grouped by CustomerID using the groupby method and then the
+agg function is used to calculate different metrics for each customer.</p>
+<p>The metrics that are calculated are as follows:</p>
+<ul><li><p>TransactionID: number of transactions performed by the customer.</p>
+</li><li><p>CustGender: customer’s gender (taken from the first transaction recorded
+for the customer).</p>
+</li><li><p>CustLocation: location of the customer (also taken from the first
+transaction recorded for the customer).</p>
+</li><li><p>CustAccountBalance: average balance of the customer’s account.</p>
+</li><li><p>TransactionTime: average time of transactions performed by the customer.</p>
+</li><li><p>TransactionAmount: average amount of transactions made by the customer.</p>
+</li><li><p>CustomerAge: median age of the client.</p>
+</li><li><p>TransactionDate2: most recent date on which the customer made a
+transaction.</p>
+</li><li><p>TransactionDate1: oldest date on which the customer made a transaction.</p>
+</li><li><p>TransactionDate: median date on which the customer made a transaction.</p>
 </li></ul><div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#Creating MRF Table Strategy</span>
-<span class="n">RFM_df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">&quot;CustomerID&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">agg</span><span class="p">({</span>
-                                        <span class="s2">&quot;TransactionID&quot;</span> <span class="p">:</span> <span class="s2">&quot;count&quot;</span><span class="p">,</span>
-                                        <span class="s2">&quot;CustGender&quot;</span> <span class="p">:</span> <span class="s2">&quot;first&quot;</span><span class="p">,</span>
-                                        <span class="s2">&quot;CustLocation&quot;</span><span class="p">:</span><span class="s2">&quot;first&quot;</span><span class="p">,</span>
-                                        <span class="s2">&quot;CustAccountBalance&quot;</span>  <span class="p">:</span> <span class="s2">&quot;mean&quot;</span><span class="p">,</span>
-                                        <span class="s2">&quot;TransactionTime&quot;</span><span class="p">:</span> <span class="s2">&quot;mean&quot;</span><span class="p">,</span>
-                                        <span class="s2">&quot;TransactionAmount&quot;</span> <span class="p">:</span> <span class="s2">&quot;mean&quot;</span><span class="p">,</span>
-                                        <span class="s2">&quot;CustomerAge&quot;</span> <span class="p">:</span> <span class="s2">&quot;median&quot;</span><span class="p">,</span>
-                                        <span class="s2">&quot;TransactionDate2&quot;</span><span class="p">:</span><span class="s2">&quot;max&quot;</span><span class="p">,</span>
-                                        <span class="s2">&quot;TransactionDate1&quot;</span><span class="p">:</span><span class="s2">&quot;min&quot;</span><span class="p">,</span>
-                                        <span class="s2">&quot;TransactionDate&quot;</span><span class="p">:</span><span class="s2">&quot;median&quot;</span>
-                        <span class="p">})</span>
 
-<span class="n">RFM_df</span> <span class="o">=</span> <span class="n">RFM_df</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span>
+<span class="k">def</span> <span class="nf">MRFTable</span><span class="p">(</span><span class="n">df</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Creates a MRF Table from a dataframe</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        dataframe (DataFrame): Source dataset.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        DataFrame: A pandas DataFrame already modified.</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        TypeError: If the dataframe is not a DataFrame.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">RFM_df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">&quot;CustomerID&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">agg</span><span class="p">({</span>
+                                            <span class="s2">&quot;TransactionID&quot;</span> <span class="p">:</span> <span class="s2">&quot;count&quot;</span><span class="p">,</span>
+                                            <span class="s2">&quot;CustGender&quot;</span> <span class="p">:</span> <span class="s2">&quot;first&quot;</span><span class="p">,</span>
+                                            <span class="s2">&quot;CustLocation&quot;</span><span class="p">:</span><span class="s2">&quot;first&quot;</span><span class="p">,</span>
+                                            <span class="s2">&quot;CustAccountBalance&quot;</span>  <span class="p">:</span> <span class="s2">&quot;mean&quot;</span><span class="p">,</span>
+                                            <span class="s2">&quot;TransactionTime&quot;</span><span class="p">:</span> <span class="s2">&quot;mean&quot;</span><span class="p">,</span>
+                                            <span class="s2">&quot;TransactionAmount&quot;</span> <span class="p">:</span> <span class="s2">&quot;mean&quot;</span><span class="p">,</span>
+                                            <span class="s2">&quot;CustomerAge&quot;</span> <span class="p">:</span> <span class="s2">&quot;median&quot;</span><span class="p">,</span>
+                                            <span class="s2">&quot;TransactionDate2&quot;</span><span class="p">:</span><span class="s2">&quot;max&quot;</span><span class="p">,</span>
+                                            <span class="s2">&quot;TransactionDate1&quot;</span><span class="p">:</span><span class="s2">&quot;min&quot;</span><span class="p">,</span>
+                                            <span class="s2">&quot;TransactionDate&quot;</span><span class="p">:</span><span class="s2">&quot;median&quot;</span>
+                            <span class="p">})</span>
+
+    <span class="n">RFM_df</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">RFM_df</span>
+
+
+<span class="n">RFM_df</span> <span class="o">=</span> <span class="n">MRFTable</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
 <span class="n">RFM_df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -858,10 +972,26 @@ transaction from the first transaction</p>
 </div>
 <p>We apply a lambda function to adjust the format of our output in the
 Recency variable</p>
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Using re library for apply an regular expresion in each value of Recency column for extract the number of days in this string representation.</span>
-<span class="n">RFM_df</span><span class="p">[</span><span class="s1">&#39;Recency&#39;</span><span class="p">]</span><span class="o">=</span><span class="n">RFM_df</span><span class="p">[</span><span class="s1">&#39;Recency&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span> <span class="p">:</span><span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="s1">&#39;\d+&#39;</span><span class="p">,</span><span class="n">x</span><span class="p">)</span><span class="o">.</span><span class="n">group</span><span class="p">())</span>
-<span class="c1"># Conversion from string &#39;18&#39; to int representtion for folloeing operations</span>
-<span class="n">RFM_df</span><span class="p">[</span><span class="s1">&#39;Recency&#39;</span><span class="p">]</span><span class="o">=</span><span class="n">RFM_df</span><span class="p">[</span><span class="s1">&#39;Recency&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">formatOutputInRecency</span><span class="p">(</span><span class="n">RFM_df</span><span class="p">):</span>
+
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Formats the output of Recency column</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        dataframe (DataFrame): Source dataset.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        DataFrame: A pandas DataFrame already modified.</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        TypeError: If the dataframe is not a DataFrame.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Using re library for apply an regular expresion in each value of Recency column for extract the number of days in this string representation.</span>
+    <span class="n">RFM_df</span><span class="p">[</span><span class="s1">&#39;Recency&#39;</span><span class="p">]</span><span class="o">=</span><span class="n">RFM_df</span><span class="p">[</span><span class="s1">&#39;Recency&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span> <span class="p">:</span><span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="s1">&#39;\d+&#39;</span><span class="p">,</span><span class="n">x</span><span class="p">)</span><span class="o">.</span><span class="n">group</span><span class="p">())</span>
+    <span class="c1"># Conversion from string &#39;18&#39; to int representtion for folloeing operations</span>
+    <span class="n">RFM_df</span><span class="p">[</span><span class="s1">&#39;Recency&#39;</span><span class="p">]</span><span class="o">=</span><span class="n">RFM_df</span><span class="p">[</span><span class="s1">&#39;Recency&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+
+<span class="n">formatOutputInRecency</span><span class="p">(</span><span class="n">RFM_df</span><span class="p">)</span>
 </pre></div>
 </div>
 <p><p>Appreciation: Days mean that a customer has done transaction recently
@@ -879,30 +1009,47 @@ these columns.</p>
 </div>
 <p>Now, let’s see if our DataSet once cleaned contains atypical data</p>
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># To calculate the otliers for each feature</span>
-<span class="n">lower_list</span><span class="o">=</span><span class="p">[]</span>
-<span class="n">upper_list</span><span class="o">=</span><span class="p">[]</span>
-<span class="n">num_list</span><span class="o">=</span><span class="p">[]</span>
-<span class="n">perc_list</span><span class="o">=</span><span class="p">[]</span>
-<span class="n">cols</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Frequency&#39;</span><span class="p">,</span> <span class="s1">&#39;CustAccountBalance&#39;</span><span class="p">,</span><span class="s1">&#39;TransactionAmount&#39;</span><span class="p">,</span> <span class="s1">&#39;CustomerAge&#39;</span><span class="p">,</span> <span class="s1">&#39;Recency&#39;</span><span class="p">]</span>
-<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">cols</span><span class="p">:</span>
-    <span class="n">Q1</span> <span class="o">=</span> <span class="n">RFM_df</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">quantile</span><span class="p">(</span><span class="mf">0.25</span><span class="p">)</span>
-    <span class="n">Q3</span> <span class="o">=</span> <span class="n">RFM_df</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">quantile</span><span class="p">(</span><span class="mf">0.75</span><span class="p">)</span>
-    <span class="n">IQR</span> <span class="o">=</span> <span class="n">Q3</span> <span class="o">-</span> <span class="n">Q1</span>
-    <span class="n">lower</span> <span class="o">=</span> <span class="n">Q1</span> <span class="o">-</span> <span class="mf">1.5</span> <span class="o">*</span> <span class="n">IQR</span>
-    <span class="n">upper</span> <span class="o">=</span> <span class="n">Q3</span> <span class="o">+</span> <span class="mf">1.5</span> <span class="o">*</span> <span class="n">IQR</span>
-    <span class="c1"># Calculate number of outliers</span>
-    <span class="n">num</span><span class="o">=</span><span class="n">RFM_df</span><span class="p">[(</span><span class="n">RFM_df</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">lower</span><span class="p">)</span> <span class="o">|</span> <span class="p">(</span><span class="n">RFM_df</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">upper</span><span class="p">)]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-    <span class="c1"># Calculate percentage of outliers</span>
-    <span class="n">perc</span> <span class="o">=</span> <span class="p">(</span><span class="n">num</span> <span class="o">/</span> <span class="n">RFM_df</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">*</span> <span class="mi">100</span>
-    <span class="n">lower_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">lower</span><span class="p">)</span>
-    <span class="n">upper_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">upper</span><span class="p">)</span>
-    <span class="n">num_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">num</span><span class="p">)</span>
-    <span class="n">perc_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">perc</span><span class="p">,</span><span class="mi">2</span><span class="p">))</span>
+<span class="k">def</span> <span class="nf">outliersWhenCleaned</span><span class="p">():</span>
+
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Calculates the outliers for each feature once the data is cleaned</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        none</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">       print: A print with the outliers for each feature</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        TypeError: If the dataframe is not a DataFrame.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">lower_list</span><span class="o">=</span><span class="p">[]</span>
+    <span class="n">upper_list</span><span class="o">=</span><span class="p">[]</span>
+    <span class="n">num_list</span><span class="o">=</span><span class="p">[]</span>
+    <span class="n">perc_list</span><span class="o">=</span><span class="p">[]</span>
+    <span class="n">cols</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Frequency&#39;</span><span class="p">,</span> <span class="s1">&#39;CustAccountBalance&#39;</span><span class="p">,</span><span class="s1">&#39;TransactionAmount&#39;</span><span class="p">,</span> <span class="s1">&#39;CustomerAge&#39;</span><span class="p">,</span> <span class="s1">&#39;Recency&#39;</span><span class="p">]</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">cols</span><span class="p">:</span>
+        <span class="n">Q1</span> <span class="o">=</span> <span class="n">RFM_df</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">quantile</span><span class="p">(</span><span class="mf">0.25</span><span class="p">)</span>
+        <span class="n">Q3</span> <span class="o">=</span> <span class="n">RFM_df</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">quantile</span><span class="p">(</span><span class="mf">0.75</span><span class="p">)</span>
+        <span class="n">IQR</span> <span class="o">=</span> <span class="n">Q3</span> <span class="o">-</span> <span class="n">Q1</span>
+        <span class="n">lower</span> <span class="o">=</span> <span class="n">Q1</span> <span class="o">-</span> <span class="mf">1.5</span> <span class="o">*</span> <span class="n">IQR</span>
+        <span class="n">upper</span> <span class="o">=</span> <span class="n">Q3</span> <span class="o">+</span> <span class="mf">1.5</span> <span class="o">*</span> <span class="n">IQR</span>
+        <span class="c1"># Calculate number of outliers</span>
+        <span class="n">num</span><span class="o">=</span><span class="n">RFM_df</span><span class="p">[(</span><span class="n">RFM_df</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">lower</span><span class="p">)</span> <span class="o">|</span> <span class="p">(</span><span class="n">RFM_df</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">upper</span><span class="p">)]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="c1"># Calculate percentage of outliers</span>
+        <span class="n">perc</span> <span class="o">=</span> <span class="p">(</span><span class="n">num</span> <span class="o">/</span> <span class="n">RFM_df</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">*</span> <span class="mi">100</span>
+        <span class="n">lower_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">lower</span><span class="p">)</span>
+        <span class="n">upper_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">upper</span><span class="p">)</span>
+        <span class="n">num_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">num</span><span class="p">)</span>
+        <span class="n">perc_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">perc</span><span class="p">,</span><span class="mi">2</span><span class="p">))</span>
 
 
-<span class="n">dic</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;lower&#39;</span><span class="p">:</span> <span class="n">lower_list</span><span class="p">,</span> <span class="s1">&#39;upper&#39;</span><span class="p">:</span> <span class="n">upper_list</span><span class="p">,</span> <span class="s1">&#39;outliers&#39;</span><span class="p">:</span> <span class="n">num_list</span><span class="p">,</span> <span class="s1">&#39;Perc%&#39;</span><span class="p">:</span><span class="n">perc_list</span> <span class="p">}</span>
-<span class="n">outliers_df</span><span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">dic</span><span class="p">,</span><span class="n">index</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Frequency&#39;</span><span class="p">,</span> <span class="s1">&#39;CustAccountBalance&#39;</span><span class="p">,</span><span class="s1">&#39;TransactionAmount&#39;</span><span class="p">,</span> <span class="s1">&#39;CustomerAge&#39;</span><span class="p">,</span> <span class="s1">&#39;Recency&#39;</span><span class="p">])</span>
-<span class="n">outliers_df</span>
+    <span class="n">dic</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;lower&#39;</span><span class="p">:</span> <span class="n">lower_list</span><span class="p">,</span> <span class="s1">&#39;upper&#39;</span><span class="p">:</span> <span class="n">upper_list</span><span class="p">,</span> <span class="s1">&#39;outliers&#39;</span><span class="p">:</span> <span class="n">num_list</span><span class="p">,</span> <span class="s1">&#39;Perc%&#39;</span><span class="p">:</span><span class="n">perc_list</span> <span class="p">}</span>
+    <span class="n">outliers_df</span><span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">dic</span><span class="p">,</span><span class="n">index</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Frequency&#39;</span><span class="p">,</span> <span class="s1">&#39;CustAccountBalance&#39;</span><span class="p">,</span><span class="s1">&#39;TransactionAmount&#39;</span><span class="p">,</span> <span class="s1">&#39;CustomerAge&#39;</span><span class="p">,</span> <span class="s1">&#39;Recency&#39;</span><span class="p">])</span>
+    <span class="n">outliers_df</span>
+
+<span class="n">outliersWhenCleaned</span><span class="p">()</span>
 </pre></div>
 </div>
 <div>
@@ -1182,15 +1329,32 @@ RFM table (RFM_df), and then plots this matrix as a heat map using it.
 The correlation matrix is a square matrix that shows how the different
 features are related to each other.</p>
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># correlation between features</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span><span class="mi">5</span><span class="p">))</span>
-<span class="n">correlation</span><span class="o">=</span><span class="n">RFM_df</span><span class="o">.</span><span class="n">corr</span><span class="p">(</span><span class="n">numeric_only</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="n">sns</span><span class="o">.</span><span class="n">heatmap</span><span class="p">(</span><span class="n">correlation</span><span class="p">,</span><span class="n">vmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-    <span class="n">vmax</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span>
-    <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;rocket_r&#39;</span><span class="p">,</span>
-    <span class="n">annot</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-    <span class="n">fmt</span><span class="o">=</span><span class="s1">&#39;.1f&#39;</span><span class="p">,</span>
-    <span class="n">linecolor</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">,</span>
-    <span class="n">cbar</span><span class="o">=</span><span class="kc">True</span><span class="p">);</span>
+<span class="k">def</span> <span class="nf">correlation</span><span class="p">():</span>
+
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Calculates the correlation between features</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        none</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        heatmap: A heatmap with the correlation between features</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        TypeError: If the dataframe is not a DataFrame.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span><span class="mi">5</span><span class="p">))</span>
+    <span class="n">correlation</span><span class="o">=</span><span class="n">RFM_df</span><span class="o">.</span><span class="n">corr</span><span class="p">(</span><span class="n">numeric_only</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">sns</span><span class="o">.</span><span class="n">heatmap</span><span class="p">(</span><span class="n">correlation</span><span class="p">,</span><span class="n">vmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">vmax</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span>
+        <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;rocket_r&#39;</span><span class="p">,</span>
+        <span class="n">annot</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">fmt</span><span class="o">=</span><span class="s1">&#39;.1f&#39;</span><span class="p">,</span>
+        <span class="n">linecolor</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">,</span>
+        <span class="n">cbar</span><span class="o">=</span><span class="kc">True</span><span class="p">);</span>
+
+<span class="n">correlation</span><span class="p">()</span>
 </pre></div>
 </div>
 <img alt="_images/Customer_Segmentation_68_01.png" src="_images/Customer_Segmentation_68_01.png" />
@@ -1198,45 +1362,112 @@ features are related to each other.</p>
 the variable Frequency, it is worth noting that the frequency is the
 number of times a customer has made transactions in the period from
 August to October.</p>
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="s2">&quot;fivethirtyeight&quot;</span><span class="p">)</span>
-<span class="n">chart</span><span class="o">=</span><span class="n">sns</span><span class="o">.</span><span class="n">countplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="s1">&#39;Frequency&#39;</span><span class="p">,</span><span class="n">data</span><span class="o">=</span><span class="n">RFM_df</span><span class="p">,</span><span class="n">palette</span><span class="o">=</span><span class="s1">&#39;rocket&#39;</span><span class="p">,</span> <span class="n">order</span> <span class="o">=</span> <span class="n">RFM_df</span><span class="p">[</span><span class="s1">&#39;Frequency&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Frequency&quot;</span><span class="p">,</span>
-          <span class="n">fontsize</span><span class="o">=</span><span class="s1">&#39;20&#39;</span><span class="p">,</span>
-          <span class="n">backgroundcolor</span><span class="o">=</span><span class="s1">&#39;AliceBlue&#39;</span><span class="p">,</span>
-          <span class="n">color</span><span class="o">=</span><span class="s1">&#39;magenta&#39;</span><span class="p">);</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">distributionFrequency</span><span class="p">():</span>
+
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Plots the distribution of Frequency variable</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        none</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        chart: A chart with the distribution of Frequency variable</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        TypeError: If the dataframe is not a DataFrame.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="s2">&quot;fivethirtyeight&quot;</span><span class="p">)</span>
+    <span class="n">chart</span><span class="o">=</span><span class="n">sns</span><span class="o">.</span><span class="n">countplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="s1">&#39;Frequency&#39;</span><span class="p">,</span><span class="n">data</span><span class="o">=</span><span class="n">RFM_df</span><span class="p">,</span><span class="n">palette</span><span class="o">=</span><span class="s1">&#39;rocket&#39;</span><span class="p">,</span> <span class="n">order</span> <span class="o">=</span> <span class="n">RFM_df</span><span class="p">[</span><span class="s1">&#39;Frequency&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Frequency&quot;</span><span class="p">,</span>
+            <span class="n">fontsize</span><span class="o">=</span><span class="s1">&#39;20&#39;</span><span class="p">,</span>
+            <span class="n">backgroundcolor</span><span class="o">=</span><span class="s1">&#39;AliceBlue&#39;</span><span class="p">,</span>
+            <span class="n">color</span><span class="o">=</span><span class="s1">&#39;magenta&#39;</span><span class="p">);</span>
+
+<span class="n">distributionFrequency</span><span class="p">()</span>
 </pre></div>
 </div>
 <img alt="_images/Customer_Segmentation_70_01.png" src="_images/Customer_Segmentation_70_01.png" />
 <p>We obtain the age distribution of the clients and also the percentage of
 women and men in the records we have.</p>
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="s2">&quot;fivethirtyeight&quot;</span><span class="p">)</span>
-<span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">ncols</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span><span class="n">nrows</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span><span class="mi">5</span><span class="p">))</span>
-<span class="n">palette_color</span> <span class="o">=</span> <span class="n">sns</span><span class="o">.</span><span class="n">color_palette</span><span class="p">(</span><span class="s1">&#39;rocket&#39;</span><span class="p">)</span>
-<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">RFM_df</span><span class="p">[</span><span class="s1">&#39;CustomerAge&#39;</span><span class="p">],</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;purple&#39;</span><span class="p">)</span>
-<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Distribution of Customer Age&quot;</span><span class="p">)</span>
-<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">pie</span><span class="p">(</span><span class="n">RFM_df</span><span class="p">[</span><span class="s1">&#39;CustGender&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">(),</span><span class="n">autopct</span><span class="o">=</span><span class="s1">&#39;%1.f</span><span class="si">%%</span><span class="s1">&#39;</span><span class="p">,</span><span class="n">colors</span><span class="o">=</span><span class="n">palette_color</span><span class="p">,</span><span class="n">labels</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Male&#39;</span><span class="p">,</span><span class="s1">&#39;Female&#39;</span><span class="p">])</span>
-<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Customer Gender&quot;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">();</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">graphAgeAndGender</span><span class="p">():</span>
+
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Shows a graph with the distribution of the age and a pie graph of the gender in the dataset</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        none</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        histogram: A histogram with the distribution of the age</span>
+<span class="sd">        pie: percentage of women and men</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        TypeError: If the dataframe is not a DataFrame.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">plt</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="s2">&quot;fivethirtyeight&quot;</span><span class="p">)</span>
+    <span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">ncols</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span><span class="n">nrows</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span><span class="mi">5</span><span class="p">))</span>
+    <span class="n">palette_color</span> <span class="o">=</span> <span class="n">sns</span><span class="o">.</span><span class="n">color_palette</span><span class="p">(</span><span class="s1">&#39;rocket&#39;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">RFM_df</span><span class="p">[</span><span class="s1">&#39;CustomerAge&#39;</span><span class="p">],</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;purple&#39;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Distribution of Customer Age&quot;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">pie</span><span class="p">(</span><span class="n">RFM_df</span><span class="p">[</span><span class="s1">&#39;CustGender&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">(),</span><span class="n">autopct</span><span class="o">=</span><span class="s1">&#39;%1.f</span><span class="si">%%</span><span class="s1">&#39;</span><span class="p">,</span><span class="n">colors</span><span class="o">=</span><span class="n">palette_color</span><span class="p">,</span><span class="n">labels</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Male&#39;</span><span class="p">,</span><span class="s1">&#39;Female&#39;</span><span class="p">])</span>
+    <span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Customer Gender&quot;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">();</span>
+
+<span class="n">graphAgeAndGender</span><span class="p">()</span>
 </pre></div>
 </div>
 <img alt="_images/Customer_Segmentation_72_01.png" src="_images/Customer_Segmentation_72_01.png" />
 <p>In this graph we obtain the number of times a transaction was made in
 different areas of the country, only the top 20 locations with the most
 transactions made will be shown.</p>
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="s2">&quot;fivethirtyeight&quot;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span><span class="mi">7</span><span class="p">))</span>
-<span class="n">chart</span><span class="o">=</span><span class="n">sns</span><span class="o">.</span><span class="n">countplot</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="s1">&#39;CustLocation&#39;</span><span class="p">,</span><span class="n">data</span><span class="o">=</span><span class="n">RFM_df</span><span class="p">,</span><span class="n">palette</span><span class="o">=</span><span class="s1">&#39;rocket&#39;</span><span class="p">,</span> <span class="n">order</span> <span class="o">=</span> <span class="n">RFM_df</span><span class="p">[</span><span class="s1">&#39;CustLocation&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()[:</span><span class="mi">20</span><span class="p">]</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Most 20 Location of Customer &quot;</span><span class="p">,</span>
-          <span class="n">fontsize</span><span class="o">=</span><span class="s1">&#39;15&#39;</span><span class="p">,</span>
-          <span class="n">backgroundcolor</span><span class="o">=</span><span class="s1">&#39;AliceBlue&#39;</span><span class="p">,</span>
-          <span class="n">color</span><span class="o">=</span><span class="s1">&#39;magenta&#39;</span><span class="p">);</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">graphLocation</span><span class="p">():</span>
+
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Shows a graph with the distribution of the location in the dataset</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        none</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        chart: A chart with the distribution of the location</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        TypeError: If the dataframe is not a DataFrame.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="s2">&quot;fivethirtyeight&quot;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span><span class="mi">7</span><span class="p">))</span>
+    <span class="n">chart</span><span class="o">=</span><span class="n">sns</span><span class="o">.</span><span class="n">countplot</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="s1">&#39;CustLocation&#39;</span><span class="p">,</span><span class="n">data</span><span class="o">=</span><span class="n">RFM_df</span><span class="p">,</span><span class="n">palette</span><span class="o">=</span><span class="s1">&#39;rocket&#39;</span><span class="p">,</span> <span class="n">order</span> <span class="o">=</span> <span class="n">RFM_df</span><span class="p">[</span><span class="s1">&#39;CustLocation&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()[:</span><span class="mi">20</span><span class="p">]</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Most 20 Location of Customer &quot;</span><span class="p">,</span>
+            <span class="n">fontsize</span><span class="o">=</span><span class="s1">&#39;15&#39;</span><span class="p">,</span>
+            <span class="n">backgroundcolor</span><span class="o">=</span><span class="s1">&#39;AliceBlue&#39;</span><span class="p">,</span>
+            <span class="n">color</span><span class="o">=</span><span class="s1">&#39;magenta&#39;</span><span class="p">);</span>
+
+<span class="n">graphLocation</span><span class="p">()</span>
 </pre></div>
 </div>
 <img alt="_images/Customer_Segmentation_74_01.png" src="_images/Customer_Segmentation_74_01.png" />
 <p>We generate the scatter plot of the data referring to the variable
 Frequency.</p>
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="s2">&quot;fivethirtyeight&quot;</span><span class="p">)</span>
-<span class="n">sns</span><span class="o">.</span><span class="n">pairplot</span><span class="p">(</span><span class="n">RFM_df</span><span class="p">,</span><span class="n">hue</span><span class="o">=</span><span class="s1">&#39;Frequency&#39;</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">scatterOFData</span><span class="p">():</span>
+
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Shows a scatter plot of the data</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        none</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        chart: A chart with the scatter plot of the data</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        TypeError: If the dataframe is not a DataFrame.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="s2">&quot;fivethirtyeight&quot;</span><span class="p">)</span>
+    <span class="n">sns</span><span class="o">.</span><span class="n">pairplot</span><span class="p">(</span><span class="n">RFM_df</span><span class="p">,</span><span class="n">hue</span><span class="o">=</span><span class="s1">&#39;Frequency&#39;</span><span class="p">)</span>
+
+<span class="n">scatterOFData</span><span class="p">()</span>
 </pre></div>
 </div>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">seaborn</span><span class="o">.</span><span class="n">axisgrid</span><span class="o">.</span><span class="n">PairGrid</span> <span class="n">at</span> <span class="mh">0x2238b194bb0</span><span class="o">&gt;</span>
@@ -1248,13 +1479,31 @@ dataframe and is represented on the X axis (horizontal) the transaction
 amounts (TransactionAmount) and on the Y axis (vertical) the customer’s
 account balance (CustAccountBalance). We add a third dimension to the
 graph which is Frequency and a fourth one with Recency.</p>
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="s2">&quot;fivethirtyeight&quot;</span><span class="p">)</span>
-<span class="n">sns</span><span class="o">.</span><span class="n">scatterplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="s1">&#39;TransactionAmount&#39;</span><span class="p">,</span><span class="n">y</span><span class="o">=</span><span class="s1">&#39;CustAccountBalance&#39;</span><span class="p">,</span><span class="n">data</span><span class="o">=</span><span class="n">RFM_df</span><span class="p">,</span><span class="n">palette</span><span class="o">=</span><span class="s1">&#39;rocket&#39;</span><span class="p">,</span><span class="n">hue</span><span class="o">=</span><span class="s1">&#39;Frequency&#39;</span><span class="p">,</span><span class="n">size</span><span class="o">=</span><span class="s1">&#39;Recency&#39;</span> <span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span> <span class="o">=</span> <span class="s2">&quot;upper right&quot;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;TransactionAmount (INR) and CustAccountBalance&quot;</span><span class="p">,</span>
-          <span class="n">fontsize</span><span class="o">=</span><span class="s1">&#39;15&#39;</span><span class="p">,</span>
-          <span class="n">backgroundcolor</span><span class="o">=</span><span class="s1">&#39;AliceBlue&#39;</span><span class="p">,</span>
-          <span class="n">color</span><span class="o">=</span><span class="s1">&#39;magenta&#39;</span><span class="p">);</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">graphTransactionAmountAndCustAccountBalance</span><span class="p">():</span>
+
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Shows a scatter plot of the TransactionAmount and CustAccountBalance</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        none</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        chart: A chart with the scatter plot of the TransactionAmount and CustAccountBalance</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        TypeError: If the dataframe is not a DataFrame.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">plt</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="s2">&quot;fivethirtyeight&quot;</span><span class="p">)</span>
+    <span class="n">sns</span><span class="o">.</span><span class="n">scatterplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="s1">&#39;TransactionAmount&#39;</span><span class="p">,</span><span class="n">y</span><span class="o">=</span><span class="s1">&#39;CustAccountBalance&#39;</span><span class="p">,</span><span class="n">data</span><span class="o">=</span><span class="n">RFM_df</span><span class="p">,</span><span class="n">palette</span><span class="o">=</span><span class="s1">&#39;rocket&#39;</span><span class="p">,</span><span class="n">hue</span><span class="o">=</span><span class="s1">&#39;Frequency&#39;</span><span class="p">,</span><span class="n">size</span><span class="o">=</span><span class="s1">&#39;Recency&#39;</span> <span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span> <span class="o">=</span> <span class="s2">&quot;upper right&quot;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;TransactionAmount (INR) and CustAccountBalance&quot;</span><span class="p">,</span>
+            <span class="n">fontsize</span><span class="o">=</span><span class="s1">&#39;15&#39;</span><span class="p">,</span>
+            <span class="n">backgroundcolor</span><span class="o">=</span><span class="s1">&#39;AliceBlue&#39;</span><span class="p">,</span>
+            <span class="n">color</span><span class="o">=</span><span class="s1">&#39;magenta&#39;</span><span class="p">);</span>
+
+<span class="n">graphTransactionAmountAndCustAccountBalance</span><span class="p">()</span>
 </pre></div>
 </div>
 <img alt="_images/Customer_Segmentation_78_01.png" src="_images/Customer_Segmentation_78_01.png" />
@@ -1268,10 +1517,27 @@ graph which is Frequency and a fourth one with Recency.</p>
 </div>
 <p>We group the transactions according to the month in which they were made
 and obtain the average for each table.</p>
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">RFM_df</span><span class="o">=</span><span class="n">RFM_df</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="s1">&#39;TransactionDate&#39;</span><span class="p">)</span>
-<span class="n">groupbby_month</span> <span class="o">=</span> <span class="n">RFM_df</span><span class="o">.</span><span class="n">groupby</span><span class="p">([</span><span class="n">pd</span><span class="o">.</span><span class="n">Grouper</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="s1">&#39;TransactionDate&#39;</span><span class="p">,</span> <span class="n">freq</span><span class="o">=</span><span class="s1">&#39;M&#39;</span><span class="p">)])[[</span><span class="s1">&#39;Frequency&#39;</span><span class="p">,</span> <span class="s1">&#39;TransactionAmount&#39;</span><span class="p">,</span> <span class="s1">&#39;CustAccountBalance&#39;</span><span class="p">,</span> <span class="s1">&#39;TransactionTime&#39;</span><span class="p">,</span> <span class="s1">&#39;CustomerAge&#39;</span><span class="p">,</span> <span class="s1">&#39;Recency&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">groupbby_month</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
-<span class="n">groupbby_month</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">groupTransaccionsByMonth</span><span class="p">():</span>
+
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Groups the transactions by month and calculates the mean of each feature</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        none</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        groupbby_month: A dataframe with the mean of each feature</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        TypeError: If the dataframe is not a DataFrame.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">RFM_df</span><span class="o">=</span><span class="n">RFM_df</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="s1">&#39;TransactionDate&#39;</span><span class="p">)</span>
+    <span class="n">groupbby_month</span> <span class="o">=</span> <span class="n">RFM_df</span><span class="o">.</span><span class="n">groupby</span><span class="p">([</span><span class="n">pd</span><span class="o">.</span><span class="n">Grouper</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="s1">&#39;TransactionDate&#39;</span><span class="p">,</span> <span class="n">freq</span><span class="o">=</span><span class="s1">&#39;M&#39;</span><span class="p">)])[[</span><span class="s1">&#39;Frequency&#39;</span><span class="p">,</span> <span class="s1">&#39;TransactionAmount&#39;</span><span class="p">,</span> <span class="s1">&#39;CustAccountBalance&#39;</span><span class="p">,</span> <span class="s1">&#39;TransactionTime&#39;</span><span class="p">,</span> <span class="s1">&#39;CustomerAge&#39;</span><span class="p">,</span> <span class="s1">&#39;Recency&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">groupbby_month</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">groupbby_month</span>
+
+<span class="n">groupbby_month</span> <span class="o">=</span> <span class="n">groupTransaccionsByMonth</span><span class="p">()</span>
 </pre></div>
 </div>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">6</span><span class="p">)</span>
@@ -1343,14 +1609,30 @@ and obtain the average for each table.</p>
   </tbody>
 </table>
 </div><p>We made line graphs of the information we obtained previously.</p>
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mf">13.4</span><span class="p">,</span><span class="mi">7</span><span class="p">))</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Average of account balance per month&quot;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">groupbby_month</span><span class="o">.</span><span class="n">index</span><span class="p">,</span><span class="n">groupbby_month</span><span class="p">[</span><span class="s1">&#39;CustAccountBalance&#39;</span><span class="p">],</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;purple&#39;</span><span class="p">,</span><span class="n">marker</span><span class="o">=</span><span class="s1">&#39;o&#39;</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;Customer Account Balance&#39;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;dashed&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">();</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">grphLineBalanceAndTransactionAmount</span><span class="p">():</span>
 
-<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mf">13.8</span><span class="p">,</span><span class="mi">7</span><span class="p">))</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Average of transaction amount per month&quot;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">groupbby_month</span><span class="o">.</span><span class="n">index</span><span class="p">,</span><span class="n">groupbby_month</span><span class="p">[</span><span class="s1">&#39;TransactionAmount&#39;</span><span class="p">],</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;green&#39;</span><span class="p">,</span><span class="n">marker</span><span class="o">=</span><span class="s1">&#39;o&#39;</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;Transaction Amount&#39;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;dashed&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Shows a line graph of the average of account balance and transaction amount per month</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        none</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        chart: A chart with the line graph of the average of account balance and transaction amount per month</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        TypeError: If the dataframe is not a DataFrame.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mf">13.4</span><span class="p">,</span><span class="mi">7</span><span class="p">))</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Average of account balance per month&quot;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">groupbby_month</span><span class="o">.</span><span class="n">index</span><span class="p">,</span><span class="n">groupbby_month</span><span class="p">[</span><span class="s1">&#39;CustAccountBalance&#39;</span><span class="p">],</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;purple&#39;</span><span class="p">,</span><span class="n">marker</span><span class="o">=</span><span class="s1">&#39;o&#39;</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;Customer Account Balance&#39;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;dashed&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">();</span>
+
+    <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mf">13.8</span><span class="p">,</span><span class="mi">7</span><span class="p">))</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Average of transaction amount per month&quot;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">groupbby_month</span><span class="o">.</span><span class="n">index</span><span class="p">,</span><span class="n">groupbby_month</span><span class="p">[</span><span class="s1">&#39;TransactionAmount&#39;</span><span class="p">],</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;green&#39;</span><span class="p">,</span><span class="n">marker</span><span class="o">=</span><span class="s1">&#39;o&#39;</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;Transaction Amount&#39;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;dashed&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+
+<span class="n">grphLineBalanceAndTransactionAmount</span><span class="p">()</span>
 </pre></div>
 </div>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="o">&lt;</span><span class="n">matplotlib</span><span class="o">.</span><span class="n">lines</span><span class="o">.</span><span class="n">Line2D</span> <span class="n">at</span> <span class="mh">0x2238b3089d0</span><span class="o">&gt;</span><span class="p">]</span>

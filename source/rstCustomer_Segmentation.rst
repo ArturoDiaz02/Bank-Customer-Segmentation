@@ -55,7 +55,6 @@ Cleaning **4.** Exploratory Data Analysis
 
       </h2>
 
-
 .. autofunction:: scriptNotebook.import_data
 
 .. code:: ipython3
@@ -165,22 +164,19 @@ Cleaning **4.** Exploratory Data Analysis
         </tr>
       </tbody>
     </table>
+    <br>
     </div>
 
 
 
+.. autofunction:: scriptNotebook.dfInformation
+
 .. code:: ipython3
 
     def dfInformation(dataframe):
-        """
-        Gets the initial information of the Dataset, the number of records, number of variables, non-null objects and data type.
-    
-        :param dataframe: Source dataset.
-        :type dataframe: pandas.DataFrame
-        :return: A range indes conforma by float64(2), int64(1), object(6)
-        :rtype: void
-        """
+        
         display(dataframe.info())
+    
     dfInformation(df)
     # Getting the dataframe size for following amortized values
     initialRows = len(df)
@@ -222,17 +218,11 @@ Cleaning **4.** Exploratory Data Analysis
 
       </h2>
 
+.. autofunction:: scriptNotebook.check
+
 .. code:: ipython3
 
     def check(dataframe):
-        """
-        Gets the amount of null data and unique is calculated
-    
-        :param dataframe: Source dataset.
-        :type dataframe: pandas.DataFrame
-        :return: A new Dataframe tha represents de amortized values of null and unique values for each column.
-        :rtype: pandas.DataFrame
-        """
         l=[]
         columns=dataframe.columns
         for col in columns:
@@ -364,10 +354,14 @@ the total data. We check if there are repeated elements in our DataSet
         """
         Removes null values from data source and calculates the amount eliminated
     
-        :param dataframe: Source dataset.
-        :type dataframe: pandas.DataFrame
-        :return: The total of null values already deleted
-        :rtype: int
+        Args:
+            dataframe (DataFrame): Source dataset.
+    
+        Returns:
+            int: The total of null values already deleted
+    
+        Raises:
+            TypeError: If the dataframe is not a DataFrame.
         """
         shapeInitial = dataframe.shape[0]
         dataframe.dropna(inplace=True)
@@ -387,10 +381,14 @@ the total data. We check if there are repeated elements in our DataSet
         """
         Checks duplicated values for each column and amortized this count.
     
-        :param dataframe: Source dataset.
-        :type dataframe: pandas.DataFrame
-        :return: The total of duplicated values in an specifica dataframe
-        :rtype: int
+        Args:
+            dataframe (DataFrame): Source dataset.
+    
+        Returns:
+            int: The total of duplicated values in an specifica dataframe
+    
+        Raises:
+            TypeError: If the dataframe is not a DataFrame.
         """
         return dataframe.duplicated().sum()
     checkDuplicates(df)
@@ -423,12 +421,15 @@ We analyze the number of records for each client’s date of birth.
         """
         Getting distinct values from column or specific variable
     
-        :param dataframe: Source dataset.
-        :type dataframe: pandas.DataFrame
-        :param column: Variable or column in dataframe
-        :type dataframe: string
-        :return: A series containing counts of unique rows in the DataFrame.
-        :rtype: Series
+        Args:
+            dataframe (DataFrame): Source dataset.
+            column (string): Variable or column in dataframe
+    
+        Returns:
+            Series: A series containing counts of unique rows in the DataFrame.
+    
+        Raises:
+            TypeError: If the dataframe is not a DataFrame.
         """
         return dataframe[column].value_counts()
     uniqueRows(df,'CustomerDOB')
@@ -475,14 +476,16 @@ eliminate these outliers or erroneously measured data.
         """
         Removes an specific value from a source column in a dataframe
     
-        :param dataframe: Source dataset.
-        :type dataframe: pandas.DataFrame
-        :param column: Variable or column in dataframe
-        :type dataframe: string
-        :param value: Value with column type
-        :type dataframe: any
-        :return: A pandas DataFrame already modified.
-        :rtype: pandas.DataFrame
+        Args:
+            dataframe (DataFrame): Source dataset.
+            column (string): Variable or column in dataframe
+            value (any): Value with column type
+    
+        Returns:
+            DataFrame: A pandas DataFrame already modified.
+    
+        Raises:
+            TypeError: If the dataframe is not a DataFrame.
         """
         return dataframe.loc[~(dataframe[column] == value)]
     
@@ -516,12 +519,15 @@ eliminate these outliers or erroneously measured data.
         """
         Gets the minimum and maximum values of any column in order to see in which range the values in this column oscillate.
     
-        :param dataframe: Source dataset.
-        :type dataframe: pandas.DataFrame
-        :param column: Variable or column in dataframe
-        :type dataframe: string
-        :return: Shows the minimun and maximun values from this column
-        :rtype: void
+        Args:
+            dataframe (DataFrame): Source dataset.
+            column (string): Variable or column in dataframe
+    
+        Returns:
+            void: Shows the minimun and maximun values from this column
+    
+        Raises:
+            TypeError: If the dataframe is not a DataFrame.
         """
         print("min: " + str(dataframe[column].min()) + " max: " + str(dataframe[column].max()))
     minAndMax(df,'CustomerDOB')
@@ -546,12 +552,15 @@ date will be DD/MM/YY
         """
         Converts dataframe column to datetime format using pandas tool with specific format 'dayfirst'
     
-        :param dataframe: Source dataset.
-        :type dataframe: pandas.DataFrame
-        :param column: Variable or column in dataframe
-        :type dataframe: string
-        :return: New Dataframe already modified
-        :rtype: pandas.DataFrame
+        Args:
+            dataframe (DataFrame): Source dataset.
+            column (string): Variable or column in dataframe
+    
+        Returns:
+            DataFrame: A pandas DataFrame already modified.
+    
+        Raises:
+            TypeError: If the dataframe is not a DataFrame.
         """
         return pd.to_datetime(dataframe[column], dayfirst=True)
     df['CustomerDOB'] = dateConvertion(df,'CustomerDOB')
@@ -581,10 +590,15 @@ Pandas has when converting a date).
         """
         Refactors date dob column substrating 100 from values greater than 1999
         Note: Fixing the problem base on analysis above
-        :param dataframe: Source dataset.
-        :type dataframe: pandas.DataFrame
-        :return: New Dataframe already modified
-        :rtype: pandas.DataFrame
+    
+        Args:
+            dataframe (DataFrame): Source dataset.
+    
+        Returns:
+            DataFrame: A pandas DataFrame already modified.
+    
+        Raises:
+            TypeError: If the dataframe is not a DataFrame.
         """
         dataframe.loc[df['CustomerDOB'].dt.year > 1999, 'CustomerDOB'] -= pd.DateOffset(years=100)
         return dataframe
@@ -658,14 +672,27 @@ us to eliminate them, because we cannot speculate about them.
 
 Determine minority group of people aged over 100 years
 
-    
 .. code:: ipython3
 
-    def filterDOB(dataframe):  
-      return dataframe["CustomerDOB"].apply(lambda x: x if x.year < 1917 else 0)
-
+    # We filter our dataframe specifically on the DOB column to make a decision regarding date ambiguity.
+    def filterDOB(dataframe):
+        """
+        Filters dataframe by DOB column
+    
+        Args:
+            dataframe (DataFrame): Source dataset.
+    
+        Returns:
+            DataFrame: A pandas DataFrame already modified.
+    
+        Raises:
+            TypeError: If the dataframe is not a DataFrame.
+        """
+        return dataframe["CustomerDOB"].apply(lambda x: x if x.year < 1917 else 0)
+    
     df_filtered = filterDOB(df)
-
+    
+    
     # Amortizing and removing values ​​greater than 1917 represented as 0
     counts = df_filtered.value_counts().drop(0)
     print(counts)
@@ -715,10 +742,26 @@ subtracting the TransactionDate from the CustomerDOB.
 .. code:: ipython3
 
     # Getting the customer age at transaction moment and adding a new column in our dataframe
-    df['CustomerAge'] = (df['TransactionDate'] - df['CustomerDOB'])/np.timedelta64(1, 'Y')
-    df['CustomerAge'] = df['CustomerAge'].astype(int)
-    # Checking range of CustomerAge variable
-    print("min: " + str(df['CustomerAge'].min()) + " max: " + str(df['CustomerAge'].max()))
+    def getCustomerAge(dataframe):
+        """
+        Gets the customer age at transaction moment
+    
+        Args:
+            dataframe (DataFrame): Source dataset.
+    
+        Returns:
+            DataFrame: A pandas DataFrame already modified.
+    
+        Raises:
+            TypeError: If the dataframe is not a DataFrame.
+        """
+        df['CustomerAge'] = (df['TransactionDate'] - df['CustomerDOB'])/np.timedelta64(1, 'Y')
+        df['CustomerAge'] = df['CustomerAge'].astype(int)
+        # Checking range of CustomerAge variable
+        print("min: " + str(df['CustomerAge'].min()) + " max: " + str(df['CustomerAge'].max()))
+    
+    getCustomerAge(df)
+    
 
 
 .. parsed-literal::
@@ -764,14 +807,26 @@ considered outliers.
 .. code:: ipython3
 
     def outliers(dataframe):
-      num_col = df.select_dtypes(include=np.number)
-      cat_col = df.select_dtypes(exclude=np.number)
-
-      for i in num_col.columns:
-          sns.boxplot(x=num_col[i])
-          plt.title("Boxplot " + i)
-          plt.show()
-
+        """
+        Calculates the outliers for each numeric column in dataframe
+    
+        Args:
+            dataframe (DataFrame): Source dataset.
+    
+        Returns:
+            DataFrame: A pandas DataFrame already modified.
+    
+        Raises:
+            TypeError: If the dataframe is not a DataFrame.
+        """
+        num_col = df.select_dtypes(include=np.number)
+        cat_col = df.select_dtypes(exclude=np.number)
+    
+        for i in num_col.columns:
+            sns.boxplot(x=num_col[i])
+            plt.title("Boxplot " + i)
+            plt.show()
+    
     outliers(df)
 
 
@@ -861,12 +916,11 @@ We prepare some columns to make the RFM table
     df['TransactionDate1']=df['TransactionDate'] # ==> to calculate the minimum (first transaction)
     df['TransactionDate2']=df['TransactionDate'] # ==> to calculate the maximum (last transaction)
 
-Este código es utilizado para crear una tabla RFM (Recency, Frequency,
-Monetary) Se agrupan los datos por CustomerID utilizando el método
-groupby y luego se utiliza la función agg para calcular distintas
-métricas para cada cliente.
+This code is used to create a RFM (Recency, Frequency, Monetary) table.
+The data is grouped by CustomerID using the groupby method and then the
+agg function is used to calculate different metrics for each customer.
 
-Las métricas que se calculan son las siguientes:
+The metrics that are calculated are as follows:
 
 .. raw:: html
 
@@ -876,7 +930,7 @@ Las métricas que se calculan son las siguientes:
 
    <li>
 
-TransactionID: cantidad de transacciones realizadas por el cliente.
+TransactionID: number of transactions performed by the customer.
 
 .. raw:: html
 
@@ -886,8 +940,8 @@ TransactionID: cantidad de transacciones realizadas por el cliente.
 
    <li>
 
-CustGender: género del cliente (tomado de la primera transacción
-registrada para el cliente).
+CustGender: customer’s gender (taken from the first transaction recorded
+for the customer).
 
 .. raw:: html
 
@@ -897,8 +951,8 @@ registrada para el cliente).
 
    <li>
 
-CustLocation: ubicación del cliente (también tomada de la primera
-transacción registrada para el cliente).
+CustLocation: location of the customer (also taken from the first
+transaction recorded for the customer).
 
 .. raw:: html
 
@@ -908,7 +962,7 @@ transacción registrada para el cliente).
 
    <li>
 
-CustAccountBalance: saldo promedio de la cuenta del cliente.
+CustAccountBalance: average balance of the customer’s account.
 
 .. raw:: html
 
@@ -918,8 +972,7 @@ CustAccountBalance: saldo promedio de la cuenta del cliente.
 
    <li>
 
-TransactionTime: hora promedio de las transacciones realizadas por el
-cliente.
+TransactionTime: average time of transactions performed by the customer.
 
 .. raw:: html
 
@@ -929,8 +982,7 @@ cliente.
 
    <li>
 
-TransactionAmount: monto promedio de las transacciones realizadas por el
-cliente.
+TransactionAmount: average amount of transactions made by the customer.
 
 .. raw:: html
 
@@ -940,7 +992,7 @@ cliente.
 
    <li>
 
-CustomerAge: edad mediana del cliente.
+CustomerAge: median age of the client.
 
 .. raw:: html
 
@@ -950,8 +1002,8 @@ CustomerAge: edad mediana del cliente.
 
    <li>
 
-TransactionDate2: fecha más reciente en la que el cliente realizó una
-transacción.
+TransactionDate2: most recent date on which the customer made a
+transaction.
 
 .. raw:: html
 
@@ -961,8 +1013,7 @@ transacción.
 
    <li>
 
-TransactionDate1: fecha más antigua en la que el cliente realizó una
-transacción.
+TransactionDate1: oldest date on which the customer made a transaction.
 
 .. raw:: html
 
@@ -972,8 +1023,7 @@ transacción.
 
    <li>
 
-TransactionDate: fecha mediana en la que el cliente realizó una
-transacción.
+TransactionDate: median date on which the customer made a transaction.
 
 .. raw:: html
 
@@ -986,21 +1036,41 @@ transacción.
 .. code:: ipython3
 
     #Creating MRF Table Strategy
-    RFM_df = df.groupby("CustomerID").agg({
-                                            "TransactionID" : "count",
-                                            "CustGender" : "first",
-                                            "CustLocation":"first",
-                                            "CustAccountBalance"  : "mean",
-                                            "TransactionTime": "mean",
-                                            "TransactionAmount" : "mean",
-                                            "CustomerAge" : "median",
-                                            "TransactionDate2":"max",
-                                            "TransactionDate1":"min",
-                                            "TransactionDate":"median"
-                            })
     
-    RFM_df = RFM_df.reset_index()
+    def MRFTable(df):   
+        """
+        Creates a MRF Table from a dataframe
+    
+        Args:
+            dataframe (DataFrame): Source dataset.
+    
+        Returns:
+            DataFrame: A pandas DataFrame already modified.
+    
+        Raises:
+            TypeError: If the dataframe is not a DataFrame.
+        """
+        
+        RFM_df = df.groupby("CustomerID").agg({
+                                                "TransactionID" : "count",
+                                                "CustGender" : "first",
+                                                "CustLocation":"first",
+                                                "CustAccountBalance"  : "mean",
+                                                "TransactionTime": "mean",
+                                                "TransactionAmount" : "mean",
+                                                "CustomerAge" : "median",
+                                                "TransactionDate2":"max",
+                                                "TransactionDate1":"min",
+                                                "TransactionDate":"median"
+                                })
+    
+        RFM_df.reset_index()
+        return RFM_df
+        
+    
+    RFM_df = MRFTable(df)
     RFM_df.head()
+    
 
 
 
@@ -1201,10 +1271,26 @@ Recency variable
 
 .. code:: ipython3
 
-    # Using re library for apply an regular expresion in each value of Recency column for extract the number of days in this string representation. 
-    RFM_df['Recency']=RFM_df['Recency'].apply(lambda x :re.search('\d+',x).group())
-    # Conversion from string '18' to int representtion for folloeing operations
-    RFM_df['Recency']=RFM_df['Recency'].astype(int)
+    def formatOutputInRecency(RFM_df):
+        
+        """
+        Formats the output of Recency column
+    
+        Args:
+            dataframe (DataFrame): Source dataset.
+    
+        Returns:
+            DataFrame: A pandas DataFrame already modified.
+    
+        Raises:
+            TypeError: If the dataframe is not a DataFrame.
+        """
+        # Using re library for apply an regular expresion in each value of Recency column for extract the number of days in this string representation. 
+        RFM_df['Recency']=RFM_df['Recency'].apply(lambda x :re.search('\d+',x).group())
+        # Conversion from string '18' to int representtion for folloeing operations
+        RFM_df['Recency']=RFM_df['Recency'].astype(int)
+    
+    formatOutputInRecency(RFM_df)
 
 .. raw:: html
 
@@ -1236,30 +1322,47 @@ Now, let’s see if our DataSet once cleaned contains atypical data
 .. code:: ipython3
 
     # To calculate the otliers for each feature
-    lower_list=[]
-    upper_list=[]
-    num_list=[]
-    perc_list=[]
-    cols=['Frequency', 'CustAccountBalance','TransactionAmount', 'CustomerAge', 'Recency']
-    for i in cols:
-        Q1 = RFM_df[i].quantile(0.25)
-        Q3 = RFM_df[i].quantile(0.75)
-        IQR = Q3 - Q1
-        lower = Q1 - 1.5 * IQR
-        upper = Q3 + 1.5 * IQR
-        # Calculate number of outliers
-        num=RFM_df[(RFM_df[i] < lower) | (RFM_df[i] > upper)].shape[0]
-        # Calculate percentage of outliers
-        perc = (num / RFM_df.shape[0]) * 100
-        lower_list.append(lower)
-        upper_list.append(upper)
-        num_list.append(num)
-        perc_list.append(round(perc,2))
-    
+    def outliersWhenCleaned():
         
-    dic={'lower': lower_list, 'upper': upper_list, 'outliers': num_list, 'Perc%':perc_list }
-    outliers_df=pd.DataFrame(dic,index=['Frequency', 'CustAccountBalance','TransactionAmount', 'CustomerAge', 'Recency'])
-    outliers_df
+        """
+        Calculates the outliers for each feature once the data is cleaned
+    
+        Args:
+            none
+        
+        Returns:
+           print: A print with the outliers for each feature
+    
+        Raises:
+            TypeError: If the dataframe is not a DataFrame.
+        """
+    
+        lower_list=[]
+        upper_list=[]
+        num_list=[]
+        perc_list=[]
+        cols=['Frequency', 'CustAccountBalance','TransactionAmount', 'CustomerAge', 'Recency']
+        for i in cols:
+            Q1 = RFM_df[i].quantile(0.25)
+            Q3 = RFM_df[i].quantile(0.75)
+            IQR = Q3 - Q1
+            lower = Q1 - 1.5 * IQR
+            upper = Q3 + 1.5 * IQR
+            # Calculate number of outliers
+            num=RFM_df[(RFM_df[i] < lower) | (RFM_df[i] > upper)].shape[0]
+            # Calculate percentage of outliers
+            perc = (num / RFM_df.shape[0]) * 100
+            lower_list.append(lower)
+            upper_list.append(upper)
+            num_list.append(num)
+            perc_list.append(round(perc,2))
+    
+            
+        dic={'lower': lower_list, 'upper': upper_list, 'outliers': num_list, 'Perc%':perc_list }
+        outliers_df=pd.DataFrame(dic,index=['Frequency', 'CustAccountBalance','TransactionAmount', 'CustomerAge', 'Recency'])
+        outliers_df
+    
+    outliersWhenCleaned()
 
 
 
@@ -1590,15 +1693,32 @@ features are related to each other.
 .. code:: ipython3
 
     # correlation between features
-    plt.figure(figsize=(7,5))
-    correlation=RFM_df.corr(numeric_only=True)
-    sns.heatmap(correlation,vmin=None,
-        vmax=0.8,
-        cmap='rocket_r',
-        annot=True,
-        fmt='.1f',
-        linecolor='white',
-        cbar=True);
+    def correlation():
+        
+        """
+        Calculates the correlation between features
+    
+        Args:
+            none
+    
+        Returns:
+            heatmap: A heatmap with the correlation between features
+    
+        Raises:
+            TypeError: If the dataframe is not a DataFrame. 
+        """
+    
+        plt.figure(figsize=(7,5))
+        correlation=RFM_df.corr(numeric_only=True)
+        sns.heatmap(correlation,vmin=None,
+            vmax=0.8,
+            cmap='rocket_r',
+            annot=True,
+            fmt='.1f',
+            linecolor='white',
+            cbar=True);
+    
+    correlation()
 
 
 
@@ -1612,12 +1732,28 @@ August to October.
 
 .. code:: ipython3
 
-    plt.style.use("fivethirtyeight")
-    chart=sns.countplot(x='Frequency',data=RFM_df,palette='rocket', order = RFM_df['Frequency'].value_counts().index)
-    plt.title("Frequency",
-              fontsize='20',
-              backgroundcolor='AliceBlue',
-              color='magenta');
+    def distributionFrequency():
+        
+        """
+        Plots the distribution of Frequency variable
+    
+        Args:
+            none
+    
+        Returns:
+            chart: A chart with the distribution of Frequency variable
+    
+        Raises:
+            TypeError: If the dataframe is not a DataFrame.
+        """
+        plt.style.use("fivethirtyeight")
+        chart=sns.countplot(x='Frequency',data=RFM_df,palette='rocket', order = RFM_df['Frequency'].value_counts().index)
+        plt.title("Frequency",
+                fontsize='20',
+                backgroundcolor='AliceBlue',
+                color='magenta');
+    
+    distributionFrequency()
 
 
 
@@ -1629,14 +1765,32 @@ women and men in the records we have.
 
 .. code:: ipython3
 
-    plt.style.use("fivethirtyeight")
-    fig,ax=plt.subplots(ncols=2,nrows=1,figsize=(15,5))
-    palette_color = sns.color_palette('rocket')
-    ax[0].hist(x=RFM_df['CustomerAge'],color='purple')
-    ax[0].set_title("Distribution of Customer Age")
-    ax[1].pie(RFM_df['CustGender'].value_counts(),autopct='%1.f%%',colors=palette_color,labels=['Male','Female'])
-    ax[1].set_title("Customer Gender")
-    plt.tight_layout();
+    def graphAgeAndGender():
+        
+        """
+        Shows a graph with the distribution of the age and a pie graph of the gender in the dataset
+    
+        Args:
+            none
+    
+        Returns:
+            histogram: A histogram with the distribution of the age
+            pie: percentage of women and men
+    
+        Raises:
+            TypeError: If the dataframe is not a DataFrame.
+        """
+    
+        plt.style.use("fivethirtyeight")
+        fig,ax=plt.subplots(ncols=2,nrows=1,figsize=(15,5))
+        palette_color = sns.color_palette('rocket')
+        ax[0].hist(x=RFM_df['CustomerAge'],color='purple')
+        ax[0].set_title("Distribution of Customer Age")
+        ax[1].pie(RFM_df['CustGender'].value_counts(),autopct='%1.f%%',colors=palette_color,labels=['Male','Female'])
+        ax[1].set_title("Customer Gender")
+        plt.tight_layout();
+    
+    graphAgeAndGender()
 
 
 
@@ -1649,13 +1803,30 @@ transactions made will be shown.
 
 .. code:: ipython3
 
-    plt.style.use("fivethirtyeight")
-    plt.figure(figsize=(15,7))
-    chart=sns.countplot(y='CustLocation',data=RFM_df,palette='rocket', order = RFM_df['CustLocation'].value_counts()[:20].index)
-    plt.title("Most 20 Location of Customer ",
-              fontsize='15',
-              backgroundcolor='AliceBlue',
-              color='magenta');
+    def graphLocation():
+        
+        """
+        Shows a graph with the distribution of the location in the dataset
+    
+        Args:
+            none
+    
+        Returns:
+            chart: A chart with the distribution of the location
+    
+        Raises:
+            TypeError: If the dataframe is not a DataFrame.
+    
+        """
+        plt.style.use("fivethirtyeight")
+        plt.figure(figsize=(15,7))
+        chart=sns.countplot(y='CustLocation',data=RFM_df,palette='rocket', order = RFM_df['CustLocation'].value_counts()[:20].index)
+        plt.title("Most 20 Location of Customer ",
+                fontsize='15',
+                backgroundcolor='AliceBlue',
+                color='magenta');
+    
+    graphLocation()
 
 
 
@@ -1667,8 +1838,24 @@ Frequency.
 
 .. code:: ipython3
 
-    plt.style.use("fivethirtyeight")
-    sns.pairplot(RFM_df,hue='Frequency')
+    def scatterOFData():
+        
+        """
+        Shows a scatter plot of the data
+    
+        Args:
+            none
+    
+        Returns:
+            chart: A chart with the scatter plot of the data
+    
+        Raises:
+            TypeError: If the dataframe is not a DataFrame.
+        """
+        plt.style.use("fivethirtyeight")
+        sns.pairplot(RFM_df,hue='Frequency')
+    
+    scatterOFData()
 
 
 
@@ -1691,13 +1878,31 @@ graph which is Frequency and a fourth one with Recency.
 
 .. code:: ipython3
 
-    plt.style.use("fivethirtyeight")
-    sns.scatterplot(x='TransactionAmount',y='CustAccountBalance',data=RFM_df,palette='rocket',hue='Frequency',size='Recency' )
-    plt.legend(loc = "upper right")
-    plt.title("TransactionAmount (INR) and CustAccountBalance",
-              fontsize='15',
-              backgroundcolor='AliceBlue',
-              color='magenta');
+    def graphTransactionAmountAndCustAccountBalance():
+        
+        """
+        Shows a scatter plot of the TransactionAmount and CustAccountBalance
+    
+        Args:
+            none
+    
+        Returns:
+            chart: A chart with the scatter plot of the TransactionAmount and CustAccountBalance
+    
+        Raises:
+            TypeError: If the dataframe is not a DataFrame.
+            
+        """
+    
+        plt.style.use("fivethirtyeight")
+        sns.scatterplot(x='TransactionAmount',y='CustAccountBalance',data=RFM_df,palette='rocket',hue='Frequency',size='Recency' )
+        plt.legend(loc = "upper right")
+        plt.title("TransactionAmount (INR) and CustAccountBalance",
+                fontsize='15',
+                backgroundcolor='AliceBlue',
+                color='magenta');
+    
+    graphTransactionAmountAndCustAccountBalance()
 
 
 
@@ -1725,10 +1930,27 @@ and obtain the average for each table.
 
 .. code:: ipython3
 
-    RFM_df=RFM_df.sort_values(by='TransactionDate')
-    groupbby_month = RFM_df.groupby([pd.Grouper(key='TransactionDate', freq='M')])[['Frequency', 'TransactionAmount', 'CustAccountBalance', 'TransactionTime', 'CustomerAge', 'Recency']].mean()
-    print(groupbby_month.shape)
-    groupbby_month
+    def groupTransaccionsByMonth():
+        
+        """
+        Groups the transactions by month and calculates the mean of each feature
+    
+        Args:
+            none
+    
+        Returns:
+            groupbby_month: A dataframe with the mean of each feature
+    
+        Raises:
+            TypeError: If the dataframe is not a DataFrame.
+        """
+    
+        RFM_df=RFM_df.sort_values(by='TransactionDate')
+        groupbby_month = RFM_df.groupby([pd.Grouper(key='TransactionDate', freq='M')])[['Frequency', 'TransactionAmount', 'CustAccountBalance', 'TransactionTime', 'CustomerAge', 'Recency']].mean()
+        print(groupbby_month.shape)
+        return groupbby_month
+    
+    groupbby_month = groupTransaccionsByMonth()
 
 
 .. parsed-literal::
@@ -1813,14 +2035,30 @@ We made line graphs of the information we obtained previously.
 
 .. code:: ipython3
 
-    plt.figure(figsize=(13.4,7))
-    plt.title("Average of account balance per month")
-    plt.plot(groupbby_month.index,groupbby_month['CustAccountBalance'],color='purple',marker='o',label='Customer Account Balance', linestyle='dashed', linewidth=2, markersize=10)
-    plt.legend();
+    def grphLineBalanceAndTransactionAmount():
+        
+        """
+        Shows a line graph of the average of account balance and transaction amount per month
     
-    plt.figure(figsize=(13.8,7))
-    plt.title("Average of transaction amount per month")
-    plt.plot(groupbby_month.index,groupbby_month['TransactionAmount'],color='green',marker='o',label='Transaction Amount', linestyle='dashed', linewidth=2, markersize=10)
+        Args:
+            none
+    
+        Returns:
+            chart: A chart with the line graph of the average of account balance and transaction amount per month
+    
+        Raises:
+            TypeError: If the dataframe is not a DataFrame.
+        """
+        plt.figure(figsize=(13.4,7))
+        plt.title("Average of account balance per month")
+        plt.plot(groupbby_month.index,groupbby_month['CustAccountBalance'],color='purple',marker='o',label='Customer Account Balance', linestyle='dashed', linewidth=2, markersize=10)
+        plt.legend();
+    
+        plt.figure(figsize=(13.8,7))
+        plt.title("Average of transaction amount per month")
+        plt.plot(groupbby_month.index,groupbby_month['TransactionAmount'],color='green',marker='o',label='Transaction Amount', linestyle='dashed', linewidth=2, markersize=10)
+    
+    grphLineBalanceAndTransactionAmount()
 
 
 
