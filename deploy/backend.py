@@ -96,3 +96,7 @@ def scale_data(RFM_df):
     scaler.fit(RFM_df)
     RFM_DF = pd.DataFrame(scaler.transform(RFM_df), columns=column_names)
     return df
+
+def importance_columns(RFM_df):
+    RFM_df = RFM_df[["Frequency","CustLocation", "CustGender", "CustAccountBalance", "TransactionAmount", "CustomerAge"]]
+    return RFM_df
