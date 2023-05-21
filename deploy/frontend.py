@@ -8,7 +8,6 @@ import re
 from sklearn.preprocessing import LabelEncoder, StandardScaler
 from backend import *
 
-
 st.title("Bank Customer Segmentation - Model KMeans Prediction")
 
 def main():
