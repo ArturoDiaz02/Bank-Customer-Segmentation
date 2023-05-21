@@ -38,10 +38,10 @@ def main():
             df = importance_columns(df)
             st.write("Datos procesados correctamente")
         
-        if st.button("Predecir"):
-            model = joblib.load("./deploy/model.joblib")
-            predict = model.predict(df)
-            st.write("Predicción: ", predict)
+            if st.button("Predecir"):
+                model = joblib.load("./deploy/model.joblib")
+                predict = model.predict(df)
+                st.write("Predicción: ", predict)
 
 
 
