@@ -4,14 +4,15 @@ import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
 import numpy as np
-
-def load_data(data):
-    df = pd.read_csv(data)
-    return df
-
+import re
+from sklearn.preprocessing import LabelEncoder, StandardScaler
 
 def dateConvertion(df):
-    return pd.to_datetime(df["CustomerDOB"], dayfirst=True)
+    df["CustomerDOB"] = pd.to_datetime(df["CustomerDOB"], dayfirst=True)
+    df['TransactionDate'] = pd.to_datetime(df['TransactionDate'], dayfirst=True)
+    df['TransactionDate1'] = df['TransactionDate']
+    df['TransactionDate2'] = df['TransactionDate']
+    return df
 
 
 def refactorDates(df):    
@@ -22,12 +23,10 @@ def refactorDates(df):
 def getCustomerAge(df):    
     df['CustomerAge'] = (df['TransactionDate'] - df['CustomerDOB'])/np.timedelta64(1, 'Y')
     df['CustomerAge'] = df['CustomerAge'].astype(int)
+    return df
 
 
 def RFMTable(df):
-    df['TransactionDate1']=df['TransactionDate'] # ==> to calculate the minimum (first transaction)
-    df['TransactionDate2']=df['TransactionDate'] # ==> to calculate the maximum (last transaction)
-    
     RFM_df = df.groupby("CustomerID").agg({
                                             "TransactionID" : "count",
                                             "CustGender" : "first",
@@ -40,7 +39,7 @@ def RFMTable(df):
                                             "TransactionDate1":"min",
                                             "TransactionDate":"median"
                             })
-    RFM_df.reset_index()
+    RFM_df.reset_index(inplace=True)
     RFM_df.rename(columns={"TransactionID":"Frequency"},inplace=True)
     RFM_df['Recency']=RFM_df['TransactionDate2']-RFM_df['TransactionDate1']
     RFM_df['Recency']=RFM_df['Recency'].astype(str)
@@ -50,9 +49,10 @@ def RFMTable(df):
 
 def formatOutputInRecency(RFM_df):     
     RFM_df['Recency']=RFM_df['Recency'].apply(lambda x :re.search('\d+',x).group())
-    RFM_df['Recency']=RFM_df['Recency'].astype(int)
+    RFM_df['Recency']=RFM_df['Recency'].astype(int) 
     RFM_df['Recency']=RFM_df['Recency'].apply(lambda x: 1 if x == 0 else x)
     RFM_df.drop(columns=["TransactionDate1","TransactionDate2"],inplace=True)
+    return RFM_df
 
 
 def groupbby_month_RFM(RFM_df):
@@ -74,6 +74,7 @@ def dataToEncoder(RFM_df):
 
     RFM_df.drop(['TransactionDate'], axis=1, inplace=True) # Porque creamos 3 variable basadas en la fecha, Dia, Mes, Nombre dia
     RFM_df.drop(['Recency'], axis=1, inplace=True) # Correlación con variable frecuuencia
+    RFM_df.drop(['CustomerID'], axis=1, inplace=True) # No aporta valor al modelo
     
     encoder = LabelEncoder()
     RFM_df.CustLocation = encoder.fit_transform(RFM_df.CustLocation)
@@ -95,7 +96,7 @@ def scale_data(RFM_df):
     scaler = StandardScaler()
     scaler.fit(RFM_df)
     RFM_DF = pd.DataFrame(scaler.transform(RFM_df), columns=column_names)
-    return df
+    return RFM_df
 
 def importance_columns(RFM_df):
     RFM_df = RFM_df[["Frequency","CustLocation", "CustGender", "CustAccountBalance", "TransactionAmount", "CustomerAge"]]
