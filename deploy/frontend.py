@@ -39,7 +39,7 @@ def main():
             st.write("Datos procesados correctamente")
         
         if st.button("Predecir"):
-            model = joblib.load("model.joblib")
+            model = joblib.load("./deploy/model.joblib")
             predict = model.predict(df)
             st.write("Predicción: ", predict)
 
