@@ -19,9 +19,7 @@ def main():
         st.header("¿Cuales son los clusters?")
         st.image("./deploy/resources/clusters.png")
         st.image("./deploy/resources/scatterplot.png")
-        st.write(
-            "El algoritmo de agrupación espectral ha dividido a los clientes en tres grupos distintos. El **primer** grupo está formado por los clientes dinámicos 👥 que tienen un saldo de cuenta más bajo y suelen gastar menos efectivo en las transacciones. El **segundo** son mujeres de entre 20 y 30 años que realizan transacciones de gran valor 👩🏻🛍️. El **tercer** grupo de hombres de entre 30 y 40 años 👨🏻💼 que trabajan y guardan dinero en su cuenta para una posible inversión.")
-
+        st.write("El algoritmo de agrupación espectral ha dividido a los clientes en tres grupos distintos. ✨ El **primer** grupo está compuesto por aquellas personas que son dinámicas, es decir, que realizan muchas transacciones 💸 y, por ende, tienen poco saldo en su cuenta. Además, está compuesto en su mayoría por personas jóvenes 🌟 y donde predominan las mujeres 👩‍💼. El segundo **grupo** son aquellas personas que deciden ahorrar más dinero 💰 y, por ende, no realizan muchas transacciones. Está compuesto en su mayoría por hombres de avanzada edad 👴 que tienen una mentalidad ahorradora. Por último, el **tercer** grupo está compuesto por aquellas personas que realizan más transacciones que los del grupo 2 pero menos que los del grupo 1. Está compuesto por hombres y mujeres entre 30 y 50 años 👨‍👩‍👧‍👦. Esta es toda la información que se tiene de los clusters. 📊")
     with tab3:
         st.header("Columnas del Dataset")
         variable_list = [
