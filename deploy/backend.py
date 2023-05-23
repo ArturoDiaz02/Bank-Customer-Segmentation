@@ -6,10 +6,9 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 import numpy as np
 import re
-
 from mpl_toolkits.mplot3d import Axes3D
 from scipy.spatial.distance import pdist
-from sklearn.preprocessing import LabelEncoder, RobustScaler
+from sklearn.preprocessing import LabelEncoder, RobustScaler, MinMaxScaler 
 from scipy.cluster.hierarchy import linkage, dendrogram
 
 
@@ -31,36 +30,42 @@ def scatterplot(df, prediction, model):
 
     return fig
 
+def radarchar(df, predict):
+    # Crear DataFrame con las predicciones
+    predictions_df = pd.DataFrame(predict, columns=['Cluster'])
+    merged_df = pd.concat([df, predictions_df], axis=1)
+    df_aux = merged_df.drop(columns=['CustLocation', 'CustGender', 'CustomerAge'])
 
-def lineplot(df, prediction):
-    df_n = pd.DataFrame(df,
-                        columns=["Frequency", "CustGender", "CustLocation", "CustAccountBalance", "TransactionAmount",
-                                 "CustomerAge"])
+    # Definir categorías para el gráfico de radar
+    categories = ['CustAccountBalance', 'TransactionAmount', 'Frequency']
 
-    df_n["ID"] = df.index
-    df_n["Cluster"] = prediction
+    # Normalizar los datos en df_aux
+    scaler = MinMaxScaler()
+    df_aux_norm = pd.DataFrame(scaler.fit_transform(df_aux), columns=df_aux.columns)
 
-    df_nor_melt = pd.melt(df_n.reset_index(),
-                          id_vars=['ID', 'Cluster'],
-                          value_vars=["CustAccountBalance", "TransactionAmount"],
-                          var_name='Attribute',
-                          value_name='Value')
+    # Calcular promedio por categoría y cluster
+    avg_values = df_aux_norm.groupby('Cluster')[categories].mean()
 
-    df_nor_melt2 = pd.melt(df_n.reset_index(),
-                           id_vars=['ID', 'Cluster'],
-                           value_vars=["CustGender", "CustomerAge"],
-                           var_name='Attribute',
-                           value_name='Value')
+    # Calcular ángulos para el gráfico de radar
+    angles = np.linspace(0, 2 * np.pi, len(categories), endpoint=False)
+    angles = np.concatenate((angles, [angles[0]]))  # Repetir el primer ángulo al final para cerrar el gráfico
 
-    fig, (ax1, ax2) = plt.subplots(ncols=2, figsize=(12, 6))
-    sns.lineplot(data=df_nor_melt, x='ID', y='Value', hue='Cluster', ax=ax1)
-    ax1.set_xticklabels(ax1.get_xticklabels(), rotation=45)
-    ax1.set_title('Balance y Transaciones')
+    # Configurar el gráfico de radar
+    fig, ax = plt.subplots(figsize=(6, 6), subplot_kw=dict(polar=True))
+    ax.set_xticks(angles[:-1])
+    ax.set_xticklabels(categories)
+    count = 0
+    # Dibujar el gráfico de radar para cada cluster
+    for cluster, values in avg_values.iterrows():
+        cluster_values = values.values.tolist()
+        cluster_values += [cluster_values[0]]  # Repetir el primer valor al final para cerrar el gráfico
+        ax.plot(angles, cluster_values, linewidth=1, label=f'Cluster {count}')
+        ax.fill(angles, cluster_values, alpha=0.25)
+        count += 1
 
-    sns.lineplot(x='Attribute', y='Value', hue='Cluster', data=df_nor_melt2, ax=ax2)
-    ax2.set_xticklabels(ax2.get_xticklabels(), rotation=45)
-    ax2.set_title('Genero y edad')
-
+    # Mostrar leyenda y título
+    ax.legend(loc='upper right')
+    ax.set_title('Gráfico de Radar por Cluster')
     return fig
 
 def numclusters(predict):
