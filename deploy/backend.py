@@ -9,7 +9,7 @@ import re
 
 from mpl_toolkits.mplot3d import Axes3D
 from scipy.spatial.distance import pdist
-from sklearn.preprocessing import LabelEncoder, StandardScaler
+from sklearn.preprocessing import LabelEncoder, RobustScaler
 from scipy.cluster.hierarchy import linkage, dendrogram
 
 
@@ -153,7 +153,7 @@ def dataToEncoder(RFM_df):
 
 def scale_data(RFM_df):
     column_names = RFM_df.columns
-    scaler = StandardScaler()
+    scaler = RobustScaler()
     scaler.fit(RFM_df)
     RFM_DF = pd.DataFrame(scaler.transform(RFM_df), columns=column_names)
     return RFM_df
