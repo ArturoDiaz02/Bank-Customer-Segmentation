@@ -5,9 +5,11 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 from io import StringIO
 import re
+from sklearn.pipeline import Pipeline
+from sklearn.preprocessing import FunctionTransformer
 
 from mpl_toolkits.mplot3d import Axes3D
-from sklearn.preprocessing import LabelEncoder, StandardScaler
+from sklearn.preprocessing import LabelEncoder, RobustScaler, StandardScaler
 from backend import *
 
 st.title("Bank Customer Segmentation - Model KMeans Prediction")
@@ -56,15 +58,18 @@ def main():
             df = groupbby_month_RFM(df)
             df = replaceGenderforInt(df)
             df = dataToEncoder(df)
-            df = scale_data(df)
+            column_names = df.columns
+            scaler = RobustScaler()
+            scaler.fit(df)
+            df = pd.DataFrame(scaler.transform(df), columns=column_names)
             df = importance_columns(df)
+            st.write(df)
             st.write("Datos procesados correctamente")
-
             if st.button("Predecir"):
                 model = joblib.load("./deploy/model.joblib")
                 predict = model.predict(df)
                 st.write("Predicción: ", predict)
-
+                st.write(numclustersTable(predict))
                 # Normalizar los datos en df_aux
                 predictions_df = pd.DataFrame(predict, columns=['Cluster'])
                 merged_df = pd.concat([df, predictions_df], axis=1)

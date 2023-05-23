@@ -15,24 +15,14 @@ from scipy.cluster.hierarchy import linkage, dendrogram
 def scatterplot(df, prediction, model):
     colores = ['red', 'green', 'blue']
     asignar = []
-    for row in prediction:
-        asignar.append(colores[row])
-
-    scaler = MinMaxScaler()
-    df_aux_norm = pd.DataFrame(scaler.fit_transform(df), columns=df.columns)
     
 
     fig = plt.figure(figsize=(10, 7))
-    ax = fig.add_subplot(111, projection='3d')
-    ax.scatter(df_aux_norm['TransactionAmount'], df_aux_norm['CustAccountBalance'], df_aux_norm['CustomerAge'], c=asignar, s=10)
-    ax.set_xlabel('TransactionAmount')
-    ax.set_ylabel('CustAccountBalance')
-    ax.set_zlabel('CustomerAge')
+    ax = fig.add_subplot(111)
+    sns.scatterplot(data=df ,x='CustAccountBalance', y='TransactionAmount', hue=prediction,s=300,alpha=0.6,palette='summer')
+    ax.set_xlabel('CustAccountBalance')
+    ax.set_ylabel('TransactionAmount')
 
-    ax.view_init(azim=270, elev=15)
-    ax.set_xlim([0, 0.5])  # Límites en el eje x
-    ax.set_ylim([0, 1])  # Límites en el eje y
-    ax.set_zlim([0, 0.87])
     plt.title('Gráfico de los clusters')
 
     return fig
@@ -47,7 +37,7 @@ def radarchar(df, predict):
     categories = ['CustAccountBalance', 'TransactionAmount', "CustomerAge"]
 
     # Normalizar los datos en df_aux
-    scaler = RobustScaler()
+    scaler = MinMaxScaler()
     df_aux_norm = pd.DataFrame(scaler.fit_transform(df_aux), columns=df_aux.columns)
 
     # Calcular promedio por categoría y cluster
@@ -90,6 +80,11 @@ def numclusters(predict):
     plt.title('Número de instancias por cluster')
     return fig
 
+def numclustersTable(predict):
+    unique, counts = np.unique(predict, return_counts=True)
+    items = list(dict(zip(unique, counts)).items())
+
+    return items
 
 def dateConvertion(df):
     df["CustomerDOB"] = pd.to_datetime(df["CustomerDOB"], dayfirst=True)
