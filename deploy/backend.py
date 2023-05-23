@@ -8,24 +8,31 @@ import numpy as np
 import re
 from mpl_toolkits.mplot3d import Axes3D
 from scipy.spatial.distance import pdist
-from sklearn.preprocessing import LabelEncoder, RobustScaler, MinMaxScaler 
+from sklearn.preprocessing import LabelEncoder, RobustScaler, MinMaxScaler, StandardScaler
 from scipy.cluster.hierarchy import linkage, dendrogram
 
 
 def scatterplot(df, prediction, model):
-    C = model.cluster_centers_
     colores = ['red', 'green', 'blue']
     asignar = []
     for row in prediction:
         asignar.append(colores[row])
 
+    scaler = MinMaxScaler()
+    df_aux_norm = pd.DataFrame(scaler.fit_transform(df), columns=df.columns)
+    
+
     fig = plt.figure(figsize=(10, 7))
     ax = fig.add_subplot(111, projection='3d')
-    ax.scatter(df['CustAccountBalance'], df['TransactionAmount'], df['CustomerAge'], c=asignar, s=60)
-    ax.scatter(C[:, 0], C[:, 1], C[:, 2], marker='*', c=colores, s=1000)
-    ax.set_xlabel('CustAccountBalance')
-    ax.set_ylabel('TransactionAmount')
+    ax.scatter(df_aux_norm['TransactionAmount'], df_aux_norm['CustAccountBalance'], df_aux_norm['CustomerAge'], c=asignar, s=10)
+    ax.set_xlabel('TransactionAmount')
+    ax.set_ylabel('CustAccountBalance')
     ax.set_zlabel('CustomerAge')
+
+    ax.view_init(azim=270, elev=15)
+    ax.set_xlim([0, 0.5])  # Límites en el eje x
+    ax.set_ylim([0, 1])  # Límites en el eje y
+    ax.set_zlim([0, 0.87])
     plt.title('Gráfico de los clusters')
 
     return fig
@@ -34,13 +41,13 @@ def radarchar(df, predict):
     # Crear DataFrame con las predicciones
     predictions_df = pd.DataFrame(predict, columns=['Cluster'])
     merged_df = pd.concat([df, predictions_df], axis=1)
-    df_aux = merged_df.drop(columns=['CustLocation', 'CustGender', 'CustomerAge'])
+    df_aux = merged_df.drop(columns=['CustLocation', 'CustGender', 'Frequency'])
 
     # Definir categorías para el gráfico de radar
-    categories = ['CustAccountBalance', 'TransactionAmount', 'Frequency']
+    categories = ['CustAccountBalance', 'TransactionAmount', "CustomerAge"]
 
     # Normalizar los datos en df_aux
-    scaler = MinMaxScaler()
+    scaler = RobustScaler()
     df_aux_norm = pd.DataFrame(scaler.fit_transform(df_aux), columns=df_aux.columns)
 
     # Calcular promedio por categoría y cluster
@@ -70,7 +77,18 @@ def radarchar(df, predict):
 
 def numclusters(predict):
     unique, counts = np.unique(predict, return_counts=True)
-    return list(dict(zip(unique, counts)).items())
+    items = list(dict(zip(unique, counts)).items())
+
+    clusters = [cluster[0] for cluster in items]
+    counts = [cluster[1] for cluster in items]
+
+    # Generar el gráfico de barras
+    fig = plt.figure(figsize=(10, 7))
+    plt.bar(clusters, counts)
+    plt.xlabel('Cluster')
+    plt.ylabel('Count')
+    plt.title('Número de instancias por cluster')
+    return fig
 
 
 def dateConvertion(df):

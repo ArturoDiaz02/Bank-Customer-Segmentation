@@ -18,8 +18,8 @@ def main():
 
     with tab2:
         st.header("¿Cuales son los clusters?")
-        st.image("resources/clusters.png")
-        st.image("resources/scatterplot.png")
+        st.image("./deploy/resources/clusters.png")
+        st.image("./deploy/resources/scatterplot.png")
         st.write(
             "El algoritmo de agrupación espectral ha dividido a los clientes en tres grupos distintos. ✨ El **primer** grupo está compuesto por aquellas personas que son dinámicas, es decir, que realizan muchas transacciones 💸 y, por ende, tienen poco saldo en su cuenta. Además, está compuesto en su mayoría por personas jóvenes 🌟 y donde predominan las mujeres 👩‍💼. El segundo **grupo** son aquellas personas que deciden ahorrar más dinero 💰 y, por ende, no realizan muchas transacciones. Está compuesto en su mayoría por hombres de avanzada edad 👴 que tienen una mentalidad ahorradora. Por último, el **tercer** grupo está compuesto por aquellas personas que realizan más transacciones que los del grupo 2 pero menos que los del grupo 1. Está compuesto por hombres y mujeres entre 30 y 50 años 👨‍👩‍👧‍👦. Esta es toda la información que se tiene de los clusters. 📊")
     with tab3:
@@ -61,11 +61,24 @@ def main():
             st.write("Datos procesados correctamente")
 
             if st.button("Predecir"):
-                model = joblib.load("model.joblib")
+                model = joblib.load("./deploy/model.joblib")
                 predict = model.predict(df)
                 st.write("Predicción: ", predict)
-                st.write("Número de elementos en cada cluster: ", numclusters(predict))
+
+                # Normalizar los datos en df_aux
+                predictions_df = pd.DataFrame(predict, columns=['Cluster'])
+                merged_df = pd.concat([df, predictions_df], axis=1)
+                df_aux = merged_df.drop(columns=['CustLocation', 'CustGender', 'Frequency'])
+
+                categories = ['CustAccountBalance', 'TransactionAmount', "CustomerAge"]
+
+
+
+                # Calcular promedio por categoría y cluster
+                avg_values = df_aux.groupby('Cluster')[categories].mean()
+                st.write(avg_values)
                 st.write("Gráficos de los clusters:")
+                st.pyplot(numclusters(predict))
                 st.pyplot(scatterplot(df, predict, model))
                 st.pyplot(radarchar(df, predict))
 
