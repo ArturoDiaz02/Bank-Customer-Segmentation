@@ -53,7 +53,7 @@ def main():
         tr = st.number_input("Ingresa la cantidad de transacciones")
         age = st.number_input("Ingresa la edad del cliente")
 
-        if(st.button("Predecir")):
+        if(st.button("Predecir valores")):
 
             if fr is None or lc or gn or bl is None or tr is None or age is None:
                 st.write("Ingresa todos los datos")
