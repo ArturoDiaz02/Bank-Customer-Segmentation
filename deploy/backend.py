@@ -168,6 +168,10 @@ def dataToEncoder(RFM_df):
 
     return RFM_df
 
+def valueToEncoder(val):
+    encoder = LabelEncoder()
+    val = encoder.fit_transform(val)
+    return val
 
 def scale_data(RFM_df):
     column_names = RFM_df.columns

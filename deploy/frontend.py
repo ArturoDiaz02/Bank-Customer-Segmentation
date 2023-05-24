@@ -16,15 +16,15 @@ st.title("Bank Customer Segmentation - Model KMeans Prediction")
 
 
 def main():
-    tab1, tab2, tab3 = st.tabs(["Cargar Datos", "Información sobre los clusters", "Información del Datset"])
+    tab1, tab2, tab3, tab4 = st.tabs(["Cargar Datos", "Evaluación individual", "Información sobre los clusters", "Información del Datset"])
 
-    with tab2:
+    with tab3:
         st.header("¿Cuales son los clusters?")
         st.image("./deploy/resources/clusters.png")
         st.image("./deploy/resources/scatterplot.png")
         st.write(
             "El algoritmo de agrupación espectral ha dividido a los clientes en tres grupos distintos. ✨ El **primer** grupo está compuesto por aquellas personas que son dinámicas, es decir, que realizan muchas transacciones 💸 y, por ende, tienen poco saldo en su cuenta. Además, está compuesto en su mayoría por personas jóvenes 🌟 y donde predominan las mujeres 👩‍💼. El segundo **grupo** son aquellas personas que deciden ahorrar más dinero 💰 y, por ende, no realizan muchas transacciones. Está compuesto en su mayoría por hombres de avanzada edad 👴 que tienen una mentalidad ahorradora. Por último, el **tercer** grupo está compuesto por aquellas personas que realizan más transacciones que los del grupo 2 pero menos que los del grupo 1. Está compuesto por hombres y mujeres entre 30 y 50 años 👨‍👩‍👧‍👦. Esta es toda la información que se tiene de los clusters. 📊")
-    with tab3:
+    with tab4:
         st.header("Columnas del Dataset")
         variable_list = [
             {"Variable": "TransactionID", "Descripción": "ID único por cada transacción realizada"},
@@ -43,6 +43,39 @@ def main():
         st.write("Para predecir los datos de tu dataset, debe de estar compuesto de la siguiente manera")
 
         st.table(df_variables)
+
+    with tab2:
+        st.header("Ingresa los datos para predicir")
+        fr = st.number_input("Ingresa la frecuencia")
+        lc = st.text_input("Ingresa el nombre del cliente (En mayúsculas)")
+        gn = st.selectbox("Ingresa el género", ["Masculino", "Femenino"])
+        bl = st.number_input("Ingresa el balance de la cuenta")
+        tr = st.number_input("Ingresa la cantidad de transacciones")
+        age = st.number_input("Ingresa la edad del cliente")
+
+        if(st.button("Predecir")):
+
+            if fr is None or lc or gn or bl is None or tr is None or age is None:
+                st.write("Ingresa todos los datos")
+                return         
+            if lc:
+                lc = np.array([lc])  # Convert lc to a 1-dimensional array
+                lc = valueToEncoder(lc)
+            model = joblib.load("./deploy/model.joblib")
+            if gn == "Masculino":
+                gn = 1
+            else:
+                gn = -1
+            df = pd.DataFrame(
+                [[fr, lc, gn, bl, tr, age]], columns=['Frequency', 'CustLocation', 'CustGender', 'CustAccountBalance', 'TransactionAmount', 'CustomerAge'])
+            column_names = df.columns
+            scaler = RobustScaler()
+            scaler.fit(df)
+            df = pd.DataFrame(scaler.transform(df), columns=column_names)
+            predict = model.predict(df)
+            st.write("Predicción: ", predict)
+            st.write(numclustersTable(predict))
+
 
     with tab1:
         uploaded_file = st.file_uploader("Sube tu archivo CSV aquí", type="csv")
@@ -70,7 +103,7 @@ def main():
                 predict = model.predict(df)
                 st.write("Predicción: ", predict)
                 st.write(numclustersTable(predict))
-                # Normalizar los datos en df_aux
+
                 predictions_df = pd.DataFrame(predict, columns=['Cluster'])
                 merged_df = pd.concat([df, predictions_df], axis=1)
                 df_aux = merged_df.drop(columns=['CustLocation', 'CustGender', 'Frequency'])
@@ -78,12 +111,9 @@ def main():
                 categories = ['CustAccountBalance', 'TransactionAmount', "CustomerAge"]
 
 
-
-                # Calcular promedio por categoría y cluster
                 avg_values = df_aux.groupby('Cluster')[categories].mean()
                 st.write(avg_values)
                 st.write("Gráficos de los clusters:")
-                st.pyplot(numclusters(predict))
                 st.pyplot(scatterplot(df, predict, model))
                 st.pyplot(radarchar(df, predict))
 
