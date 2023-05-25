@@ -46,7 +46,6 @@ def main():
 
     with tab2:
         st.header("Ingresa los datos para predicir")
-        fr = st.number_input("Ingresa la frecuencia")
         lc = st.text_input("Ingresa el nombre de la ciudad (En mayúsculas)")
         gn = st.selectbox("Ingresa el género", ["Masculino", "Femenino"])
         bl = st.number_input("Ingresa el balance de la cuenta")
@@ -55,7 +54,7 @@ def main():
 
         if(st.button("Predecir valores")):
 
-            if fr is None or lc == "" or gn is None or bl is None or tr is None or age is None:
+            if lc == "" or gn is None or bl is None or tr is None or age is None:
                 st.write("Ingresa todos los datos")
                 return         
             if lc:
@@ -67,7 +66,7 @@ def main():
             else:
                 gn = -1
             df = pd.DataFrame(
-                [[fr, lc, gn, bl, tr, age]], columns=['Frequency', 'CustLocation', 'CustGender', 'CustAccountBalance', 'TransactionAmount', 'CustomerAge'])
+                [[1, lc, gn, bl, tr, age]], columns=['Frequency', 'CustLocation', 'CustGender', 'CustAccountBalance', 'TransactionAmount', 'CustomerAge'])
             column_names = df.columns
             scaler = RobustScaler()
             scaler.fit(df)
