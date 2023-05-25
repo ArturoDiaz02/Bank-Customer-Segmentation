@@ -47,15 +47,15 @@ def main():
     with tab2:
         st.header("Ingresa los datos para predicir")
         fr = st.number_input("Ingresa la frecuencia")
-        lc = st.text_input("Ingresa el nombre del cliente (En mayúsculas)")
+        lc = st.text_input("Ingresa el nombre de la ciudad (En mayúsculas)")
         gn = st.selectbox("Ingresa el género", ["Masculino", "Femenino"])
         bl = st.number_input("Ingresa el balance de la cuenta")
-        tr = st.number_input("Ingresa la cantidad de transacciones")
+        tr = st.number_input("Ingresa el monto de transacciones")
         age = st.number_input("Ingresa la edad del cliente")
 
         if(st.button("Predecir valores")):
 
-            if fr is None or lc or gn or bl is None or tr is None or age is None:
+            if fr is None or lc == "" or gn is None or bl is None or tr is None or age is None:
                 st.write("Ingresa todos los datos")
                 return         
             if lc:
