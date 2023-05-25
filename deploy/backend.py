@@ -13,6 +13,17 @@ from scipy.cluster.hierarchy import linkage, dendrogram
 
 
 def scatterplot(df, prediction, model):
+    """
+    Generate a scatter plot based on data from a DataFrame.
+
+    Args:
+        df (pd.DataFrame): The DataFrame containing the data.
+        prediction (str): The column in the DataFrame that contains the predictions/clusters.
+        model: Model used for making predictions (not used in the method).
+
+    Returns:
+        matplotlib.figure.Figure: The generated figure object.
+    """
     colores = ['red', 'green', 'blue']
     asignar = []
     
@@ -28,51 +39,62 @@ def scatterplot(df, prediction, model):
     return fig
 
 def radarchar(df, predict):
-    # Crear DataFrame con las predicciones
+    """
+    Generate a radar chart based on data from a DataFrame and predictions/clusters.
+
+    Args:
+        df (pd.DataFrame): The DataFrame containing the data.
+        predict: The predictions/clusters (not used in the method).
+
+    Returns:
+        matplotlib.figure.Figure: The generated figure object.
+    """
+
     predictions_df = pd.DataFrame(predict, columns=['Cluster'])
     merged_df = pd.concat([df, predictions_df], axis=1)
     df_aux = merged_df.drop(columns=['CustLocation', 'CustGender', 'Frequency'])
 
-    # Definir categorías para el gráfico de radar
     categories = ['CustAccountBalance', 'TransactionAmount', "CustomerAge"]
 
-    # Normalizar los datos en df_aux
     scaler = MinMaxScaler()
     df_aux_norm = pd.DataFrame(scaler.fit_transform(df_aux), columns=df_aux.columns)
 
-    # Calcular promedio por categoría y cluster
     avg_values = df_aux_norm.groupby('Cluster')[categories].mean()
 
-    # Calcular ángulos para el gráfico de radar
     angles = np.linspace(0, 2 * np.pi, len(categories), endpoint=False)
-    angles = np.concatenate((angles, [angles[0]]))  # Repetir el primer ángulo al final para cerrar el gráfico
+    angles = np.concatenate((angles, [angles[0]]))
 
-    # Configurar el gráfico de radar
     fig, ax = plt.subplots(figsize=(6, 6), subplot_kw=dict(polar=True))
     ax.set_xticks(angles[:-1])
     ax.set_xticklabels(categories)
     count = 0
-    # Dibujar el gráfico de radar para cada cluster
     for cluster, values in avg_values.iterrows():
         cluster_values = values.values.tolist()
-        cluster_values += [cluster_values[0]]  # Repetir el primer valor al final para cerrar el gráfico
+        cluster_values += [cluster_values[0]]
         ax.plot(angles, cluster_values, linewidth=1, label=f'Cluster {count}')
         ax.fill(angles, cluster_values, alpha=0.25)
         count += 1
 
-    # Mostrar leyenda y título
     ax.legend(loc='upper right')
     ax.set_title('Gráfico de Radar por Cluster')
     return fig
 
 def numclusters(predict):
+    """
+    Generate a bar chart showing the number of instances per cluster.
+
+    Args:
+        predict: The predictions/clusters.
+
+    Returns:
+        matplotlib.figure.Figure: The generated figure object.
+    """
     unique, counts = np.unique(predict, return_counts=True)
     items = list(dict(zip(unique, counts)).items())
 
     clusters = [cluster[0] for cluster in items]
     counts = [cluster[1] for cluster in items]
 
-    # Generar el gráfico de barras
     fig = plt.figure(figsize=(10, 7))
     plt.bar(clusters, counts)
     plt.xlabel('Cluster')
@@ -87,6 +109,15 @@ def numclustersTable(predict):
     return items
 
 def dateConvertion(df):
+    """
+    Convert date columns in the DataFrame to datetime format.
+
+    Args:
+        df (pd.DataFrame): The DataFrame containing the data.
+
+    Returns:
+        pd.DataFrame: The DataFrame with converted date columns.
+    """
     df["CustomerDOB"] = pd.to_datetime(df["CustomerDOB"], dayfirst=True)
     df['TransactionDate'] = pd.to_datetime(df['TransactionDate'], dayfirst=True)
     df['TransactionDate1'] = df['TransactionDate']
@@ -95,17 +126,44 @@ def dateConvertion(df):
 
 
 def refactorDates(df):
+    """
+    Refactor the CustomerDOB column in the DataFrame.
+
+    Args:
+        df (pd.DataFrame): The DataFrame containing the data.
+
+    Returns:
+        pd.DataFrame: The DataFrame with refactored CustomerDOB column.
+    """
     df.loc[df['CustomerDOB'].dt.year > 1999, 'CustomerDOB'] -= pd.DateOffset(years=100)
     return df
 
 
 def getCustomerAge(df):
+    """
+    Calculate the CustomerAge based on the CustomerDOB and TransactionDate columns.
+
+    Args:
+        df (pd.DataFrame): The DataFrame containing the data.
+
+    Returns:
+        pd.DataFrame: The DataFrame with the calculated CustomerAge column.
+    """
     df['CustomerAge'] = (df['TransactionDate'] - df['CustomerDOB']) / np.timedelta64(1, 'Y')
     df['CustomerAge'] = df['CustomerAge'].astype(int)
     return df
 
 
 def RFMTable(df):
+    """
+    Generate an RFM table based on the DataFrame.
+
+    Args:
+        df (pd.DataFrame): The DataFrame containing the data.
+
+    Returns:
+        pd.DataFrame: The RFM table.
+    """
     RFM_df = df.groupby("CustomerID").agg({
         "TransactionID": "count",
         "CustGender": "first",
@@ -127,6 +185,15 @@ def RFMTable(df):
 
 
 def formatOutputInRecency(RFM_df):
+    """
+    Format the Recency column in the RFM table.
+
+    Args:
+        RFM_df (pd.DataFrame): The RFM table.
+
+    Returns:
+        pd.DataFrame: The RFM table with formatted Recency column.
+    """
     RFM_df['Recency'] = RFM_df['Recency'].apply(lambda x: re.search('\d+', x).group())
     RFM_df['Recency'] = RFM_df['Recency'].astype(int)
     RFM_df['Recency'] = RFM_df['Recency'].apply(lambda x: 1 if x == 0 else x)
@@ -150,15 +217,14 @@ def replaceGenderforInt(RFM_df):
 
 def dataToEncoder(RFM_df):
     RFM_df.drop(['TransactionDate'], axis=1,
-                inplace=True)  #  Porque creamos 3 variable basadas en la fecha, Dia, Mes, Nombre dia
-    RFM_df.drop(['Recency'], axis=1, inplace=True)  # Correlación con variable frecuuencia
-    RFM_df.drop(['CustomerID'], axis=1, inplace=True)  # No aporta valor al modelo
+                inplace=True)
+    RFM_df.drop(['Recency'], axis=1, inplace=True)
+    RFM_df.drop(['CustomerID'], axis=1, inplace=True)
 
     encoder = LabelEncoder()
     RFM_df.CustLocation = encoder.fit_transform(RFM_df.CustLocation)
     RFM_df.TransactionMonthName = encoder.fit_transform(RFM_df.TransactionMonthName)
     RFM_df.TransactionDayName = encoder.fit_transform(RFM_df.TransactionDayName)
-    # Custom Cast
     RFM_df.CustLocation = RFM_df.CustLocation.astype(np.int64)
     RFM_df.TransactionMonthName = RFM_df.TransactionMonthName.astype(np.int64)
     RFM_df.TransactionDayName = RFM_df.TransactionDayName.astype(np.int64)

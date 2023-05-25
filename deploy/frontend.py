@@ -67,10 +67,6 @@ def main():
                 gn = -1
             df = pd.DataFrame(
                 [[1, lc, gn, bl, tr, age]], columns=['Frequency', 'CustLocation', 'CustGender', 'CustAccountBalance', 'TransactionAmount', 'CustomerAge'])
-            column_names = df.columns
-            scaler = RobustScaler()
-            scaler.fit(df)
-            df = pd.DataFrame(scaler.transform(df), columns=column_names)
             predict = model.predict(df)
             st.write("Predicción: ", predict)
             st.write(numclustersTable(predict))
