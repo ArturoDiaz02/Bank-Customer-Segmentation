@@ -14,16 +14,27 @@ from backend import *
 
 st.title("Bank Customer Segmentation - Model KMeans Prediction")
 
+def infoCluster(tab3):
+    """
+    Display information about the clusters on the specified tab.
 
-def main():
-    tab1, tab2, tab3, tab4 = st.tabs(["Cargar Datos", "Evaluación individual", "Información sobre los clusters", "Información del Datset"])
-
+    Args:
+        tab3: The tab to display the information on.
+    """
     with tab3:
         st.header("¿Cuales son los clusters?")
         st.image("./deploy/resources/clusters.png")
         st.image("./deploy/resources/scatterplot.png")
         st.write(
-            "El algoritmo de agrupación espectral ha dividido a los clientes en tres grupos distintos. ✨ El **primer** grupo está compuesto por aquellas personas que son dinámicas, es decir, que realizan muchas transacciones 💸 y, por ende, tienen poco saldo en su cuenta. Además, está compuesto en su mayoría por personas jóvenes 🌟 y donde predominan las mujeres 👩‍💼. El segundo **grupo** son aquellas personas que deciden ahorrar más dinero 💰 y, por ende, no realizan muchas transacciones. Está compuesto en su mayoría por hombres de avanzada edad 👴 que tienen una mentalidad ahorradora. Por último, el **tercer** grupo está compuesto por aquellas personas que realizan más transacciones que los del grupo 2 pero menos que los del grupo 1. Está compuesto por hombres y mujeres entre 30 y 50 años 👨‍👩‍👧‍👦. Esta es toda la información que se tiene de los clusters. 📊")
+            "El algoritmo de agrupación espectral ha dividido a los clientes en tres grupos distintos. ✨ El **primer** grupo está compuesto por aquellas personas que son dinámicas, es decir, que realizan muchas transacciones 💸 y, por ende, tienen poco saldo en su cuenta. Además, está compuesto en su mayoría por personas jóvenes 🌟 y donde predominan las mujeres 👩‍💼. El **segundo** grupo está compuesto por aquellas personas que realizan más transacciones que los del grupo 2 pero menos que los del grupo 1. Está compuesto por hombres y mujeres entre 30 y 50 años 👨‍👩‍👧‍👦. Por ultimo, el tercer **grupo** son aquellas personas que deciden ahorrar más dinero 💰 y, por ende, no realizan muchas transacciones. Está compuesto en su mayoría por hombres de avanzada edad 👴 que tienen una mentalidad ahorradora. Esta es toda la información que se tiene de los clusters. 📊")
+
+def aboutDataSet(tab4):
+    """
+    Display information about the dataset columns on the specified tab.
+
+    Args:
+        tab4: The tab to display the information on.
+    """
     with tab4:
         st.header("Columnas del Dataset")
         variable_list = [
@@ -43,7 +54,14 @@ def main():
         st.write("Para predecir los datos de tu dataset, debe de estar compuesto de la siguiente manera")
 
         st.table(df_variables)
+    
+def evaluationIndividual(tab2):
+    """
+    Display the input form for individual prediction on the specified tab.
 
+    Args:
+        tab2: The tab to display the input form on.
+    """
     with tab2:
         st.header("Ingresa los datos para predicir")
         lc = st.text_input("Ingresa el nombre de la ciudad (En mayúsculas)")
@@ -71,7 +89,13 @@ def main():
             st.write("Predicción: ", predict)
             st.write(numclustersTable(predict))
 
+def predictionData(tab1):
+    """
+    Display the prediction data section on the specified tab.
 
+    Args:
+        tab1: The tab to display the prediction data section on.
+    """
     with tab1:
         uploaded_file = st.file_uploader("Sube tu archivo CSV aquí", type="csv")
         if uploaded_file is not None:
@@ -111,7 +135,15 @@ def main():
                 st.write("Gráficos de los clusters:")
                 st.pyplot(scatterplot(df, predict, model))
                 st.pyplot(radarchar(df, predict))
+    
 
+def main():
+    tab1, tab2, tab3, tab4 = st.tabs(["Cargar Datos", "Evaluación individual", "Información sobre los clusters", "Información del Datset"])
+
+    infoCluster(tab3)
+    aboutDataSet(tab4)
+    evaluationIndividual(tab2)
+    predictionData(tab1)
 
 if __name__ == "__main__":
     main()

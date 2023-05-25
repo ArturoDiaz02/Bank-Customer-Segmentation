@@ -202,6 +202,15 @@ def formatOutputInRecency(RFM_df):
 
 
 def groupbby_month_RFM(RFM_df):
+    """
+    Add month and day-related columns to the RFM table based on the TransactionDate.
+
+    Args:
+        RFM_df (pd.DataFrame): The RFM table.
+
+    Returns:
+        pd.DataFrame: The RFM table with added month and day-related columns.
+    """
     RFM_df['TransactionMonth'] = RFM_df["TransactionDate"].dt.month
     RFM_df['TransactionMonthName'] = RFM_df["TransactionDate"].dt.month_name()
     RFM_df['TransactionDay'] = RFM_df["TransactionDate"].dt.day
@@ -210,12 +219,30 @@ def groupbby_month_RFM(RFM_df):
 
 
 def replaceGenderforInt(RFM_df):
+    """
+    Replace gender values in the RFM table with corresponding integer values.
+
+    Args:
+        RFM_df (pd.DataFrame): The RFM table.
+
+    Returns:
+        pd.DataFrame: The RFM table with replaced gender values.
+    """
     RFM_df.CustGender.replace(['F', 'M'], [-1, 1], inplace=True)
     RFM_df.CustGender = RFM_df.CustGender.astype(np.int64)
     return RFM_df
 
 
 def dataToEncoder(RFM_df):
+    """
+    Prepare the RFM table for encoding by dropping unnecessary columns and applying label encoding.
+
+    Args:
+        RFM_df (pd.DataFrame): The RFM table.
+
+    Returns:
+        pd.DataFrame: The preprocessed RFM table.
+    """
     RFM_df.drop(['TransactionDate'], axis=1,
                 inplace=True)
     RFM_df.drop(['Recency'], axis=1, inplace=True)
@@ -235,11 +262,29 @@ def dataToEncoder(RFM_df):
     return RFM_df
 
 def valueToEncoder(val):
+    """
+    Apply label encoding to a given value.
+
+    Args:
+        val: The value to encode.
+
+    Returns:
+        The encoded value.
+    """
     encoder = LabelEncoder()
     val = encoder.fit_transform(val)
     return val
 
 def scale_data(RFM_df):
+    """
+    Scale the numeric columns in the RFM table using robust scaler.
+
+    Args:
+        RFM_df (pd.DataFrame): The RFM table.
+
+    Returns:
+        pd.DataFrame: The scaled RFM table.
+    """
     column_names = RFM_df.columns
     scaler = RobustScaler()
     scaler.fit(RFM_df)
@@ -248,6 +293,15 @@ def scale_data(RFM_df):
 
 
 def importance_columns(RFM_df):
+    """
+    Select the important columns from the RFM table.
+
+    Args:
+        RFM_df (pd.DataFrame): The RFM table.
+
+    Returns:
+        pd.DataFrame: The RFM table with selected important
+    """
     RFM_df = RFM_df[
         ["Frequency", "CustLocation", "CustGender", "CustAccountBalance", "TransactionAmount", "CustomerAge"]]
     return RFM_df
